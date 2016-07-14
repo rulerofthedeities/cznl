@@ -1,31 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {WordService} from '../services/words.service';
-import {WordPair} from '../model/word';
+import {Component} from '@angular/core';
 import {Menu} from './menu.component';
 
 @Component({
   selector: 'cz',
   directives: [Menu],
-  providers: [WordService],
   template: `
-    <menu></menu>
-    <ul>
-      <li *ngFor="let word of words">
-        {{word.src.word}} -> {{word.tgt.word}}
-      </li>
-    </ul>`
+    <menu></menu>`
 })
-export class AppComponent implements OnInit {
-  public words: WordPair[];
+export class AppComponent {
 
-  constructor(private wordService: WordService) {}
-
-  ngOnInit() {
-    this.getWords();
-  }
-
-  getWords() {
-    this.wordService.getWords()
-      .then(wordlist => this.words = wordlist);
-  }
 }

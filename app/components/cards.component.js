@@ -9,19 +9,30 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var menu_component_1 = require('./menu.component');
-var AppComponent = (function () {
-    function AppComponent() {
+var Cards = (function () {
+    function Cards() {
+        this.cardsIndex = 0;
     }
-    AppComponent = __decorate([
+    Cards.prototype.ngOnInit = function () {
+        this.getNextCard();
+    };
+    Cards.prototype.getNextCard = function () {
+        if (this.cards.length >= this.cardsIndex) {
+            this.currentCard = this.cards[this.cardsIndex++];
+        }
+    };
+    __decorate([
+        core_1.Input('data'), 
+        __metadata('design:type', Array)
+    ], Cards.prototype, "cards", void 0);
+    Cards = __decorate([
         core_1.Component({
-            selector: 'cz',
-            directives: [menu_component_1.Menu],
-            template: "\n    <menu></menu>"
+            selector: 'cards',
+            template: "\n    <div>CARDS\n    {{currentCard|json}}\n    </div>"
         }), 
         __metadata('design:paramtypes', [])
-    ], AppComponent);
-    return AppComponent;
+    ], Cards);
+    return Cards;
 }());
-exports.AppComponent = AppComponent;
-//# sourceMappingURL=app.component.js.map
+exports.Cards = Cards;
+//# sourceMappingURL=cards.component.js.map

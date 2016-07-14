@@ -13,7 +13,7 @@ var words_1 = require('../data/words');
 var WordService = (function () {
     function WordService() {
     }
-    WordService.prototype.getWords = function () {
+    WordService.prototype.getWords = function (filter) {
         return Promise.resolve(words_1.WORDS);
     };
     WordService = __decorate([

@@ -3,7 +3,7 @@ import {WORDS} from '../data/words';
 
 @Injectable()
 export class WordService {
-  getWords() {
+  getWords(filter:string) {
     return Promise.resolve(WORDS);
   }
 }
