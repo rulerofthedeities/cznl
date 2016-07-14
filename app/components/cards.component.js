@@ -9,12 +9,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var settings_service_1 = require('../services/settings.service');
+var card_item_component_1 = require('./card-item.component');
 var Cards = (function () {
-    function Cards() {
+    function Cards(settingsService) {
+        this.settingsService = settingsService;
         this.cardsIndex = 0;
+        this.maxCards = 20;
+        this.isQuestion = true;
     }
     Cards.prototype.ngOnInit = function () {
-        this.getNextCard();
+        this.getSettings();
+    };
+    Cards.prototype.getSettings = function () {
+        var _this = this;
+        this.settingsService.getSettings()
+            .then(function (settings) {
+            _this.maxCards = settings.maxCards;
+            _this.getNextCard();
+        });
     };
     Cards.prototype.getNextCard = function () {
         if (this.cards.length >= this.cardsIndex) {
@@ -28,9 +41,11 @@ var Cards = (function () {
     Cards = __decorate([
         core_1.Component({
             selector: 'cards',
-            template: "\n    <div>CARDS\n    {{currentCard|json}}\n    </div>"
+            directives: [card_item_component_1.CardItem],
+            providers: [settings_service_1.SettingsService],
+            template: "\n    <div>CARDS\n      <div>{{cardsIndex}}/{{maxCards}}</div>\n      <div *ngIf=\"currentCard\">\n        <card-item \n          [tpe]=\"isQuestion ? 'question' : 'answer'\"\n          [card]=\"currentCard\">\n        </card-item>\n      </div>\n    </div>"
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [settings_service_1.SettingsService])
     ], Cards);
     return Cards;
 }());

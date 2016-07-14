@@ -1,20 +1,43 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {SettingsService} from '../services/settings.service';
+import {CardItem} from './card-item.component';
+import {WordPair} from '../model/word.model';
 
 @Component({
   selector: 'cards',
+  directives: [CardItem],
+  providers: [SettingsService],
   template: `
     <div>CARDS
-    {{currentCard|json}}
+      <div>{{cardsIndex}}/{{maxCards}}</div>
+      <div *ngIf="currentCard">
+        <card-item 
+          [tpe]="isQuestion ? 'question' : 'answer'"
+          [card]="currentCard">
+        </card-item>
+      </div>
     </div>`
 })
 
 export class Cards implements OnInit {
-  @Input('data') cards: Object[];
+  @Input('data') cards: WordPair[];
   cardsIndex = 0;
-  currentCard: Object;
+  maxCards = 20;
+  isQuestion = true;
+  currentCard: WordPair;
+
+  constructor(private settingsService: SettingsService) {}
 
   ngOnInit() {
-    this.getNextCard();
+    this.getSettings();
+  }
+
+  getSettings() {
+    this.settingsService.getSettings()
+      .then(settings => {
+        this.maxCards = settings.maxCards;
+        this.getNextCard();
+      });
   }
 
   getNextCard() {
