@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var settings_service_1 = require('../services/settings.service');
 var card_item_component_1 = require('./card-item.component');
+var card_score_component_1 = require('./card-score.component');
 var Cards = (function () {
     function Cards(settingsService) {
         this.settingsService = settingsService;
@@ -26,7 +27,7 @@ var Cards = (function () {
         var _this = this;
         this.settingsService.getSettings()
             .then(function (settings) {
-            _this.maxCards = settings.maxCards;
+            _this.maxCards = Math.min(settings.maxCards, _this.cards.length);
             _this.getNextCard();
         });
     };
@@ -52,9 +53,9 @@ var Cards = (function () {
     Cards = __decorate([
         core_1.Component({
             selector: 'cards',
-            directives: [card_item_component_1.CardItem],
+            directives: [card_item_component_1.CardItem, card_score_component_1.CardScore],
             providers: [settings_service_1.SettingsService],
-            template: "\n    <div>CARDS\n      <div>{{cardsIndex}}/{{maxCards}}</div>\n      <card-item \n        *ngIf=\"currentCard\"\n        [card]=\"currentCard\"\n        (cardAnswered)=\"onCardAnswered($event)\">\n      </card-item>\n      <div *ngIf=\"isFinished\">\n        <h1>FINISHED</h1>\n        score: {{correct}}\n      </div>\n    </div>"
+            template: "\n    <div>CARDS\n      <div>{{cardsIndex}}/{{maxCards}}</div>\n      <card-item \n        *ngIf=\"currentCard\"\n        [card]=\"currentCard\"\n        (cardAnswered)=\"onCardAnswered($event)\">\n      </card-item>\n      <card-score \n        *ngIf=\"isFinished\"\n        [correct]=\"correct\"\n        [total]=\"maxCards\">\n        <h1>FINISHED</h1>\n        score: {{correct}}\n      </card-score>\n    </div>"
         }), 
         __metadata('design:paramtypes', [settings_service_1.SettingsService])
     ], Cards);

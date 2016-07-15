@@ -1,11 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {SettingsService} from '../services/settings.service';
 import {CardItem} from './card-item.component';
+import {CardScore} from './card-score.component';
 import {WordPair} from '../model/word.model';
 
 @Component({
   selector: 'cards',
-  directives: [CardItem],
+  directives: [CardItem, CardScore],
   providers: [SettingsService],
   template: `
     <div>CARDS
@@ -15,10 +16,13 @@ import {WordPair} from '../model/word.model';
         [card]="currentCard"
         (cardAnswered)="onCardAnswered($event)">
       </card-item>
-      <div *ngIf="isFinished">
+      <card-score 
+        *ngIf="isFinished"
+        [correct]="correct"
+        [total]="maxCards">
         <h1>FINISHED</h1>
         score: {{correct}}
-      </div>
+      </card-score>
     </div>`
 })
 
@@ -39,7 +43,7 @@ export class Cards implements OnInit {
   getSettings() {
     this.settingsService.getSettings()
       .then(settings => {
-        this.maxCards = settings.maxCards;
+        this.maxCards = Math.min(settings.maxCards, this.cards.length);
         this.getNextCard();
       });
   }
