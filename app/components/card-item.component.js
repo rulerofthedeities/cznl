@@ -12,24 +12,38 @@ var core_1 = require('@angular/core');
 var word_model_1 = require('../model/word.model');
 var CardItem = (function () {
     function CardItem() {
-        this.cardType = 'question';
+        this.isQuestion = true;
+        this.cardCompleted = new core_1.EventEmitter();
     }
-    CardItem.prototype.ngOnInit = function () {
-        this.cardData = this.cardType === 'question' ? this.card.src : this.card.tgt;
-        this.cardData.tpe = this.card.tpe;
+    CardItem.prototype.ngOnChanges = function () {
+        this.getCardData();
+    };
+    CardItem.prototype.turnCard = function () {
+        this.isQuestion = !this.isQuestion;
+        this.getCardData();
+        if (this.isQuestion) {
+            this.cardCompleted.emit(null);
+        }
+    };
+    CardItem.prototype.getCardData = function () {
+        this.cardData = this.isQuestion ? this.card.src : this.card.tgt;
     };
     __decorate([
         core_1.Input('tpe'), 
-        __metadata('design:type', String)
-    ], CardItem.prototype, "cardType", void 0);
+        __metadata('design:type', Boolean)
+    ], CardItem.prototype, "isQuestion", void 0);
     __decorate([
         core_1.Input(), 
         __metadata('design:type', word_model_1.WordPair)
     ], CardItem.prototype, "card", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], CardItem.prototype, "cardCompleted", void 0);
     CardItem = __decorate([
         core_1.Component({
             selector: 'card-item',
-            template: "\n    <div>\n      {{cardData.article}}<h1>{{cardData.word}}</h1>\n      <em>{{cardData.genus}} / {{cardData.tpe}}</em>\n    </div>\n    {{card |json}}"
+            template: "\n    <div class=\"card\" (click)=\"turnCard()\">\n      <div *ngIf=\"isQuestion\" class=\"question\">\n        QUESTION <br>\n        {{cardData.article}}<h1>{{cardData.word}}</h1>\n        <em>{{cardData.genus}} / {{card.tpe}}</em>\n      </div>\n      <div *ngIf=\"!isQuestion\" class=\"answer\">\n        QUESTION <br>\n         {{cardData.article}}<h1>{{cardData.word}}</h1>\n      </div>\n    </div>\n    <br>"
         }), 
         __metadata('design:paramtypes', [])
     ], CardItem);

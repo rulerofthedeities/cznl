@@ -10,13 +10,18 @@ import {WordPair} from '../model/word.model';
   template: `
     <div>CARDS
       <div>{{cardsIndex}}/{{maxCards}}</div>
-      <div *ngIf="currentCard">
-        <card-item 
-          [tpe]="isQuestion ? 'question' : 'answer'"
-          [card]="currentCard">
-        </card-item>
+      <card-item 
+        *ngIf="currentCard"
+        [tpe]="isQuestion"
+        [card]="currentCard"
+        (cardCompleted)="onCardCompleted()">
+      </card-item>
+      <div *ngIf="isFinished">
+        <h1>FINISHED</h1>
       </div>
-    </div>`
+    </div>`,
+  styles: [
+  `card-item {cursor:pointer;}`]
 })
 
 export class Cards implements OnInit {
@@ -24,6 +29,7 @@ export class Cards implements OnInit {
   cardsIndex = 0;
   maxCards = 20;
   isQuestion = true;
+  isFinished = false;
   currentCard: WordPair;
 
   constructor(private settingsService: SettingsService) {}
@@ -41,8 +47,15 @@ export class Cards implements OnInit {
   }
 
   getNextCard() {
-    if (this.cards.length >= this.cardsIndex) {
+    if (this.cardsIndex < this.cards.length) {
       this.currentCard = this.cards[this.cardsIndex++];
+    } else {
+      this.currentCard = null;
+      this.isFinished = true;
     }
+  }
+
+  onCardCompleted() {
+    this.getNextCard();
   }
 }
