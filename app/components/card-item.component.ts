@@ -4,24 +4,30 @@ import {WordPair, CardWord} from '../model/word.model';
 @Component({
   selector: 'card-item',
   template: `
-    <div class="card" (click)="turnCard()">
-      <div *ngIf="isQuestion" class="question">
+    <div class="card">
+      <div 
+        *ngIf="isQuestion"
+        (click)="turnCard()"
+        class="question">
         QUESTION <br>
         {{cardData.article}}<h1>{{cardData.word}}</h1>
         <em>{{cardData.genus}} / {{card.tpe}}</em>
       </div>
       <div *ngIf="!isQuestion" class="answer">
-        QUESTION <br>
+        ANSWER <br>
          {{cardData.article}}<h1>{{cardData.word}}</h1>
+         <div class="button" (click)="answerCard(true)">Correct</div>
+         <div class="button" (click)="answerCard(false)">Incorrect</div>
       </div>
-    </div>
-    <br>`
+    </div>`,
+  styles: [
+  `div.question, div.button {cursor:pointer;}`]
 })
 
 export class CardItem implements OnChanges {
-  @Input('tpe') isQuestion:boolean = true;
   @Input() card: WordPair;
-  @Output() cardCompleted = new EventEmitter();
+  @Output() cardAnswered = new EventEmitter();
+  isQuestion = true;
   cardData: CardWord;
 
   ngOnChanges() {
@@ -31,9 +37,11 @@ export class CardItem implements OnChanges {
   turnCard() {
     this.isQuestion = !this.isQuestion;
     this.getCardData();
-    if (this.isQuestion) {
-      this.cardCompleted.emit(null);
-    }
+  }
+
+  answerCard(correct: boolean) {
+    this.cardAnswered.emit(correct);
+    this.turnCard();
   }
 
   getCardData() {

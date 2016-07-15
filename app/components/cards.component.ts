@@ -12,24 +12,22 @@ import {WordPair} from '../model/word.model';
       <div>{{cardsIndex}}/{{maxCards}}</div>
       <card-item 
         *ngIf="currentCard"
-        [tpe]="isQuestion"
         [card]="currentCard"
-        (cardCompleted)="onCardCompleted()">
+        (cardAnswered)="onCardAnswered($event)">
       </card-item>
       <div *ngIf="isFinished">
         <h1>FINISHED</h1>
+        score: {{correct}}
       </div>
-    </div>`,
-  styles: [
-  `card-item {cursor:pointer;}`]
+    </div>`
 })
 
 export class Cards implements OnInit {
   @Input('data') cards: WordPair[];
   cardsIndex = 0;
   maxCards = 20;
-  isQuestion = true;
   isFinished = false;
+  correct = 0;
   currentCard: WordPair;
 
   constructor(private settingsService: SettingsService) {}
@@ -55,7 +53,10 @@ export class Cards implements OnInit {
     }
   }
 
-  onCardCompleted() {
+  onCardAnswered(isCorrect) {
     this.getNextCard();
+    if (isCorrect) {
+      this.correct++;
+    }
   }
 }

@@ -12,8 +12,8 @@ var core_1 = require('@angular/core');
 var word_model_1 = require('../model/word.model');
 var CardItem = (function () {
     function CardItem() {
+        this.cardAnswered = new core_1.EventEmitter();
         this.isQuestion = true;
-        this.cardCompleted = new core_1.EventEmitter();
     }
     CardItem.prototype.ngOnChanges = function () {
         this.getCardData();
@@ -21,17 +21,14 @@ var CardItem = (function () {
     CardItem.prototype.turnCard = function () {
         this.isQuestion = !this.isQuestion;
         this.getCardData();
-        if (this.isQuestion) {
-            this.cardCompleted.emit(null);
-        }
+    };
+    CardItem.prototype.answerCard = function (correct) {
+        this.cardAnswered.emit(correct);
+        this.turnCard();
     };
     CardItem.prototype.getCardData = function () {
         this.cardData = this.isQuestion ? this.card.src : this.card.tgt;
     };
-    __decorate([
-        core_1.Input('tpe'), 
-        __metadata('design:type', Boolean)
-    ], CardItem.prototype, "isQuestion", void 0);
     __decorate([
         core_1.Input(), 
         __metadata('design:type', word_model_1.WordPair)
@@ -39,11 +36,13 @@ var CardItem = (function () {
     __decorate([
         core_1.Output(), 
         __metadata('design:type', Object)
-    ], CardItem.prototype, "cardCompleted", void 0);
+    ], CardItem.prototype, "cardAnswered", void 0);
     CardItem = __decorate([
         core_1.Component({
             selector: 'card-item',
-            template: "\n    <div class=\"card\" (click)=\"turnCard()\">\n      <div *ngIf=\"isQuestion\" class=\"question\">\n        QUESTION <br>\n        {{cardData.article}}<h1>{{cardData.word}}</h1>\n        <em>{{cardData.genus}} / {{card.tpe}}</em>\n      </div>\n      <div *ngIf=\"!isQuestion\" class=\"answer\">\n        QUESTION <br>\n         {{cardData.article}}<h1>{{cardData.word}}</h1>\n      </div>\n    </div>\n    <br>"
+            template: "\n    <div class=\"card\">\n      <div \n        *ngIf=\"isQuestion\"\n        (click)=\"turnCard()\"\n        class=\"question\">\n        QUESTION <br>\n        {{cardData.article}}<h1>{{cardData.word}}</h1>\n        <em>{{cardData.genus}} / {{card.tpe}}</em>\n      </div>\n      <div *ngIf=\"!isQuestion\" class=\"answer\">\n        ANSWER <br>\n         {{cardData.article}}<h1>{{cardData.word}}</h1>\n         <div class=\"button\" (click)=\"answerCard(true)\">Correct</div>\n         <div class=\"button\" (click)=\"answerCard(false)\">Incorrect</div>\n      </div>\n    </div>",
+            styles: [
+                "div.question, div.button {cursor:pointer;}"]
         }), 
         __metadata('design:paramtypes', [])
     ], CardItem);

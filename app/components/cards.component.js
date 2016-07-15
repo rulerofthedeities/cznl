@@ -16,8 +16,8 @@ var Cards = (function () {
         this.settingsService = settingsService;
         this.cardsIndex = 0;
         this.maxCards = 20;
-        this.isQuestion = true;
         this.isFinished = false;
+        this.correct = 0;
     }
     Cards.prototype.ngOnInit = function () {
         this.getSettings();
@@ -39,8 +39,11 @@ var Cards = (function () {
             this.isFinished = true;
         }
     };
-    Cards.prototype.onCardCompleted = function () {
+    Cards.prototype.onCardAnswered = function (isCorrect) {
         this.getNextCard();
+        if (isCorrect) {
+            this.correct++;
+        }
     };
     __decorate([
         core_1.Input('data'), 
@@ -51,9 +54,7 @@ var Cards = (function () {
             selector: 'cards',
             directives: [card_item_component_1.CardItem],
             providers: [settings_service_1.SettingsService],
-            template: "\n    <div>CARDS\n      <div>{{cardsIndex}}/{{maxCards}}</div>\n      <card-item \n        *ngIf=\"currentCard\"\n        [tpe]=\"isQuestion\"\n        [card]=\"currentCard\"\n        (cardCompleted)=\"onCardCompleted()\">\n      </card-item>\n      <div *ngIf=\"isFinished\">\n        <h1>FINISHED</h1>\n      </div>\n    </div>",
-            styles: [
-                "card-item {cursor:pointer;}"]
+            template: "\n    <div>CARDS\n      <div>{{cardsIndex}}/{{maxCards}}</div>\n      <card-item \n        *ngIf=\"currentCard\"\n        [card]=\"currentCard\"\n        (cardAnswered)=\"onCardAnswered($event)\">\n      </card-item>\n      <div *ngIf=\"isFinished\">\n        <h1>FINISHED</h1>\n        score: {{correct}}\n      </div>\n    </div>"
         }), 
         __metadata('design:paramtypes', [settings_service_1.SettingsService])
     ], Cards);
