@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
-import {WordPair, CardWord} from '../model/word.model';
+import {WordPair, Word} from '../../model/word.model';
 
 @Component({
   selector: 'card-item',
@@ -11,11 +11,12 @@ import {WordPair, CardWord} from '../model/word.model';
         class="question">
         QUESTION <br>
         {{cardData.article}}<h1>{{cardData.word}}</h1>
-        <em>{{cardData.genus}} / {{card.tpe}}</em>
+        <em>{{card.tpe}}</em>
       </div>
       <div *ngIf="!isQuestion" class="answer">
         ANSWER <br>
          {{cardData.article}}<h1>{{cardData.word}}</h1>
+         {{cardData.genus}}
          <div class="button" (click)="answerCard(true)">Correct</div>
          <div class="button" (click)="answerCard(false)">Incorrect</div>
       </div>
@@ -28,7 +29,7 @@ export class CardItem implements OnChanges {
   @Input() card: WordPair;
   @Output() cardAnswered = new EventEmitter();
   isQuestion = true;
-  cardData: CardWord;
+  cardData: Word;
 
   ngOnChanges() {
     this.getCardData();
@@ -45,6 +46,6 @@ export class CardItem implements OnChanges {
   }
 
   getCardData() {
-    this.cardData = this.isQuestion ? this.card.src : this.card.tgt;
+    this.cardData = this.isQuestion ? this.card.nl : this.card.cz;
   }
 }

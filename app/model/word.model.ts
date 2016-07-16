@@ -1,18 +1,14 @@
-interface Word {
+export interface Word {
   language: string;
   word: string;
   article: string;
   genus: string;
-}
-
-export interface CardWord extends Word {
   tpe?: string;
 }
 
-export class WordPair {
-  src: Word;
-  tgt: Word;
+export interface WordPair {
+  cz: Word;
+  nl: Word;
   tpe: string;
   categories: string[];
 }
-

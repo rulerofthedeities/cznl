@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Filter} from './common/filter.component';
-import {Cards} from './cards.component';
+import {Cards} from './cards/cards.component';
 import {WordPair} from '../model/word.model';
 import {WordService} from '../services/words.service';
 

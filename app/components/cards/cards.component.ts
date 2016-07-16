@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {SettingsService} from '../services/settings.service';
+import {SettingsService} from '../../services/settings.service';
 import {CardItem} from './card-item.component';
 import {CardScore} from './card-score.component';
-import {WordPair} from '../model/word.model';
+import {WordPair} from '../../model/word.model';
 
 @Component({
   selector: 'cards',

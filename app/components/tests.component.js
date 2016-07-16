@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var filter_component_1 = require('./common/filter.component');
-var cards_component_1 = require('./cards.component');
+var cards_component_1 = require('./cards/cards.component');
 var words_service_1 = require('../services/words.service');
 var Tests = (function () {
     function Tests(wordService) {

@@ -1,10 +1,10 @@
 "use strict";
-var firstWordSrc = { language: 'cz', word: 'pes', article: 'ten', genus: 'Ma' };
-var firstWordTgt = { language: 'nl', word: 'hond', article: 'de', genus: '' };
-var secondWordSrc = { language: 'cz', word: 'kočka', article: 'ta', genus: 'F' };
-var secondWordTgt = { language: 'nl', word: 'kat', article: 'de', genus: '' };
+var firstWordCz = { language: 'cz', word: 'pes', article: 'ten', genus: 'Ma' };
+var firstWordNl = { language: 'nl', word: 'hond', article: 'de', genus: '' };
+var secondWordCz = { language: 'cz', word: 'kočka', article: 'ta', genus: 'F' };
+var secondWordNl = { language: 'nl', word: 'kat', article: 'de', genus: '' };
 exports.WORDS = [
-    { src: firstWordSrc, tgt: firstWordTgt, tpe: 'noun', categories: ['dieren', 'zoogdieren', 'huisdieren'] },
-    { src: secondWordSrc, tgt: secondWordTgt, tpe: 'noun', categories: ['dieren', 'zoogdieren', 'huisdieren'] }
+    { cz: firstWordCz, nl: firstWordNl, tpe: 'noun', categories: ['dieren', 'zoogdieren', 'huisdieren'] },
+    { cz: secondWordCz, nl: secondWordNl, tpe: 'noun', categories: ['dieren', 'zoogdieren', 'huisdieren'] }
 ];
 //# sourceMappingURL=words.js.map
