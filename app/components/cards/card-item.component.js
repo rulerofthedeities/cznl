@@ -39,9 +39,8 @@ var CardItem = (function () {
     CardItem = __decorate([
         core_1.Component({
             selector: 'card-item',
-            template: "\n    <div class=\"card\">\n      <div \n        *ngIf=\"isQuestion\"\n        (click)=\"turnCard()\"\n        class=\"question\">\n        QUESTION <br>\n        {{cardData.article}}<h1>{{cardData.word}}</h1>\n        <em>{{card.tpe}}</em>\n      </div>\n      <div *ngIf=\"!isQuestion\" class=\"answer\">\n        ANSWER <br>\n         {{cardData.article}}<h1>{{cardData.word}}</h1>\n         {{cardData.genus}}\n         <div class=\"button\" (click)=\"answerCard(true)\">Correct</div>\n         <div class=\"button\" (click)=\"answerCard(false)\">Incorrect</div>\n      </div>\n    </div>",
-            styles: [
-                "div.question, div.button {cursor:pointer;}"]
+            template: "\n\n<div class=\"col-xs-10 col-xs-offset-1\">\n\n    <div class=\"w3-card-4\">\n      <div \n        *ngIf=\"isQuestion\"\n        (click)=\"turnCard()\"\n        class=\"question caption\">\n        {{cardData.article}}<h4>{{cardData.word}}</h4>\n        <em>{{card.tpe}}</em>\n      </div>\n      <div *ngIf=\"!isQuestion\" class=\"answer\">\n        {{cardData.article}}<h4>{{cardData.word}}</h4>\n        {{cardData.genus}}\n        <div \n          class=\"btn btn-success btn-xs pull-right\" \n          (click)=\"answerCard(true)\">\n          Correct\n        </div>\n        <div \n          class=\"btn btn-danger btn-xs pull-right\" \n          (click)=\"answerCard(false)\">\n          Incorrect\n        </div>\n      </div>\n    </div>",
+            styles: ["\n    .card {\n      padding:12px;\n      \n    }\n    div.question {cursor:pointer;}\n    div.answer .btn {margin:3px}\n  "]
         }), 
         __metadata('design:paramtypes', [])
     ], CardItem);

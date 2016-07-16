@@ -5,10 +5,10 @@ import {FilterService} from '../../services/filters.service';
   selector: 'filter',
   providers: [FilterService],
   template: `
-  <div [ngSwitch]="tpe" *ngIf="filters">
-    <ul *ngSwitchCase="'default'">
+  <div [ngSwitch]="tpe" *ngIf="filters" class="filter">
+    <ul *ngSwitchCase="'default'" class="list-unstyled">
       <li>
-        <select #level>
+        <select #level class="form-control">
           <option 
             *ngFor="let level of filters.levels">
             {{level}}
@@ -16,7 +16,7 @@ import {FilterService} from '../../services/filters.service';
         </select>
       </li>
       <li>
-        <select #wordtpe>
+        <select #wordtpe class="form-control">
           <option 
             *ngFor="let tpe of filters.tpes">
             {{tpe}}
@@ -24,22 +24,34 @@ import {FilterService} from '../../services/filters.service';
         </select>
       </li>
       <li>
-        <select #cats>
+        <select #cats class="form-control">
           <option 
             *ngFor="let cat of filters.cats">
             {{cat}}
           </option>
         </select>
       </li>
-      <li (click)="startTest(level.value, wordtpe.value, cats.value)">Start</li>
+      <li 
+        class="btn btn-success btn-lg" 
+        (click)="startTest(level.value, wordtpe.value, cats.value)">
+        Start Test
+      </li>
     </ul>
-    <ul *ngSwitchCase="'user'">
-      <li>Lijst 1</li>
-      <li>Lijst 2</li>
-      <li>Select #words</li>
-      <li>Start</li>
+    <ul 
+      *ngSwitchCase="'user'"
+      class="list-group">
+      <li class="list-group-item">Lijst 1<span class="badge">12</span></li>
+      <li class="list-group-item">Lijst 2<span class="badge">8</span></li>
+      <li
+        class="btn btn-success btn-lg disabled">
+        Start Test
+      </li>
     </ul>
-  </div>`
+  </div>`,
+  styles: [`
+    .filter {margin: 0 20px;}
+    .btn {margin-top: 6px;}
+  `]
 })
 
 export class Filter implements OnInit {

@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var router_1 = require('@angular/router');
 var menu_component_1 = require('./menu.component');
 var AppComponent = (function () {
     function AppComponent() {
@@ -16,8 +17,9 @@ var AppComponent = (function () {
     AppComponent = __decorate([
         core_1.Component({
             selector: 'cz',
-            directives: [menu_component_1.Menu],
-            template: "\n    <menu></menu>"
+            directives: [router_1.ROUTER_DIRECTIVES, menu_component_1.Menu],
+            template: "\n    <div class=\"container\">\n      <div class=\"panel-top\">\n        <menu></menu>\n      </div>\n      <div class=\"panel-main\">\n        <router-outlet></router-outlet>\n      </div>\n    </div>",
+            styles: ["\n      .panel-top {\n        background-color:#eee;\n        border: 1px solid #ddd;\n      }\n      .panel-main {\n        background-color:#fefefe;\n        border:1px solid #eee;\n        padding: 20px 0;\n        margin-top:6px;\n      }\n    "]
         }), 
         __metadata('design:paramtypes', [])
     ], AppComponent);

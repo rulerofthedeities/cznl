@@ -4,25 +4,40 @@ import {WordPair, Word} from '../../model/word.model';
 @Component({
   selector: 'card-item',
   template: `
-    <div class="card">
+
+<div class="col-xs-10 col-xs-offset-1">
+
+    <div class="w3-card-4">
       <div 
         *ngIf="isQuestion"
         (click)="turnCard()"
-        class="question">
-        QUESTION <br>
-        {{cardData.article}}<h1>{{cardData.word}}</h1>
+        class="question caption">
+        {{cardData.article}}<h4>{{cardData.word}}</h4>
         <em>{{card.tpe}}</em>
       </div>
       <div *ngIf="!isQuestion" class="answer">
-        ANSWER <br>
-         {{cardData.article}}<h1>{{cardData.word}}</h1>
-         {{cardData.genus}}
-         <div class="button" (click)="answerCard(true)">Correct</div>
-         <div class="button" (click)="answerCard(false)">Incorrect</div>
+        {{cardData.article}}<h4>{{cardData.word}}</h4>
+        {{cardData.genus}}
+        <div 
+          class="btn btn-success btn-xs pull-right" 
+          (click)="answerCard(true)">
+          Correct
+        </div>
+        <div 
+          class="btn btn-danger btn-xs pull-right" 
+          (click)="answerCard(false)">
+          Incorrect
+        </div>
       </div>
     </div>`,
-  styles: [
-  `div.question, div.button {cursor:pointer;}`]
+  styles: [`
+    .card {
+      padding:12px;
+      
+    }
+    div.question {cursor:pointer;}
+    div.answer .btn {margin:3px}
+  `]
 })
 
 export class CardItem implements OnChanges {

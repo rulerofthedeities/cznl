@@ -38,7 +38,7 @@ var Tests = (function () {
             selector: 'tests',
             directives: [filter_component_1.Filter, cards_component_1.Cards],
             providers: [words_service_1.WordService],
-            template: "\n  <h1>Word tests</h1>\n  <ul>\n    <li (click)=\"selectListType('default')\">Selecteer woordenlijst</li>\n    <li (click)=\"selectListType('user')\">Mijn woordenlijst</li>\n  </ul>\n  <filter *ngIf=\"!started\"\n    [tpe]=\"listType\"\n    (selectedFilter)=\"onSelectFilter($event)\">\n  </filter>\n  <div *ngIf=\"started\">\n    Filter data: {{filterData|json}}\n    <cards [data]=\"cards\">\n    </cards>\n  </div>\n\n  ",
+            template: "\n  <div class=\"row\">\n    <div *ngIf=\"!started\" class=\"col-xs-4\">\n      <ul class=\"btn-group-vertical btn-group-sm\">\n        <li \n          (click)=\"selectListType('default')\"\n          class=\"btn\"\n          [ngClass]=\"{'btn-primary':listType==='default'}\">\n          Selecteer woordenlijst\n        </li>\n        <li \n          (click)=\"selectListType('user')\"\n          class=\"btn\"\n          [ngClass]=\"{'btn-primary':listType==='user'}\">\n          Mijn woordenlijst\n        </li>\n      </ul>\n    </div>\n    <filter *ngIf=\"!started\"\n      [tpe]=\"listType\"\n      (selectedFilter)=\"onSelectFilter($event)\"\n      class=\"col-xs-8\">\n    </filter>\n    <div *ngIf=\"started\" class=\"col-xs-12\">\n      Filter data: {{filterData|json}}\n      <cards [data]=\"cards\">\n      </cards>\n    </div>\n  </div>\n  ",
             styles: [
                 "li {cursor:pointer;}"]
         }), 
