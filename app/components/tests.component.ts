@@ -32,7 +32,6 @@ import {WordService} from '../services/words.service';
       class="col-xs-8">
     </filter>
     <div *ngIf="started" class="col-xs-12">
-      Filter data: {{filterData|json}}
       <cards [data]="cards">
       </cards>
     </div>

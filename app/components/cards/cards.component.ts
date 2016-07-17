@@ -9,8 +9,22 @@ import {WordPair} from '../../model/word.model';
   directives: [CardItem, CardScore],
   providers: [SettingsService],
   template: `
-    <div>CARDS
-      <div>{{cardsIndex}}/{{maxCards}}</div>
+    <div>
+      <div 
+        class="text-center progress"
+        *ngIf="!isFinished">
+        <div 
+          class="progress-bar" 
+          role="progressbar" 
+          [attr.aria-valuenow]="progress"
+          aria-valuemin="0" 
+          aria-valuemax="100" 
+          [style.width.%]="progress">
+          <span>
+            {{cardsIndex}}/{{maxCards}}
+          </span>
+        </div>
+      </div>
       <card-item 
         *ngIf="currentCard"
         [card]="currentCard"
@@ -30,6 +44,7 @@ export class Cards implements OnInit {
   @Input('data') cards: WordPair[];
   cardsIndex = 0;
   maxCards = 20;
+  progress = 0;
   isFinished = false;
   correct = 0;
   currentCard: WordPair;
@@ -51,6 +66,7 @@ export class Cards implements OnInit {
   getNextCard() {
     if (this.cardsIndex < this.cards.length) {
       this.currentCard = this.cards[this.cardsIndex++];
+      this.progress = Math.trunc(this.cardsIndex / this.maxCards * 100);
     } else {
       this.currentCard = null;
       this.isFinished = true;

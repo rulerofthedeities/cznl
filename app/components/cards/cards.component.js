@@ -17,6 +17,7 @@ var Cards = (function () {
         this.settingsService = settingsService;
         this.cardsIndex = 0;
         this.maxCards = 20;
+        this.progress = 0;
         this.isFinished = false;
         this.correct = 0;
     }
@@ -34,6 +35,7 @@ var Cards = (function () {
     Cards.prototype.getNextCard = function () {
         if (this.cardsIndex < this.cards.length) {
             this.currentCard = this.cards[this.cardsIndex++];
+            this.progress = Math.trunc(this.cardsIndex / this.maxCards * 100);
         }
         else {
             this.currentCard = null;
@@ -55,7 +57,7 @@ var Cards = (function () {
             selector: 'cards',
             directives: [card_item_component_1.CardItem, card_score_component_1.CardScore],
             providers: [settings_service_1.SettingsService],
-            template: "\n    <div>CARDS\n      <div>{{cardsIndex}}/{{maxCards}}</div>\n      <card-item \n        *ngIf=\"currentCard\"\n        [card]=\"currentCard\"\n        (cardAnswered)=\"onCardAnswered($event)\">\n      </card-item>\n      <card-score \n        *ngIf=\"isFinished\"\n        [correct]=\"correct\"\n        [total]=\"maxCards\">\n        <h1>FINISHED</h1>\n        score: {{correct}}\n      </card-score>\n    </div>"
+            template: "\n    <div>\n      <div \n        class=\"text-center progress\"\n        *ngIf=\"!isFinished\">\n        <div \n          class=\"progress-bar\" \n          role=\"progressbar\" \n          [attr.aria-valuenow]=\"progress\"\n          aria-valuemin=\"0\" \n          aria-valuemax=\"100\" \n          [style.width.%]=\"progress\">\n          <span>\n            {{cardsIndex}}/{{maxCards}}\n          </span>\n        </div>\n      </div>\n      <card-item \n        *ngIf=\"currentCard\"\n        [card]=\"currentCard\"\n        (cardAnswered)=\"onCardAnswered($event)\">\n      </card-item>\n      <card-score \n        *ngIf=\"isFinished\"\n        [correct]=\"correct\"\n        [total]=\"maxCards\">\n        <h1>FINISHED</h1>\n        score: {{correct}}\n      </card-score>\n    </div>"
         }), 
         __metadata('design:paramtypes', [settings_service_1.SettingsService])
     ], Cards);
