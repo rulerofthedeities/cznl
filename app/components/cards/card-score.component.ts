@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 
 @Component({
   selector: 'card-score',
@@ -8,7 +8,11 @@ import {Component, Input, OnInit} from '@angular/core';
       <h2>Score: {{scoreDisplay}}</h2>
       <em>({{percDisplay}}%)</em>
       <div class="clearfix"></div>
-      <button class="btn btn-success">Probeer opnieuw</button>
+      <button 
+        class="btn btn-success"
+        (click)="doRestart()">
+        Probeer opnieuw
+      </button>
     </div>`,
   styleUrls: ['app/components/cards/card.component.css']
 })
@@ -16,11 +20,16 @@ import {Component, Input, OnInit} from '@angular/core';
 export class CardScore implements OnInit {
   @Input() correct;
   @Input() total;
+  @Output() restart = new EventEmitter();
   scoreDisplay: string;
   percDisplay: string;
 
   ngOnInit() {
     this.scoreDisplay = this.correct + '/' + this.total;
     this.percDisplay = Math.round(this.correct / this.total * 100).toString();
+  }
+
+  doRestart() {
+    this.restart.emit(true);
   }
 }

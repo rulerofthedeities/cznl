@@ -33,25 +33,25 @@ import {WordPair} from '../../model/word.model';
       <card-score 
         *ngIf="isFinished"
         [correct]="correct"
-        [total]="maxCards">
-        <h1>FINISHED</h1>
-        score: {{correct}}
+        [total]="maxCards"
+        (restart)="onRestart($event)">
       </card-score>
     </div>`
 })
 
 export class Cards implements OnInit {
   @Input('data') cards: WordPair[];
-  cardsIndex = 0;
   maxCards = 20;
-  progress = 0;
-  isFinished = false;
-  correct = 0;
+  cardsIndex:number;
+  isFinished: boolean;
+  correct: number;
+  progress: number;
   currentCard: WordPair;
 
   constructor(private settingsService: SettingsService) {}
 
   ngOnInit() {
+    this.reset();
     this.getSettings();
   }
 
@@ -73,10 +73,22 @@ export class Cards implements OnInit {
     }
   }
 
-  onCardAnswered(isCorrect) {
+  onCardAnswered(isCorrect: boolean) {
     this.getNextCard();
     if (isCorrect) {
       this.correct++;
     }
+  }
+
+  onRestart(isRestart: boolean) {
+    this.reset();
+    this.getNextCard();
+  }
+
+  reset() {
+    this.isFinished = false;
+    this.progress = 0;
+    this.correct = 0;
+    this.cardsIndex = 0;
   }
 }

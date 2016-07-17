@@ -15,13 +15,10 @@ var card_score_component_1 = require('./card-score.component');
 var Cards = (function () {
     function Cards(settingsService) {
         this.settingsService = settingsService;
-        this.cardsIndex = 0;
         this.maxCards = 20;
-        this.progress = 0;
-        this.isFinished = false;
-        this.correct = 0;
     }
     Cards.prototype.ngOnInit = function () {
+        this.reset();
         this.getSettings();
     };
     Cards.prototype.getSettings = function () {
@@ -48,6 +45,16 @@ var Cards = (function () {
             this.correct++;
         }
     };
+    Cards.prototype.onRestart = function (isRestart) {
+        this.reset();
+        this.getNextCard();
+    };
+    Cards.prototype.reset = function () {
+        this.isFinished = false;
+        this.progress = 0;
+        this.correct = 0;
+        this.cardsIndex = 0;
+    };
     __decorate([
         core_1.Input('data'), 
         __metadata('design:type', Array)
@@ -57,7 +64,7 @@ var Cards = (function () {
             selector: 'cards',
             directives: [card_item_component_1.CardItem, card_score_component_1.CardScore],
             providers: [settings_service_1.SettingsService],
-            template: "\n    <div>\n      <div \n        class=\"text-center progress\"\n        *ngIf=\"!isFinished\">\n        <div \n          class=\"progress-bar\" \n          role=\"progressbar\" \n          [attr.aria-valuenow]=\"progress\"\n          aria-valuemin=\"0\" \n          aria-valuemax=\"100\" \n          [style.width.%]=\"progress\">\n          <span>\n            {{cardsIndex}}/{{maxCards}}\n          </span>\n        </div>\n      </div>\n      <card-item \n        *ngIf=\"currentCard\"\n        [card]=\"currentCard\"\n        (cardAnswered)=\"onCardAnswered($event)\">\n      </card-item>\n      <card-score \n        *ngIf=\"isFinished\"\n        [correct]=\"correct\"\n        [total]=\"maxCards\">\n        <h1>FINISHED</h1>\n        score: {{correct}}\n      </card-score>\n    </div>"
+            template: "\n    <div>\n      <div \n        class=\"text-center progress\"\n        *ngIf=\"!isFinished\">\n        <div \n          class=\"progress-bar\" \n          role=\"progressbar\" \n          [attr.aria-valuenow]=\"progress\"\n          aria-valuemin=\"0\" \n          aria-valuemax=\"100\" \n          [style.width.%]=\"progress\">\n          <span>\n            {{cardsIndex}}/{{maxCards}}\n          </span>\n        </div>\n      </div>\n      <card-item \n        *ngIf=\"currentCard\"\n        [card]=\"currentCard\"\n        (cardAnswered)=\"onCardAnswered($event)\">\n      </card-item>\n      <card-score \n        *ngIf=\"isFinished\"\n        [correct]=\"correct\"\n        [total]=\"maxCards\"\n        (restart)=\"onRestart($event)\">\n      </card-score>\n    </div>"
         }), 
         __metadata('design:paramtypes', [settings_service_1.SettingsService])
     ], Cards);

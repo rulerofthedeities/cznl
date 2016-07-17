@@ -11,10 +11,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var CardScore = (function () {
     function CardScore() {
+        this.restart = new core_1.EventEmitter();
     }
     CardScore.prototype.ngOnInit = function () {
         this.scoreDisplay = this.correct + '/' + this.total;
         this.percDisplay = Math.round(this.correct / this.total * 100).toString();
+    };
+    CardScore.prototype.doRestart = function () {
+        this.restart.emit(true);
     };
     __decorate([
         core_1.Input(), 
@@ -24,10 +28,14 @@ var CardScore = (function () {
         core_1.Input(), 
         __metadata('design:type', Object)
     ], CardScore.prototype, "total", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], CardScore.prototype, "restart", void 0);
     CardScore = __decorate([
         core_1.Component({
             selector: 'card-score',
-            template: "\n    <div class=\"card center-block text-center score\">\n      <h4>Test Completed!</h4>\n      <h2>Score: {{scoreDisplay}}</h2>\n      <em>({{percDisplay}}%)</em>\n      <div class=\"clearfix\"></div>\n      <button class=\"btn btn-success\">Probeer opnieuw</button>\n    </div>",
+            template: "\n    <div class=\"card center-block text-center score\">\n      <h4>Test Completed!</h4>\n      <h2>Score: {{scoreDisplay}}</h2>\n      <em>({{percDisplay}}%)</em>\n      <div class=\"clearfix\"></div>\n      <button \n        class=\"btn btn-success\"\n        (click)=\"doRestart()\">\n        Probeer opnieuw\n      </button>\n    </div>",
             styleUrls: ['app/components/cards/card.component.css']
         }), 
         __metadata('design:paramtypes', [])
