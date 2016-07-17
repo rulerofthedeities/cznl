@@ -27,7 +27,8 @@ var CardScore = (function () {
     CardScore = __decorate([
         core_1.Component({
             selector: 'card-score',
-            template: "\n  FINISHED\n  score: {{scoreDisplay}} ({{percDisplay}}%)"
+            template: "\n    <div class=\"card center-block text-center score\">\n      <h4>Test Completed!</h4>\n      <h2>Score: {{scoreDisplay}}</h2>\n      <em>({{percDisplay}}%)</em>\n      <div class=\"clearfix\"></div>\n      <button class=\"btn btn-success\">Probeer opnieuw</button>\n    </div>",
+            styleUrls: ['app/components/cards/card.component.css']
         }), 
         __metadata('design:paramtypes', [])
     ], CardScore);

@@ -3,8 +3,14 @@ import {Component, Input, OnInit} from '@angular/core';
 @Component({
   selector: 'card-score',
   template: `
-  FINISHED
-  score: {{scoreDisplay}} ({{percDisplay}}%)`
+    <div class="card center-block text-center score">
+      <h4>Test Completed!</h4>
+      <h2>Score: {{scoreDisplay}}</h2>
+      <em>({{percDisplay}}%)</em>
+      <div class="clearfix"></div>
+      <button class="btn btn-success">Probeer opnieuw</button>
+    </div>`,
+  styleUrls: ['app/components/cards/card.component.css']
 })
 
 export class CardScore implements OnInit {
