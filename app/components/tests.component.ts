@@ -1,13 +1,15 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {Filter} from './common/filter.component';
 import {Cards} from './cards/cards.component';
 import {WordPair} from '../model/word.model';
 import {WordService} from '../services/words.service';
+import {RestartService} from '../services/restart.service';
+import {Subscription}   from 'rxjs/Subscription';
 
 @Component({
   selector: 'tests',
   directives: [Filter, Cards],
-  providers: [WordService],
+  providers: [WordService, RestartService],
   template:`
   <div class="row">
     <div *ngIf="!started" class="col-xs-4">
@@ -32,7 +34,8 @@ import {WordService} from '../services/words.service';
       class="col-xs-8">
     </filter>
     <div *ngIf="started" class="col-xs-12">
-      <cards [data]="cards">
+      <cards 
+        [data]="cards">
       </cards>
     </div>
   </div>
@@ -41,13 +44,21 @@ import {WordService} from '../services/words.service';
   `li {cursor:pointer;}`]
 })
 
-export class Tests {
+export class Tests implements OnDestroy {
   listType: string = 'default';
   filterData: Object;
   started: boolean = false;
   cards: WordPair[];
+  subscription: Subscription;
 
-  constructor(private wordService: WordService) {}
+  constructor(
+    private wordService: WordService,
+    restartService: RestartService) {
+    this.subscription = restartService.restart$.subscribe(
+      start => {
+        this.restart();
+      });
+  }
 
   selectListType(tpe) {
     this.listType = tpe;
@@ -64,5 +75,14 @@ export class Tests {
         this.cards = wordlist;
         this.started = true;
       });
+  }
+
+  restart() {
+    this.started = false;
+  }
+
+  ngOnDestroy() {
+    // prevent memory leak when component destroyed
+    this.subscription.unsubscribe();
   }
 }

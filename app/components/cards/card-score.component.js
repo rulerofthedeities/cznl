@@ -9,8 +9,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var restart_service_1 = require('../../services/restart.service');
 var CardScore = (function () {
-    function CardScore() {
+    function CardScore(restartService) {
+        this.restartService = restartService;
         this.restart = new core_1.EventEmitter();
     }
     CardScore.prototype.ngOnInit = function () {
@@ -19,6 +21,9 @@ var CardScore = (function () {
     };
     CardScore.prototype.doRestart = function () {
         this.restart.emit(true);
+    };
+    CardScore.prototype.doNewTest = function () {
+        this.restartService.restartTest();
     };
     __decorate([
         core_1.Input(), 
@@ -35,10 +40,10 @@ var CardScore = (function () {
     CardScore = __decorate([
         core_1.Component({
             selector: 'card-score',
-            template: "\n    <div class=\"card center-block text-center score\">\n      <h4>Test Completed!</h4>\n      <h2>Score: {{scoreDisplay}}</h2>\n      <em>({{percDisplay}}%)</em>\n      <div class=\"clearfix\"></div>\n      <button \n        class=\"btn btn-success\"\n        (click)=\"doRestart()\">\n        Probeer opnieuw\n      </button>\n    </div>",
+            template: "\n    <div class=\"card center-block text-center score\">\n      <h4>Test Completed!</h4>\n      <h2>Score: {{scoreDisplay}}</h2>\n      <em>({{percDisplay}}%)</em>\n      <div class=\"clearfix\"></div>\n      <button \n        class=\"btn btn-success\"\n        (click)=\"doRestart()\">\n        Probeer opnieuw\n      </button>\n      <button \n        class=\"btn btn-success\"\n        (click)=\"doNewTest()\">\n        Nieuwe test\n      </button>\n    </div>",
             styleUrls: ['app/components/cards/card.component.css']
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [restart_service_1.RestartService])
     ], CardScore);
     return CardScore;
 }());
