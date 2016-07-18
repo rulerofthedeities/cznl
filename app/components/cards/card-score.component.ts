@@ -5,20 +5,22 @@ import {RestartService} from '../../services/restart.service';
   selector: 'card-score',
   template: `
     <div class="card center-block text-center score">
-      <h4>Test Completed!</h4>
+      <h4>Test voltooid!</h4>
       <h2>Score: {{scoreDisplay}}</h2>
       <em>({{percDisplay}}%)</em>
       <div class="clearfix"></div>
-      <button 
-        class="btn btn-success"
-        (click)="doRestart()">
-        Probeer opnieuw
-      </button>
-      <button 
-        class="btn btn-success"
-        (click)="doNewTest()">
-        Nieuwe test
-      </button>
+      <div class="buttons">
+        <button 
+          class="btn btn-success btn-block"
+          (click)="doRestart()">
+          Probeer opnieuw
+        </button>
+        <button 
+          class="btn btn-success btn-block"
+          (click)="doNewTest()">
+          Nieuwe test
+        </button>
+      </div>
     </div>`,
   styleUrls: ['app/components/cards/card.component.css']
 })

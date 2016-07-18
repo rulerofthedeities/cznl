@@ -12,6 +12,7 @@ var core_1 = require('@angular/core');
 var settings_service_1 = require('../../services/settings.service');
 var card_item_component_1 = require('./card-item.component');
 var card_score_component_1 = require('./card-score.component');
+var utils_1 = require('../../utils/utils');
 var Cards = (function () {
     function Cards(settingsService) {
         this.settingsService = settingsService;
@@ -47,6 +48,7 @@ var Cards = (function () {
     };
     Cards.prototype.onRestart = function (isRestart) {
         this.reset();
+        utils_1.shuffle(this.cards);
         this.getNextCard();
     };
     Cards.prototype.reset = function () {

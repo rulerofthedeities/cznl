@@ -13,7 +13,7 @@ var Subject_1 = require('rxjs/Subject');
 var RestartService = (function () {
     function RestartService() {
         this.restartSource = new Subject_1.Subject();
-        this.restart$ = this.restartSource.asObservable();
+        this.restartFilter$ = this.restartSource.asObservable();
     }
     RestartService.prototype.restartTest = function () {
         this.restartSource.next('new test');

@@ -4,7 +4,7 @@ import {Subject} from 'rxjs/Subject';
 @Injectable()
 export class RestartService {
   private restartSource = new Subject<string>();
-  restart$ = this.restartSource.asObservable();
+  restartFilter$ = this.restartSource.asObservable();
 
   restartTest() {
     this.restartSource.next('new test');

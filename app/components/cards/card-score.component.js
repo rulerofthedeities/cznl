@@ -40,7 +40,7 @@ var CardScore = (function () {
     CardScore = __decorate([
         core_1.Component({
             selector: 'card-score',
-            template: "\n    <div class=\"card center-block text-center score\">\n      <h4>Test Completed!</h4>\n      <h2>Score: {{scoreDisplay}}</h2>\n      <em>({{percDisplay}}%)</em>\n      <div class=\"clearfix\"></div>\n      <button \n        class=\"btn btn-success\"\n        (click)=\"doRestart()\">\n        Probeer opnieuw\n      </button>\n      <button \n        class=\"btn btn-success\"\n        (click)=\"doNewTest()\">\n        Nieuwe test\n      </button>\n    </div>",
+            template: "\n    <div class=\"card center-block text-center score\">\n      <h4>Test voltooid!</h4>\n      <h2>Score: {{scoreDisplay}}</h2>\n      <em>({{percDisplay}}%)</em>\n      <div class=\"clearfix\"></div>\n      <div class=\"buttons\">\n        <button \n          class=\"btn btn-success btn-block\"\n          (click)=\"doRestart()\">\n          Probeer opnieuw\n        </button>\n        <button \n          class=\"btn btn-success btn-block\"\n          (click)=\"doNewTest()\">\n          Nieuwe test\n        </button>\n      </div>\n    </div>",
             styleUrls: ['app/components/cards/card.component.css']
         }), 
         __metadata('design:paramtypes', [restart_service_1.RestartService])

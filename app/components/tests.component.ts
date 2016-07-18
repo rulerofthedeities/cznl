@@ -54,7 +54,7 @@ export class Tests implements OnDestroy {
   constructor(
     private wordService: WordService,
     restartService: RestartService) {
-    this.subscription = restartService.restart$.subscribe(
+    this.subscription = restartService.restartFilter$.subscribe(
       start => {
         this.restart();
       });

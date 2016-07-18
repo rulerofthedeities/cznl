@@ -19,7 +19,7 @@ var Tests = (function () {
         this.wordService = wordService;
         this.listType = 'default';
         this.started = false;
-        this.subscription = restartService.restart$.subscribe(function (start) {
+        this.subscription = restartService.restartFilter$.subscribe(function (start) {
             _this.restart();
         });
     }
