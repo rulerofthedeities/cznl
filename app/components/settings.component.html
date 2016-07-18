@@ -1,0 +1,37 @@
+<h1>Settings</h1>
+<form 
+  class="settings" 
+  *ngIf="isReady" (ngSubmit)="onSubmit()" 
+  #settingsForm="ngForm">
+
+  <div class="form-group">
+    <label for="wordcnt"># of words:</label>
+    <select [(ngModel)]="settings.wordCnt" name="wordcnt">
+      <option *ngFor="let l of testLength" [value]="l">
+        {{l}}
+      </option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="landir">Language direction:</label>
+    <select [(ngModel)]="settings.lanDir" name="landir">
+      <option *ngFor="let d of directions" [value]="d.val">
+        {{d.label}}
+      </option>
+    </select>
+  </div>
+
+  <button 
+    type="submit" 
+    class="btn btn-default" 
+    [disabled]="!settingsForm.form.valid">
+    Submit
+  </button>
+
+</form>
+
+<div [hidden]="!isSubmitted">
+  <h2>New settings saved:</h2>
+  {{settings|json}}
+</div>

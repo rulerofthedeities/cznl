@@ -11,11 +11,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var Settings = (function () {
     function Settings() {
+        this.isReady = true;
+        this.isSubmitted = false;
     }
+    Settings.prototype.ngOnInit = function () {
+        this.testLength = [10, 25, 50, 100];
+        this.directions = [
+            { label: 'Nederlands -> Tsjechisch', val: 'nlcz' },
+            { label: 'Tsjechisch -> Nederlands', val: 'cznl' }
+        ];
+        this.settings = {
+            wordCnt: 25,
+            lanDir: 'nlcz'
+        };
+        this.isReady = true;
+    };
+    Settings.prototype.onSubmit = function () {
+        this.isSubmitted = true;
+    };
     Settings = __decorate([
         core_1.Component({
             selector: 'settings',
-            template: '<h1>Settings</h1>'
+            templateUrl: 'app/components/settings.component.html'
         }), 
         __metadata('design:paramtypes', [])
     ], Settings);
