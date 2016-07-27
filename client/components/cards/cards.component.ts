@@ -30,6 +30,7 @@ import {Subscription}   from 'rxjs/Subscription';
       <card-item 
         *ngIf="currentCard"
         [card]="currentCard"
+        [lanDir]="lanDir"
         (cardAnswered)="onCardAnswered($event)">
       </card-item>
       <card-score 
@@ -50,6 +51,7 @@ export class Cards implements OnInit {
   progress: number;
   currentCard: WordPair;
   subscription: Subscription;
+  lanDir: string;
 
   constructor(private settingsService: SettingsService) {}
 
@@ -62,6 +64,7 @@ export class Cards implements OnInit {
     this.settingsService.getSettings()
       .then(settings => {
         this.maxCards = Math.min(settings.maxWords, this.cards.length);
+        this.lanDir = settings.lanDir;
         this.getNextCard();
       });
   }

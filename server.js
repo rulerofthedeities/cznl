@@ -19,7 +19,6 @@ if (app.get('env') == 'development') {
   app.use('/node', express.static(path.join(__dirname, '/node_modules')));
 }
 
-  
 app.use(express.static(path.join(__dirname, '/public')));
 app.use(bodyParser.json());
 

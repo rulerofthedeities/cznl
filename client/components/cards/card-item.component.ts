@@ -37,6 +37,7 @@ import {WordPair, Word} from '../../model/word.model';
 
 export class CardItem implements OnChanges {
   @Input() card: WordPair;
+  @Input() lanDir: string;
   @Output() cardAnswered = new EventEmitter();
   isQuestion = true;
   cardData: Word;
@@ -56,6 +57,35 @@ export class CardItem implements OnChanges {
   }
 
   getCardData() {
-    this.cardData = this.isQuestion ? this.card.nl : this.card.cz;
+    if (this.isQuestion) {
+      this.cardData = this.card.nl;
+      this.card.tpe = this.getCardTypeName(this.card.tpe);
+    } else {
+      this.cardData = this.card.cz;
+      this.cardData.article = this.getCardArticle(this.cardData.genus);
+    }
+  }
+
+  getCardArticle(genus: string) {
+    let article: string;
+    switch (genus) {
+      case 'Ma':
+      case 'Mi': article = 'ten'; break;
+      case 'F': article = 'ta'; break;
+      case 'O': article = 'to'; break;
+      default: article = '';
+    }
+
+    return article;
+  }
+
+  getCardTypeName(tpe: string) {
+    let newTpe: string;
+    switch (tpe) {
+      case 'noun': newTpe = 'Zelfst. Naamwoord'; break;
+      default: newTpe = tpe;
+    }
+
+    return newTpe;
   }
 }

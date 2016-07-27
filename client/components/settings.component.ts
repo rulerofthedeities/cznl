@@ -11,22 +11,23 @@ export class AppSettings implements OnInit {
   testLength: number[];
   directions: Object[];
   settings: Settings;
-  isReady = true;
+  isReady = false;
   isSubmitted = false;
 
   constructor (private settingsService: SettingsService) {}
 
   ngOnInit() {
+    this.isReady = false;
     this.testLength = [10, 25, 50, 100];
     this.directions = [
       {label:'Nederlands -> Tsjechisch', val:'nlcz'},
       {label:'Tsjechisch -> Nederlands', val:'cznl'}
     ];
-    this.settings = {
-      maxWords: 25,
-      lanDir: 'nlcz'
-    };
-    this.isReady = true;
+    this.settingsService.getSettings()
+      .then(settings => {
+        this.settings = settings;
+        this.isReady = true;
+      });
   }
 
   onSubmit() {

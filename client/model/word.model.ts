@@ -1,6 +1,7 @@
 export interface Word {
   word: string;
   genus: string;
+  article?: string;
 }
 
 export interface WordPair {
