@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
+import {Http, Headers} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
@@ -12,6 +12,17 @@ export class WordService {
     return this.http.get('/api/words')
       .toPromise()
       .then(response => response.json().words)
+      .catch(this.handleError);
+  }
+
+  saveAnswer(userId: string, wordId: string, correct: boolean) {
+    let headers = new Headers(),
+        answer = {userId: userId, wordId: wordId, correct: correct};
+    headers.append('Content-Type', 'application/json');
+    return this.http
+      .put('/api/answer', JSON.stringify(answer), {headers: headers})
+      .toPromise()
+      .then(() => answer)
       .catch(this.handleError);
   }
 

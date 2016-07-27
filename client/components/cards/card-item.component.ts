@@ -1,5 +1,6 @@
 import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
 import {WordPair, Word} from '../../model/word.model';
+import {WordService} from '../../services/words.service';
 
 @Component({
   selector: 'card-item',
@@ -42,6 +43,8 @@ export class CardItem implements OnChanges {
   isQuestion = true;
   cardData: Word;
 
+  constructor(private wordService: WordService) {}
+
   ngOnChanges() {
     this.getCardData();
   }
@@ -54,6 +57,7 @@ export class CardItem implements OnChanges {
   answerCard(correct: boolean) {
     this.cardAnswered.emit(correct);
     this.turnCard();
+    this.wordService.saveAnswer('demoUser', this.card._id, correct);
   }
 
   getCardData() {

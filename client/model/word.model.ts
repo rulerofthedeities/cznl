@@ -5,6 +5,7 @@ export interface Word {
 }
 
 export interface WordPair {
+  _id: string;
   cz: Word;
   nl: Word;
   tpe: string;
