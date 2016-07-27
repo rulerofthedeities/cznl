@@ -29,6 +29,11 @@ build/Release
 # Dependency directories
 node_modules
 jspm_packages
+typings
+server/**/*.js
+server/**/*.js.map
+client/**/*.js
+client/**/*.js.map
 
 # Optional npm cache directory
 .npm

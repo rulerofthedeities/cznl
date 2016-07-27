@@ -1,0 +1,43 @@
+
+
+<form 
+  class="settings" 
+  *ngIf="isReady" (ngSubmit)="onSubmit()" 
+  #settingsForm="ngForm">
+
+
+    <div class="row form-group col-md-6 col-md-offset-3">
+      <label for="maxWords"># of words:</label>
+      <select [(ngModel)]="settings.maxWords" 
+        class="form-control" 
+        name="maxWords">
+        <option *ngFor="let l of testLength" [value]="l">
+          {{l}}
+        </option>
+      </select>
+    </div>
+
+    <div class="row form-group col-md-6 col-md-offset-3">
+      <label for="landir">Language direction:</label>
+      <select [(ngModel)]="settings.lanDir"
+        class="form-control"
+        name="landir">
+        <option *ngFor="let d of directions" [value]="d.val">
+          {{d.label}}
+        </option>
+      </select>
+    </div>
+
+    <button 
+      type="submit" 
+      class="btn btn-success col-md-offset-3" 
+      [disabled]="!settingsForm.form.valid">
+      Submit
+    </button>
+
+</form>
+
+<div [hidden]="!isSubmitted">
+  <h4>New settings saved:</h4>
+  {{settings|json}}
+</div>
