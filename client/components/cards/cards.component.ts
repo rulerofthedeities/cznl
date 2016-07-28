@@ -3,7 +3,7 @@ import {SettingsService} from '../../services/settings.service';
 import {CardItem} from './card-item.component';
 import {CardScore} from './card-score.component';
 import {Review} from '../review.component';
-import {WordPair} from '../../model/word.model';
+import {WordPair} from '../../models/word.model';
 import {shuffle} from '../../utils/utils';
 import {Subscription}   from 'rxjs/Subscription';
 

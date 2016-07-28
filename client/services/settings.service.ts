@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Settings} from '../model/settings.model';
+import {Settings} from '../models/settings.model';
+import {Filter} from '../models/filters.model';
 import {Http, Headers} from '@angular/http';
-import {Filter} from '../model/filters.model';
 
 @Injectable()
 export class SettingsService {

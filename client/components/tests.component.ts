@@ -1,9 +1,9 @@
 import {Component, OnDestroy} from '@angular/core';
-import {Filter} from './common/filter.component';
+import {Filter} from './filter.component';
 import {Cards} from './cards/cards.component';
 import {Review} from './review.component';
-import {WordPair} from '../model/word.model';
-import {Filter as FilterModel} from '../model/filters.model';
+import {WordPair} from '../models/word.model';
+import {Filter as FilterModel} from '../models/filters.model';
 import {WordService} from '../services/words.service';
 import {RestartService} from '../services/restart.service';
 import {Subscription}   from 'rxjs/Subscription';

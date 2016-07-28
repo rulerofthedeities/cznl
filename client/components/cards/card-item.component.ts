@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
-import {WordPair, Word} from '../../model/word.model';
+import {WordPair, Word} from '../../models/word.model';
 import {WordService} from '../../services/words.service';
 
 @Component({

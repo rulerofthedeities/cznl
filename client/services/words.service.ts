@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Http, RequestOptions, Headers, Request, RequestMethod} from '@angular/http';
-import {Filter} from '../model/filters.model';
+import {Filter} from '../models/filters.model';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()

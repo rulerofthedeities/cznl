@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {WordPair} from '../model/word.model';
+import {WordPair} from '../models/word.model';
 import {RestartService} from '../services/restart.service';
 
 @Component({

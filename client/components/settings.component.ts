@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Settings} from '../model/settings.model';
+import {Settings} from '../models/settings.model';
 import {SettingsService} from '../services/settings.service';
 
 @Component({
@@ -22,7 +22,7 @@ export class AppSettings implements OnInit {
       {label:'Nederlands -> Tsjechisch', val:'nlcz'},
       {label:'Tsjechisch -> Nederlands', val:'cznl'}
     ];
-    this.settingsService.getSettings()
+    this.settingsService.getAppSettings()
       .then(settings => {
         this.settings = settings;
         this.isReady = true;

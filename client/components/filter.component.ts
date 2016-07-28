@@ -1,7 +1,7 @@
 import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
-import {FilterService} from '../../services/filters.service';
-import {SettingsService} from '../../services/settings.service';
-import {Filter as FilterModel} from '../../model/filters.model';
+import {FilterService} from '../services/filters.service';
+import {SettingsService} from '../services/settings.service';
+import {Filter as FilterModel} from '../models/filters.model';
 
 @Component({
   selector: 'filter',
