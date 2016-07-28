@@ -11,18 +11,21 @@ import {RestartService} from '../../services/restart.service';
       <div class="clearfix"></div>
       <div class="buttons">
         <button 
-          class="btn btn-success btn-block"
+          class="btn btn-success btn-lg btn-block"
           (click)="doRestart()">
+          <span class="fa fa-repeat"></span>
           Probeer opnieuw
         </button>
         <button 
-          class="btn btn-success btn-block"
+          class="btn btn-success btn-lg btn-block"
           (click)="doNewTest()">
+          <span class="fa fa-file-o"></span>
           Nieuwe test
         </button>
         <button 
-          class="btn btn-success btn-block"
+          class="btn btn-success btn-lg btn-block"
           (click)="doReview()">
+          <span class="fa fa-list-alt"></span>
           Herziening
         </button>
       </div>

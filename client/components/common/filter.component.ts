@@ -31,10 +31,17 @@ import {FilterService} from '../../services/filters.service';
           </option>
         </select>
       </li>
-      <li 
-        class="btn btn-success btn-lg" 
-        (click)="startTest(level.value, wordtpe.value, cats.value)">
-        Start Test
+      <li> 
+        <button class="btn btn-success btn-lg" 
+          (click)="start('test', level.value, wordtpe.value, cats.value)">
+        <span class="fa fa-play"></span>
+          Start Test
+        </button>
+        <button class="btn btn-success btn-lg" 
+          (click)="start('review', level.value, wordtpe.value, cats.value)">
+        <span class="fa fa-play"></span>
+          Start Review
+        </button>
       </li>
     </ul>
     <ul 
@@ -44,6 +51,7 @@ import {FilterService} from '../../services/filters.service';
       <li class="list-group-item">Lijst 2<span class="badge">8</span></li>
       <li
         class="btn btn-success btn-lg disabled">
+        <span class="fa fa-play"></span>
         Start Test
       </li>
     </ul>
@@ -65,11 +73,12 @@ export class Filter implements OnInit {
     this.getFilterData();
   }
 
-  startTest(level, wordtpe, cats) {
+  start(testTpe, level, wordTpe, cats) {
     let filterObj = {
       'level': level,
-      'tpe': wordtpe,
-      'cats': cats
+      'tpe': wordTpe,
+      'cats': cats,
+      'test': testTpe
     };
     this.selectedFilter.emit(filterObj);
   }

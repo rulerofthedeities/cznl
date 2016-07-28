@@ -12,8 +12,11 @@ module.exports.initialize = function(app, router) {
   
   router.get('/api/words', words.load);
   router.get('/api/settings', settings.load);
+
   router.put('/api/settings', settings.update);
   router.put('/api/answer', answers.update);
+  
+  router.post('/api/answers', answers.load);
 
   app.use(router);
 

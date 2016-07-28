@@ -1,10 +1,12 @@
 import {Component} from '@angular/core';
 import {ROUTER_DIRECTIVES} from '@angular/router';
 import {Menu} from './menu.component';
+import {RestartService} from '../services/restart.service';
 
 @Component({
   selector: 'cz',
   directives: [ROUTER_DIRECTIVES, Menu],
+  providers: [RestartService],
   template: `
     <div class="container">
       <div class="panel-top">

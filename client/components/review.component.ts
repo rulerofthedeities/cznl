@@ -14,8 +14,8 @@ import {RestartService} from '../services/restart.service';
         [ngClass]="{active:selected == i}">
         <span 
           class="fa pull-left" 
-          [ngClass]="{'fa-check':word.correct,'fa-times':!word.correct}"
-          [ngStyle]="{'color':word.correct?'green':'red'}"></span>
+          [ngClass]="{'fa-check': word.correct===true,'fa-times':word.correct===false,'fa-circle-o':isUndefined(word.correct)}"
+          [ngStyle]="{'color': getColor(word.correct)}"></span>
         <span class="pull-left">{{i + 1}}.</span>
         <div>{{word.cz.word}} ({{word.cz.genus}}) => {{word.nl.word}}</div>
         <div>{{word.tpe}}</div>
@@ -24,13 +24,15 @@ import {RestartService} from '../services/restart.service';
     </div>
     <div class="buttons center-block">
       <button 
-        class="btn btn-success btn-block"
+        class="btn btn-success btn-lg btn-block"
         (click)="doRestart()">
+        <span class="fa fa-play"></span>
         Test deze lijst
       </button>
       <button 
-        class="btn btn-success btn-block"
+        class="btn btn-success btn-lg btn-block"
         (click)="doNewTest()">
+        <span class="fa fa-file-o"></span>
         Nieuwe test
       </button>
     </div>
@@ -39,7 +41,8 @@ import {RestartService} from '../services/restart.service';
   .buttons {max-width: 240px;}
   .review-list {max-width: 500px;}
   li {font-size: 20px;}
-  .fa {width: 40px;}
+  li .fa {width: 40px;}
+  .btn .fa {margin-right:3px;}
   `]
 })
 
@@ -56,6 +59,22 @@ export class Review {
 
   doNewTest() {
     this.restartService.restartTest();
+  }
+
+  isUndefined(correct: boolean): boolean {
+    if (typeof correct === 'undefined') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  getColor(correct: boolean) : string {
+    if (this.isUndefined(correct)) {
+      return 'grey';
+    } else {
+      return correct ? 'green' : 'red';
+    }
   }
 
   onSelected(i: number) {
