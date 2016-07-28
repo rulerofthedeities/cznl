@@ -7,7 +7,6 @@ import {RestartService} from '../services/restart.service';
 import {Subscription}   from 'rxjs/Subscription';
 
 @Component({
-  selector: 'tests',
   directives: [Filter, Cards],
   providers: [WordService, RestartService],
   template:`

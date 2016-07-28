@@ -2,13 +2,14 @@ import {Component, Input, OnInit} from '@angular/core';
 import {SettingsService} from '../../services/settings.service';
 import {CardItem} from './card-item.component';
 import {CardScore} from './card-score.component';
+import {Review} from '../review.component';
 import {WordPair} from '../../model/word.model';
 import {shuffle} from '../../utils/utils';
 import {Subscription}   from 'rxjs/Subscription';
 
 @Component({
   selector: 'cards',
-  directives: [CardItem, CardScore],
+  directives: [CardItem, CardScore, Review],
   providers: [SettingsService],
   template: `
     <div>
@@ -34,11 +35,17 @@ import {Subscription}   from 'rxjs/Subscription';
         (cardAnswered)="onCardAnswered($event)">
       </card-item>
       <card-score 
-        *ngIf="isFinished"
+        *ngIf="isFinished && !isReview"
         [correct]="correct"
         [total]="maxCards"
-        (restart)="onRestart($event)">
+        (restart)="onRestart($event)"
+        (review)="onReview($event)">
       </card-score>
+      <review 
+        *ngIf="isReview"
+        [words]="cards"
+        (restart)="onRestart($event)">
+      </review>
     </div>`
 })
 
@@ -47,6 +54,7 @@ export class Cards implements OnInit {
   maxCards: number;
   cardsIndex:number;
   isFinished: boolean;
+  isReview: boolean;
   correct: number;
   progress: number;
   currentCard: WordPair;
@@ -80,6 +88,7 @@ export class Cards implements OnInit {
   }
 
   onCardAnswered(isCorrect: boolean) {
+    this.cards[this.cardsIndex - 1].correct = isCorrect;
     this.getNextCard();
     if (isCorrect) {
       this.correct++;
@@ -92,8 +101,13 @@ export class Cards implements OnInit {
     this.getNextCard();
   }
 
+  onReview(isReview: boolean) {
+    this.isReview = true;
+  }
+
   reset() {
     this.isFinished = false;
+    this.isReview = false;
     this.progress = 0;
     this.correct = 0;
     this.cardsIndex = 0;

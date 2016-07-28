@@ -10,8 +10,8 @@ import {FilterService} from '../../services/filters.service';
       <li>
         <select #level class="form-control">
           <option 
-            *ngFor="let level of filters.levels">
-            {{level}}
+            *ngFor="let level of filters.levels" value="{{level.i}}">
+            {{level.label}}
           </option>
         </select>
       </li>

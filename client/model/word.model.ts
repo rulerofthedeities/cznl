@@ -11,4 +11,5 @@ export interface WordPair {
   tpe: string;
   level: number;
   categories: string[];
+  correct?: boolean;
 }

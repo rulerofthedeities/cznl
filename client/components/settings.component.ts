@@ -3,7 +3,6 @@ import {Settings} from '../model/settings.model';
 import {SettingsService} from '../services/settings.service';
 
 @Component({
-  selector: 'settings',
   templateUrl: 'client/components/settings.component.html'
 })
 

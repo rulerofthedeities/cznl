@@ -20,6 +20,11 @@ import {RestartService} from '../../services/restart.service';
           (click)="doNewTest()">
           Nieuwe test
         </button>
+        <button 
+          class="btn btn-success btn-block"
+          (click)="doReview()">
+          Herziening
+        </button>
       </div>
     </div>`,
   styleUrls: ['client/components/cards/card.component.css']
@@ -29,6 +34,7 @@ export class CardScore implements OnInit {
   @Input() correct;
   @Input() total;
   @Output() restart = new EventEmitter();
+  @Output() review = new EventEmitter();
   scoreDisplay: string;
   percDisplay: string;
 
@@ -45,5 +51,9 @@ export class CardScore implements OnInit {
 
   doNewTest() {
     this.restartService.restartTest();
+  }
+
+  doReview() {
+    this.review.emit(true);
   }
 }
