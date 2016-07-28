@@ -1,5 +1,7 @@
 import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import {FilterService} from '../../services/filters.service';
+import {SettingsService} from '../../services/settings.service';
+import {Filter as FilterModel} from '../../model/filters.model';
 
 @Component({
   selector: 'filter',
@@ -10,7 +12,7 @@ import {FilterService} from '../../services/filters.service';
       <li>
         <select #level class="form-control">
           <option 
-            *ngFor="let level of filters.levels" value="{{level.i}}">
+            *ngFor="let level of filters.levels" [value]="level.val" [selected]="level.val==selected.level">
             {{level.label}}
           </option>
         </select>
@@ -18,16 +20,16 @@ import {FilterService} from '../../services/filters.service';
       <li>
         <select #wordtpe class="form-control">
           <option 
-            *ngFor="let tpe of filters.tpes">
-            {{tpe}}
+            *ngFor="let tpe of filters.tpes" [value]="tpe.val" [selected]="tpe.val==selected.tpe">
+            {{tpe.label}}
           </option>
         </select>
       </li>
       <li>
         <select #cats class="form-control">
           <option 
-            *ngFor="let cat of filters.cats">
-            {{cat}}
+            *ngFor="let cat of filters.cats" [value]="cat.val" [selected]="cat.val==selected.cats">
+            {{cat.label}}
           </option>
         </select>
       </li>
@@ -66,27 +68,36 @@ export class Filter implements OnInit {
   @Input() tpe: string;
   @Output() selectedFilter = new EventEmitter<Object>();
   filters: Object;
+  selected: FilterModel;
 
-  constructor(private filterService: FilterService) {}
+  constructor(
+    private filterService: FilterService,
+    private settingsService: SettingsService) {}
 
   ngOnInit() {
-    this.getFilterData();
+    this.getFilterOptions();
   }
 
-  start(testTpe, level, wordTpe, cats) {
-    let filterObj = {
+  start(testTpe: string, level: number, wordTpe: string, cats: string) {
+    let filter:FilterModel = {
       'level': level,
       'tpe': wordTpe,
       'cats': cats,
       'test': testTpe
     };
-    this.selectedFilter.emit(filterObj);
+    this.settingsService.setFilterSettings(filter);
+    this.selectedFilter.emit(filter);
   }
 
-  getFilterData() {
-    this.filterService.getFilterData().then(
-      filters => {
-        this.filters = filters;
+  getFilterOptions() {
+    this.settingsService.getFilterSettings().then(
+      settings => {
+        this.selected = settings.filter;
+        this.filterService.getFilterOptions().then(
+          filters => {
+            this.filters = filters;
+          }
+        );
       }
     );
   }

@@ -69,10 +69,10 @@ export class Cards implements OnInit {
   }
 
   getSettings() {
-    this.settingsService.getSettings()
+    this.settingsService.getAppSettings()
       .then(settings => {
-        this.maxCards = Math.min(settings.maxWords, this.cards.length);
-        this.lanDir = settings.lanDir;
+        this.maxCards = Math.min(settings.all.maxWords, this.cards.length);
+        this.lanDir = settings.all.lanDir;
         this.getNextCard();
       });
   }

@@ -5,11 +5,12 @@ import {CATS} from '../data/filters';
 
 @Injectable()
 export class FilterService {
-	getFilterData() {
+	getFilterOptions() {
 		let FILTERS: Object = {
 			'levels': LEVELS,
 			'tpes': TPES,
       'cats': CATS};
 		return Promise.resolve(FILTERS);
 	}
+
 }

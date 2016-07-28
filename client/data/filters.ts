@@ -1,18 +1,22 @@
 export const LEVELS:Object[] = [
-  {label:'Alle niveaus', i:-1},
-  {label:'Elementair', i:0},
-  {label:'Basis', i:1},
-  {label:'Medium', i:2},
-  {label:'Hoog', i:3}
+  {label:'Alle niveaus', val:-1},
+  {label:'Elementair', val:0},
+  {label:'Basis', val:1},
+  {label:'Medium', val:2},
+  {label:'Hoog', val:3}
 ];
-export const TPES:string[] = [
-  'Alle Woordsoorten',
-  'Zelfst. naamwoord',
-  'Adjectief',
-  'Werkwoord',
-  'Overige'
+export const TPES:Object[] = [
+  {label:'Alle Woordsoorten', val:'all'},
+  {label:'Zelfst. naamwoord', val:'noun'},
+  {label:'Bijv. naamwoord', val: 'adj'},
+  {label:'Werkwoord', val: 'verb'},
+  {label:'Bijwoord', val: 'adv'},
+  {label:'Voegwoord', val: 'conj'},
+  {label:'Voorzetsel', val: 'prep'}
+
 ];
-export const CATS:string[] = [
-  'Dieren',
-  'Beroepen'
+export const CATS:Object[] = [
+  {label:'Alle categorieën', val: 'all'},
+  {label:'Dieren', val: 'dieren'},
+  {label:'Beroepen', val: 'beroepen'}
 ];

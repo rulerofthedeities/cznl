@@ -8,7 +8,7 @@
 
     <div class="row form-group col-md-6 col-md-offset-3">
       <label for="maxWords"># of words:</label>
-      <select [(ngModel)]="settings.maxWords" 
+      <select [(ngModel)]="settings.all.maxWords" 
         class="form-control" 
         name="maxWords">
         <option *ngFor="let l of testLength" [value]="l">
@@ -19,7 +19,7 @@
 
     <div class="row form-group col-md-6 col-md-offset-3">
       <label for="landir">Language direction:</label>
-      <select [(ngModel)]="settings.lanDir"
+      <select [(ngModel)]="settings.all.lanDir"
         class="form-control"
         name="landir">
         <option *ngFor="let d of directions" [value]="d.val">

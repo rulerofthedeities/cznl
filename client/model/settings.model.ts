@@ -1,6 +1,11 @@
+import {Filter} from './filters.model';
+
 export interface Settings {
   _id: string;
-  maxWords: number;
-  lanDir: string;
   dt: Date;
+  all: {
+    maxWords: number;
+    lanDir: string;
+  };
+  filter: Filter;
 }

@@ -30,7 +30,7 @@ export class AppSettings implements OnInit {
   }
 
   onSubmit() {
-    this.settingsService.setSettings(this.settings);
+    this.settingsService.setAppSettings(this.settings);
     this.isSubmitted = true;
   }
 
