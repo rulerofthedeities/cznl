@@ -1,5 +1,6 @@
 import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
 import {WordPair, Word} from '../../models/word.model';
+import {AllSettings} from '../../models/settings.model';
 import {WordService} from '../../services/words.service';
 
 @Component({
@@ -17,7 +18,7 @@ import {WordService} from '../../services/words.service';
       </div>
       <div *ngIf="!isQuestion" class="answer">
         <div class="wordwrapper center-block">
-            <div class="word">{{cardData.article}}</div>
+            <div class="word" *ngIf="settings.showPronoun">{{cardData.article}}</div>
             <h2 class="word">{{cardData.word}}</h2>
         </div>
         <div class="clearfix">
@@ -38,7 +39,7 @@ import {WordService} from '../../services/words.service';
 
 export class CardItem implements OnChanges {
   @Input() card: WordPair;
-  @Input() lanDir: string;
+  @Input() settings: AllSettings;
   @Output() cardAnswered = new EventEmitter();
   isQuestion = true;
   cardData: Word;
@@ -62,10 +63,10 @@ export class CardItem implements OnChanges {
 
   getCardData() {
     if (this.isQuestion) {
-      this.cardData = this.card.nl;
+      this.cardData = this.settings.lanDir === 'cznl' ? this.card.cz : this.card.nl;
       this.card.tpe = this.getCardTypeName(this.card.tpe);
     } else {
-      this.cardData = this.card.cz;
+      this.cardData = this.settings.lanDir === 'cznl' ? this.card.nl : this.card.cz;
       this.cardData.article = this.getCardArticle(this.cardData.genus);
     }
   }

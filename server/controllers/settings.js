@@ -30,7 +30,11 @@ var updateSettings = function(db, data, options, callback) {
   
   switch (options.tpe) {
     case "all": 
-      set = {all:{maxWords:data.maxWords, lanDir:data.lanDir}, dt: new Date()};
+      set = {all:{
+        maxWords:data.maxWords, 
+        lanDir:data.lanDir,
+        showPronoun:data.showPronoun}, 
+        dt: new Date()};
       break;
     case "filter":
       set = {filter:data, dt: new Date()};

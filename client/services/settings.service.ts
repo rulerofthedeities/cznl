@@ -19,7 +19,7 @@ export class SettingsService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return this.http
-      .put('/api/settings?tpe=all', JSON.stringify(newSettings.all), {headers: headers})
+      .put('/api/settings?tpe=all', JSON.stringify(newSettings), {headers: headers})
       .toPromise()
       .then(() => newSettings)
       .catch(this.handleError);

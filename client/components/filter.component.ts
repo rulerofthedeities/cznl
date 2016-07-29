@@ -45,14 +45,14 @@ import {Filter as FilterModel} from '../models/filters.model';
       <div class="buttons"> 
         <button 
           class="btn btn-success btn-lg" 
-          [ngClass]="{disabled:totalWords < 1}"
+          [disabled]="totalWords < 1"
           (click)="start('test', level.value, wordtpe.value, cats.value)">
         <span class="fa fa-play"></span>
           Start Test
         </button>
         <button 
           class="btn btn-success btn-lg" 
-          [ngClass]="{disabled:totalWords < 1}"
+          [disabled]="totalWords < 1"
           (click)="start('review', level.value, wordtpe.value, cats.value)">
         <span class="fa fa-play"></span>
           Toon Overzicht
@@ -65,10 +65,13 @@ import {Filter as FilterModel} from '../models/filters.model';
       class="list-group">
       <li class="list-group-item">Lijst 1<span class="badge">12</span></li>
       <li class="list-group-item">Lijst 2<span class="badge">8</span></li>
-      <li
-        class="btn btn-success btn-lg disabled">
-        <span class="fa fa-play"></span>
-        Start Test
+      <li>
+        <button
+          class="btn btn-success btn-lg"
+          [disabled]="!selectedList">
+          <span class="fa fa-play"></span>
+          Start Test
+        </button>
       </li>
     </ul>
   </div>`,

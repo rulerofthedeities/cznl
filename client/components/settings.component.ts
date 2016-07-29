@@ -24,9 +24,13 @@ export class AppSettings implements OnInit {
     ];
     this.settingsService.getAppSettings()
       .then(settings => {
-        this.settings = settings;
+        this.settings = settings.all;
         this.isReady = true;
       });
+  }
+
+  onModified() {
+    this.isSubmitted = false;
   }
 
   onSubmit() {
