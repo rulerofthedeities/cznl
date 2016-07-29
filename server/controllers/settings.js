@@ -27,7 +27,7 @@ var loadSettings = function(db, options, callback) {
 
 var updateSettings = function(db, data, options, callback) {
   var set = {};
-
+  
   switch (options.tpe) {
     case "all": 
       set = {all:{maxWords:data.maxWords, lanDir:data.lanDir}, dt: new Date()};

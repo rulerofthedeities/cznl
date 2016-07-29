@@ -1,7 +1,29 @@
 var mongo = require('mongodb'),
     assert = require("assert");
 
+var countWords = function(db, options, callback) {
+  var filter = buildFilter(options);
+  db.collection('wordpairs')
+    .find(filter)
+    .count(function(err, count) {
+      assert.equal(null, err);
+      callback(count);
+  })
+}
+
 var loadWords = function(db, options, callback) {
+  var filter = buildFilter(options);
+
+  db.collection('wordpairs')
+    .find(filter)
+    .limit(options.maxwords)
+    .toArray(function(err, docs) {
+      assert.equal(null, err);
+      callback(docs);
+    })
+}
+
+buildFilter = function(options) {
   var filterArr = [];
   if (options.level >= 0) {
     filterArr.push('"level":' + options.level);
@@ -12,17 +34,8 @@ var loadWords = function(db, options, callback) {
   if (options.cat != "all") {
     filterArr.push('"categories":"' + options.cat + '"');
   }
-
   var filter = '{' + filterArr.join(',') + '}';
-  console.log('filter', filter);
-  console.log('filter', JSON.parse(filter));
-  db.collection('wordpairs')
-    .find(JSON.parse(filter))
-    .limit(options.maxwords)
-    .toArray(function(err, docs) {
-      assert.equal(null, err);
-      callback(docs);
-    })
+  return JSON.parse(filter);
 }
 
 module.exports = {
@@ -31,10 +44,20 @@ module.exports = {
       level:parseInt(req.query.l), 
       tpe:req.query.t, 
       cat:req.query.c, 
-      maxwords:parseInt(req.query.m)
+      maxwords:req.query.m ? parseInt(req.query.m) : 0,
+      iscnt: req.query.cnt
     };
-    loadWords(mongo.DB, options, function(docs){
-      res.status(200).send({"words": docs});
-    });
+
+    if (req.query.cnt == '1') {
+      //Count # of words
+      countWords(mongo.DB, options, function(count){
+        res.status(200).send({"total": count});
+      });
+    } else {
+      //Search for words
+      loadWords(mongo.DB, options, function(docs){
+        res.status(200).send({"words": docs});
+      });
+    }
   }
 }

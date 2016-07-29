@@ -15,7 +15,7 @@ import {shuffle} from '../utils/utils';
   template:`
   <div class="row">
     <div *ngIf="!started" class="col-xs-4">
-      <ul class="btn-group-vertical btn-group-sm">
+      <ul class="btn-group-vertical btn-group-lg">
         <li 
           (click)="selectListType('default')"
           class="btn"
@@ -26,7 +26,7 @@ import {shuffle} from '../utils/utils';
           (click)="selectListType('user')"
           class="btn"
           [ngClass]="{'btn-primary':listType==='user'}">
-          Mijn woordenlijst
+          Mijn woordenlijsten
         </li>
       </ul>
     </div>

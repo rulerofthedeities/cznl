@@ -8,10 +8,16 @@ export class WordService {
   constructor(private http: Http) { }
 
   getWords(filter: Filter, maxWords: number) {
-    console.log('getting words in service', filter, maxWords);
     return this.http.get('/api/words?l=' + filter.level + '&t=' + filter.tpe + '&c=' + filter.cats + '&m=' + maxWords)
       .toPromise()
       .then(response => response.json().words)
+      .catch(this.handleError);
+  }
+
+  getCount(filter:Filter) {
+    return this.http.get('/api/words?cnt=1&l=' + filter.level + '&t=' + filter.tpe + '&c=' + filter.cats)
+      .toPromise()
+      .then(response => response.json().total)
       .catch(this.handleError);
   }
 

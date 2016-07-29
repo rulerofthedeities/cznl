@@ -35,7 +35,6 @@ module.exports = {
     var words = req.body;
     var userId = 'demoUser';
     getAnswers(mongo.DB, userId, words, function(docs){
-      console.log(docs);
       res.status(200).send({"answers": docs});
     });
   },
