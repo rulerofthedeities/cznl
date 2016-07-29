@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
+import {Component, Output, EventEmitter, OnInit} from '@angular/core';
 import {FilterService} from '../services/filters.service';
 import {SettingsService} from '../services/settings.service';
 import {WordService} from '../services/words.service';
@@ -8,8 +8,8 @@ import {Filter as FilterModel} from '../models/filters.model';
   selector: 'filter',
   providers: [FilterService],
   template: `
-  <div [ngSwitch]="tpe" *ngIf="filters" class="filter">
-    <ul *ngSwitchCase="'default'" class="list-unstyled">
+  <div *ngIf="filters" class="filter">
+    <ul class="list-unstyled">
       <li>
         <select #level 
           class="form-control input-lg"
@@ -60,20 +60,6 @@ import {Filter as FilterModel} from '../models/filters.model';
       </div>
       </li>
     </ul>
-    <ul 
-      *ngSwitchCase="'user'"
-      class="list-group">
-      <li class="list-group-item">Lijst 1<span class="badge">12</span></li>
-      <li class="list-group-item">Lijst 2<span class="badge">8</span></li>
-      <li>
-        <button
-          class="btn btn-success btn-lg"
-          [disabled]="!selectedList">
-          <span class="fa fa-play"></span>
-          Start Test
-        </button>
-      </li>
-    </ul>
   </div>`,
   styles: [`
     .filter {margin: 0 20px;}
@@ -82,7 +68,6 @@ import {Filter as FilterModel} from '../models/filters.model';
 })
 
 export class Filter implements OnInit {
-  @Input() tpe: string;
   @Output() selectedFilter = new EventEmitter<Object>();
   filters: Object;
   selected: FilterModel;

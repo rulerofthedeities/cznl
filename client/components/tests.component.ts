@@ -2,6 +2,7 @@ import {Component, OnDestroy} from '@angular/core';
 import {Filter} from './filter.component';
 import {Cards} from './cards/cards.component';
 import {Review} from './review.component';
+import {WordLists} from './wordlists/wordlists.component';
 import {WordPair} from '../models/word.model';
 import {Filter as FilterModel} from '../models/filters.model';
 import {WordService} from '../services/words.service';
@@ -10,31 +11,35 @@ import {Subscription}   from 'rxjs/Subscription';
 import {shuffle} from '../utils/utils';
 
 @Component({
-  directives: [Filter, Cards, Review],
+  directives: [Filter, Cards, Review, WordLists],
   providers: [WordService],
   template:`
   <div class="row">
     <div *ngIf="!started" class="col-xs-4">
       <ul class="btn-group-vertical btn-group-lg">
         <li 
-          (click)="selectListType('default')"
+          (click)="selectListType('filter')"
           class="btn"
-          [ngClass]="{'btn-primary':listType==='default'}">
+          [ngClass]="{'btn-primary':listType==='filter'}">
           Selecteer woordenlijst
         </li>
         <li 
-          (click)="selectListType('user')"
+          (click)="selectListType('wordlist')"
           class="btn"
-          [ngClass]="{'btn-primary':listType==='user'}">
+          [ngClass]="{'btn-primary':listType==='wordlist'}">
           Mijn woordenlijsten
         </li>
       </ul>
     </div>
-    <filter *ngIf="!started"
-      [tpe]="listType"
+    <filter 
+      *ngIf="!started && listType=='filter'"
       (selectedFilter)="onSelectFilter($event)"
       class="col-xs-8">
     </filter>
+    <word-lists 
+      *ngIf="!started && listType=='wordlist'" 
+      class="col-xs-8">
+    </word-lists>
     <div *ngIf="started && exerciseTpe=='test'" class="col-xs-12">
       <cards 
         [data]="cards">
@@ -54,7 +59,7 @@ import {shuffle} from '../utils/utils';
 
 export class Tests implements OnDestroy {
   maxWords = 20;
-  listType: string = 'default';
+  listType: string = 'filter';
   filterData: FilterModel;
   started: boolean = false;
   cards: WordPair[];
