@@ -2,6 +2,7 @@ import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
 import {WordPair, Word} from '../../models/word.model';
 import {AllSettings} from '../../models/settings.model';
 import {WordService} from '../../services/words.service';
+import {TPES} from '../../data/filters';
 
 @Component({
   selector: 'card-item',
@@ -64,7 +65,7 @@ export class CardItem implements OnChanges {
   getCardData() {
     if (this.isQuestion) {
       this.cardData = this.settings.lanDir === 'cznl' ? this.card.cz : this.card.nl;
-      this.card.tpe = this.getCardTypeName(this.card.tpe);
+      this.card.tpe = this.getTpeTranslation(this.card.tpe);
     } else {
       this.cardData = this.settings.lanDir === 'cznl' ? this.card.nl : this.card.cz;
       this.cardData.article = this.getCardArticle(this.cardData.genus);
@@ -84,13 +85,14 @@ export class CardItem implements OnChanges {
     return article;
   }
 
-  getCardTypeName(tpe: string) {
-    let newTpe: string;
-    switch (tpe) {
-      case 'noun': newTpe = 'Zelfst. Naamwoord'; break;
-      default: newTpe = tpe;
+  getTpeTranslation(tpe: string) {
+    let nl_tpe = '', i = 0;
+    while (!nl_tpe && i < TPES.length) {
+      if (TPES[i].val === tpe) {
+        nl_tpe = TPES[i].label;
+      }
+      i++;
     }
-
-    return newTpe;
+    return nl_tpe;
   }
 }
