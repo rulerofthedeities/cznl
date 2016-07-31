@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {WordlistService} from '../../services/wordlists.service';
+import {WordList} from '../../models/list.model';
 
 @Component({
   selector: 'word-lists',
@@ -31,9 +32,9 @@ import {WordlistService} from '../../services/wordlists.service';
 })
 
 export class WordLists implements OnInit {
-  lists: string[];
+  lists: WordList[];
   ready = false;
-  selectedList = '';
+  selectedList: WordList;
   wordsInList = 0;
 
   constructor(private wordlistService: WordlistService) {}
@@ -46,7 +47,7 @@ export class WordLists implements OnInit {
       });
   }
 
-  selectList(i:number) {
+  selectList(i: number) {
     this.selectedList = this.lists[i];
     this.wordsInList = this.selectedList.count;
   }

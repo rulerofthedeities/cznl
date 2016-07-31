@@ -1,5 +1,4 @@
-var mongo = require('mongodb'),
-    assert = require("assert");
+var mongo = require('mongodb');
 
 var updateSettings = function(db, data, callback) {
   var mongoId = new mongo.ObjectID(data.wordId);
@@ -10,22 +9,19 @@ var updateSettings = function(db, data, callback) {
       {$set: {userId:data.userId, wordId:data.wordId, correct:data.correct, dt: new Date()}},
       {upsert:true},
       function(err, r){
-        assert.equal(null, err);
         callback(r);
       }
     )
 }
 
 var getAnswers = function(db, userId, data, callback) {
-  var mongoIds;
 
   db.collection('answers')
     .find({
       userId:userId,
       wordId:{$in:data}},
-      {_id:0, wordId:1, correct:1})
+      {_id:0, wordId:1, correct:1, listIds:1})
     .toArray(function(err, docs) {
-      assert.equal(null, err);
       callback(docs);
     })
 }
@@ -42,6 +38,11 @@ module.exports = {
     var options = {};
     updateSettings(mongo.DB, req.body, function(r){
       res.status(200).send(r);
+    });
+  },
+  getAnswersInDoc: function(userId, words, callback){
+    getAnswers(mongo.DB, userId, words, function(docs){
+      callback(docs);
     });
   }
 }

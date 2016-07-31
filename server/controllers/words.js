@@ -1,25 +1,33 @@
 var mongo = require('mongodb'),
-    assert = require("assert");
+    answers = require("./answers");
 
 var countWords = function(db, options, callback) {
   var filter = buildFilter(options);
   db.collection('wordpairs')
     .find(filter)
     .count(function(err, count) {
-      assert.equal(null, err);
       callback(count);
   })
 }
 
 var loadWords = function(db, options, callback) {
   var filter = buildFilter(options);
-
+  //Fetch words + their answer and lists for the user
   db.collection('wordpairs')
     .find(filter)
     .limit(options.maxwords)
     .toArray(function(err, docs) {
-      assert.equal(null, err);
-      callback(docs);
+      //Fetch answer and list for each word for this user
+      var wordIds = [];
+      docs.forEach(function(doc){
+        wordIds.push(doc._id.toString());
+      })
+
+      answers.getAnswersInDoc(options.userId, wordIds, function(answers){
+        //Map answers to docs
+        callback(docs, answers);
+      })
+      
     })
 }
 
@@ -41,6 +49,7 @@ buildFilter = function(options) {
 module.exports = {
   load: function(req, res) {
     var options = {
+      userId:'demoUser',
       level:parseInt(req.query.l), 
       tpe:req.query.t, 
       cat:req.query.c, 
@@ -55,8 +64,8 @@ module.exports = {
       });
     } else {
       //Search for words
-      loadWords(mongo.DB, options, function(docs){
-        res.status(200).send({"words": docs});
+      loadWords(mongo.DB, options, function(docs, answers){
+        res.status(200).send({"words": docs, "answers": answers});
       });
     }
   }

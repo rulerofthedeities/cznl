@@ -1,11 +1,13 @@
 import {Component, Input, Output, OnInit, EventEmitter} from '@angular/core';
+import {AddToList} from './wordlists/add-to-list.component';
 import {WordPair} from '../models/word.model';
+import {AllSettings} from '../models/settings.model';
 import {RestartService} from '../services/restart.service';
 import {SettingsService} from '../services/settings.service';
-import {TPES} from '../data/filters';
 
 @Component({
   selector: 'review',
+  directives: [AddToList],
   template: `
   <div class="review-list row" *ngIf="ready">
     <div class="col-sm-7">
@@ -19,30 +21,40 @@ import {TPES} from '../data/filters';
             <span
               class="fa pull-left" 
               style="margin-top:3px;"
-              [ngClass]="{'fa-check': word.correct===true,'fa-times':word.correct===false,'fa-circle-o':isUndefined(word.correct)}"
-              [ngStyle]="{'color': getColor(word.correct)}">
+              [ngClass]="{
+                'fa-check': word.answer.correct===true,
+                'fa-times':word.answer.correct===false,
+                'fa-circle-o':isUndefined(word.answer.correct)}"
+              [ngStyle]="{'color': getColor(word.answer.correct)}">
             </span>
             <span>{{i + 1}}.</span>
           </div>
           <div class="pull-left">
               <div class="word">
-                {{lanDir=="cznl" ? word.cz.word : word.nl.word}}
-                <span class="genus" *ngIf="word.cz.genus && lanDir=='cznl'">
+                <span class="genus" *ngIf="word.cz.article && settings.lanDir=='cznl' && settings.showPronoun">
+                  {{word.cz.article}}
+                </span>
+                {{settings.lanDir=="cznl" ? word.cz.word : word.nl.word}}
+                <span class="genus" *ngIf="word.cz.genus && settings.lanDir=='cznl'">
                   ({{word.cz.genus}})
                 </span>
               </div>
               <div class="pull-left small">
-                <em>{{getTpeTranslation(word.tpe)}}</em>
+                <em>{{word.tpe}}</em>
               </div>
           </div>
+          <add-to-list [word]="word"></add-to-list>
           <div class="clearfix"></div>
         </li>
       </ul> 
     </div>  
     <div class="translation col-sm-5">
       <div class="word text-center">
+        <span class="genus" *ngIf="translation.article">
+          {{translation.article}}
+        </span>
         {{translation.word}}
-        <span class="genus" *ngIf="translation.genus && lanDir=='nlcz'">
+        <span class="genus" *ngIf="translation.genus && settings.lanDir=='nlcz'">
           ({{translation.genus}})
         </span>
       </div>
@@ -80,9 +92,9 @@ export class Review implements OnInit {
   @Input() words: WordPair[];
   @Output() restart = new EventEmitter();
   selected: number;
-  translation = {word:'', genus:''};
+  translation = {word:'', genus:'', article:''};
   ready = false;
-  lanDir: string;
+  settings: AllSettings;
 
   constructor (
     private restartService: RestartService,
@@ -92,7 +104,7 @@ export class Review implements OnInit {
   ngOnInit() {
     this.settingsService.getAppSettings().then(
       settings => {
-        this.lanDir = settings.all.lanDir;
+        this.settings = settings.all;
         this.ready = true;
       }
     );
@@ -122,21 +134,13 @@ export class Review implements OnInit {
     }
   }
 
-  getTpeTranslation(tpe: string) {
-    let nl_tpe = '', i = 0;
-    while (!nl_tpe && i < TPES.length) {
-      if (TPES[i].val === tpe) {
-        nl_tpe = TPES[i].label;
-      }
-      i++;
-    }
-    return nl_tpe;
-  }
-
   onSelected(i: number) {
-    let word = this.lanDir === 'cznl' ? this.words[i].nl : this.words[i].cz;
+    let word = this.settings.lanDir === 'cznl' ? this.words[i].nl : this.words[i].cz;
     this.selected = i;
     this.translation.word = word.word;
     this.translation.genus = word.genus;
+    if (this.settings.showPronoun) {
+      this.translation.article = word.article;
+    }
   }
 }

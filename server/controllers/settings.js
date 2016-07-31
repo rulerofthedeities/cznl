@@ -1,5 +1,4 @@
-var mongo = require('mongodb'),
-    assert = require("assert");
+var mongo = require('mongodb');
 
 var loadSettings = function(db, options, callback) {
   var proj = {};
@@ -20,7 +19,6 @@ var loadSettings = function(db, options, callback) {
     .sort({dt:-1})
     .limit(1)
     .toArray(function(err, docs) {
-      assert.equal(null, err);
       callback(docs[0]);
     })
 }
@@ -49,7 +47,6 @@ var updateSettings = function(db, data, options, callback) {
       {$set: set},
       {upsert:true},
       function(err, r){
-        assert.equal(null, err);
         callback(r);
       }
     )

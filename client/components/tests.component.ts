@@ -89,11 +89,7 @@ export class Tests implements OnDestroy {
       .then(wordlist => {
         this.cards = wordlist;
         this.exerciseTpe = filter.test;
-        if (filter.test === 'review') {
-          this.fetchAnswers();
-        } else {
-          this.started = true;
-        }
+        this.started = true;
       });
   }
 
@@ -105,22 +101,6 @@ export class Tests implements OnDestroy {
   onStartTest(event: boolean) {
     shuffle(this.cards);
     this.exerciseTpe = 'test';
-  }
-
-  fetchAnswers() {
-    //If review is started without a test beforehand, fetch previous answers from db
-    let wordIds: string[] = [];
-    const answersAssoc: { [id: string]: boolean; } = { };
-
-    this.cards.forEach(card => {wordIds.push(card._id);});
-    this.wordService.getAnswers(wordIds)
-      .then(answers => {
-        //Match answers with the words in this.cards
-        answers.forEach(function(answer) {answersAssoc[answer.wordId] = answer.correct;});
-        this.cards.forEach(card => {card.correct = answersAssoc[card._id];});
-    });
-
-    this.started = true;
   }
 
   ngOnDestroy() {

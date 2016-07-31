@@ -12,4 +12,5 @@ export interface WordPair {
   level: number;
   categories: string[];
   correct?: boolean;
+  listed?: boolean;
 }

@@ -1,13 +1,17 @@
 import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
+import {AddToList} from '../wordlists/add-to-list.component';
 import {WordPair, Word} from '../../models/word.model';
 import {AllSettings} from '../../models/settings.model';
 import {WordService} from '../../services/words.service';
-import {TPES} from '../../data/filters';
 
 @Component({
   selector: 'card-item',
+  directives: [AddToList],
   template: `
     <div class="card center-block">
+      <add-to-list
+        [word]="card"
+      ></add-to-list>
       <div 
         *ngIf="isQuestion"
         (click)="turnCard()"
@@ -65,34 +69,9 @@ export class CardItem implements OnChanges {
   getCardData() {
     if (this.isQuestion) {
       this.cardData = this.settings.lanDir === 'cznl' ? this.card.cz : this.card.nl;
-      this.card.tpe = this.getTpeTranslation(this.card.tpe);
     } else {
       this.cardData = this.settings.lanDir === 'cznl' ? this.card.nl : this.card.cz;
-      this.cardData.article = this.getCardArticle(this.cardData.genus);
     }
   }
 
-  getCardArticle(genus: string) {
-    let article: string;
-    switch (genus) {
-      case 'Ma':
-      case 'Mi': article = 'ten'; break;
-      case 'F': article = 'ta'; break;
-      case 'O': article = 'to'; break;
-      default: article = '';
-    }
-
-    return article;
-  }
-
-  getTpeTranslation(tpe: string) {
-    let nl_tpe = '', i = 0;
-    while (!nl_tpe && i < TPES.length) {
-      if (TPES[i].val === tpe) {
-        nl_tpe = TPES[i].label;
-      }
-      i++;
-    }
-    return nl_tpe;
-  }
 }

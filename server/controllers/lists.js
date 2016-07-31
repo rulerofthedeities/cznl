@@ -1,11 +1,9 @@
-var mongo = require('mongodb'),
-    assert = require("assert");
+var mongo = require('mongodb');
 
 var loadLists = function(db, options, callback) {
   db.collection('wordlists')
     .find({userId:options.userId})
     .toArray(function(err, docs) {
-      assert.equal(null, err);
       callback(docs);
     });
 }
@@ -15,7 +13,6 @@ var getWordCount = function(db, options, callback) {
   db.collection('answers')
     .find({userId:options.userId, listIds:options.id})
     .count(function(err, count) {
-      assert.equal(null, err);
       callback(count);
     });
 }

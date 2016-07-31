@@ -18,6 +18,9 @@
     "minify:libs": "uglifyjs public/assets/js/libs.js --screw-ie8 --compress --mangle --output public/assets/js/libs.min.js",
     "minify:css": "cleancss public/assets/css/styles.css -o public/assets/css/styles.min.css"
   },
+  "engines": {
+    "node": "6.2.2"
+  },
   "author": "Kristiaan Van Ermengem",
   "dependencies": {
     "@angular/common": "2.0.0-rc.3",
