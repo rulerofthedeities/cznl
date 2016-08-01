@@ -4,7 +4,6 @@ import {WordList} from '../../models/list.model';
 
 @Component({
   selector: 'word-lists',
-  providers: [WordlistService],
   template: `
     <ul class="list-group" *ngIf="ready">
       <li 
@@ -13,7 +12,7 @@ import {WordList} from '../../models/list.model';
         [ngClass]="{'active':list==selectedList}"
         class="list-group-item">
           {{list.name}}
-        <span class="badge">{{list.count}}</span>
+        <span class="badge" *ngIf="list.count>0">{{list.count}}</span>
       </li>
     </ul>
     <button
@@ -24,8 +23,7 @@ import {WordList} from '../../models/list.model';
     </button>
     <button 
       class="btn btn-success btn-lg" 
-      [disabled]="!wordsInList || wordsInList < 1"
-      (click)="start('review', level.value, wordtpe.value, cats.value)">
+      [disabled]="!wordsInList || wordsInList < 1">
     <span class="fa fa-play"></span>
       Toon Overzicht
     </button>`

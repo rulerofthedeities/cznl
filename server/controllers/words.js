@@ -31,7 +31,7 @@ var loadWords = function(db, options, callback) {
     })
 }
 
-buildFilter = function(options) {
+var buildFilter = function(options) {
   var filterArr = [];
   if (options.level >= 0) {
     filterArr.push('"level":' + options.level);

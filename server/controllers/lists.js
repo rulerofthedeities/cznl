@@ -9,7 +9,6 @@ var loadLists = function(db, options, callback) {
 }
 
 var getWordCount = function(db, options, callback) {
-  console.log("searching for ", options.id);
   db.collection('answers')
     .find({userId:options.userId, listIds:options.id})
     .count(function(err, count) {
@@ -25,17 +24,17 @@ module.exports = {
     loadLists(mongo.DB, options, function(lists){
       //For each list, get the number of words in the list
       var cnt = 0;
+      var listLength = lists.length;
       lists.forEach(function(list) {
-        console.log('list', list);
         var options = {
           userId:'demoUser',
           id: list._id.toString()
         };
-        cnt++;
         getWordCount(mongo.DB, options, function(total){
+          cnt++;
           list.count = total;
-          if (cnt == lists.length) {
-            console.log('lists final', lists);
+          //Return lists only after we've got all the totals per list
+          if (cnt === listLength) {
             res.status(200).send({"lists": lists});
           }
         });

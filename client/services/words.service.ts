@@ -62,8 +62,10 @@ export class WordService {
 
     words.forEach(word => {
       //Add answers data to word object
-      word.answer = answersAssoc[word._id];
-      delete word.answer.wordId;
+      if (answersAssoc[word._id]) {
+        word.answer = answersAssoc[word._id];
+        delete word.answer.wordId;
+      }
       //Translate word type from English to Dutch
       word.tpe = this.getTpeTranslation(word.tpe);
       word.cz.article = this.getCardArticle(word.cz.genus);

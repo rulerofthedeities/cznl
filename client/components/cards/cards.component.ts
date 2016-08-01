@@ -88,7 +88,7 @@ export class Cards implements OnInit {
   }
 
   onCardAnswered(isCorrect: boolean) {
-    this.cards[this.cardsIndex - 1].correct = isCorrect;
+    this.cards[this.cardsIndex - 1].answer.correct = isCorrect;
     this.getNextCard();
     if (isCorrect) {
       this.correct++;

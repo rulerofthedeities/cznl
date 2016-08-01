@@ -22,7 +22,7 @@ import {SettingsService} from '../services/settings.service';
               class="fa pull-left" 
               style="margin-top:3px;"
               [ngClass]="{
-                'fa-check': word.answer.correct===true,
+                'fa-check':word.answer.correct===true,
                 'fa-times':word.answer.correct===false,
                 'fa-circle-o':isUndefined(word.answer.correct)}"
               [ngStyle]="{'color': getColor(word.answer.correct)}">
@@ -102,6 +102,10 @@ export class Review implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.words.forEach(word => {
+      if (!word.answer) {
+        word.answer = {_id: null};
+    }});
     this.settingsService.getAppSettings().then(
       settings => {
         this.settings = settings.all;
