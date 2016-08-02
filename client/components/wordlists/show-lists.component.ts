@@ -3,10 +3,11 @@ import { GetKeyPress } from '../../directives/get-key-pressed.directive';
 import { WordPair, Answer } from '../../models/word.model';
 import { WordlistService } from '../../services/wordlists.service';
 import { WordList } from '../../models/list.model';
+import {NewList} from './new-list.component';
 
 @Component({
     selector: 'show-lists',
-    directives: [GetKeyPress],
+    directives: [GetKeyPress, NewList],
     template: `
       <key pressed 
         key="Escape" 
@@ -42,6 +43,12 @@ import { WordList } from '../../models/list.model';
                     (click)="toggleInList(list)">
                   </span>
                 </li>
+                <li 
+                  class="list-group-item"
+                  *ngIf="creatingNewList">
+                  <new-list
+                    (addNewList)="onNewListAdded($event)"></new-list>
+                </li>
               </ul>
             </div>
             <div class="modal-footer">
@@ -55,9 +62,17 @@ import { WordList } from '../../models/list.model';
               <button 
                 type="button" 
                 class="btn btn-default" 
-                (click)="newList()"
+                (click)="createNewList()"
+                [disabled]="creatingNewList"
                 >
                 Nieuwe Lijst
+              </button>
+              <button 
+                type="button" 
+                class="btn btn-default" 
+                (click)="hideLists()"
+                >
+                Cancel
               </button>
             </div>
           </div>
@@ -73,6 +88,7 @@ import { WordList } from '../../models/list.model';
 export class ShowLists implements OnInit {
   isVisible = false;
   changesMade = false;
+  creatingNewList = false;
   wordAnswer: Answer;
   userLists: WordList[];
 
@@ -86,6 +102,7 @@ export class ShowLists implements OnInit {
   updateUserLists(word: WordPair) {
     this.wordAnswer = word.answer;
     this.wordAnswer.wordId = word._id;
+    this.creatingNewList = false;
     this.isVisible = true;
   }
 
@@ -114,18 +131,37 @@ export class ShowLists implements OnInit {
     this.changesMade = true;
   }
 
+  onNewListAdded(listName: string) {
+    if (listName) { // null = cancelled new list
+      //add to list array
+      let newList: WordList = {
+        name: listName,
+        count: 0
+      };
+      if (!this.userLists) { this.userLists = [];}
+      this.userLists.push(newList);
+      this.toggleInList(newList);
+      this.changesMade = true;
+    }
+    this.creatingNewList = false;
+  }
+
   saveLists() {
-    //Save new lists
+    //Save new lists -> if no _id, list is new
+    this.userLists.forEach( list => {
+      if (!list._id) {
+        this.wordlistService.saveList(list);
+      }
+    });
 
     //Save lists array for this particular word
-    console.log('wordanswer', this.wordAnswer);
-
     this.wordlistService.updateWordLists(this.wordAnswer);
     this.hideLists();
   }
 
-  newList() {
-    console.log('new list');
+  createNewList() {
+    this.creatingNewList = true;
   }
+
 
 }

@@ -1,5 +1,5 @@
 export interface WordList {
-  _id: string;
+  _id?: string;
   name: string;
   count: number;
 }

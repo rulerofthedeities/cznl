@@ -68,7 +68,7 @@ import {Filter as FilterModel} from '../models/filters.model';
 })
 
 export class Filter implements OnInit {
-  @Output() selectedFilter = new EventEmitter<Object>();
+  @Output() selectedFilter = new EventEmitter<FilterModel>();
   filters: Object;
   selected: FilterModel;
   totalWords: number;

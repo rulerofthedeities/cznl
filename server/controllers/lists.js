@@ -16,6 +16,16 @@ var getWordCount = function(db, options, callback) {
     });
 }
 
+var saveNewList = function(db, data, options, callback) {
+  if (data.name) {
+    db.collection('wordlists')
+      .insert({userId:options.userId, name:data.name},
+        function(err, r){
+          callback(r);
+        });
+  }
+}
+
 module.exports = {
   load: function(req, res) {
     var options = {
@@ -40,5 +50,13 @@ module.exports = {
         });
       });
     });
+  },
+  save: function(req, res) {
+    var options = {
+      userId:'demoUser'
+    };
+    saveNewList(mongo.DB, req.body, options, function(r){
+      res.status(200).send(r);
+    })
   }
 }

@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers} from '@angular/http';
 import {Answer} from '../models/word.model';
+import {WordList} from '../models/list.model';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
@@ -21,6 +22,16 @@ export class WordlistService {
       .put('/api/answer?tpe=listids', JSON.stringify(listAnswer), {headers: headers})
       .toPromise()
       .then(() => listAnswer)
+      .catch(this.handleError);
+  }
+
+  saveList(list: WordList) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http
+      .post('/api/lists/add', JSON.stringify(list), {headers: headers})
+      .toPromise()
+      .then(() => list)
       .catch(this.handleError);
   }
 

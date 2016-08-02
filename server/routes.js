@@ -19,6 +19,7 @@ module.exports.initialize = function(app, router) {
   router.put('/api/answer', answers.update);
   
   router.post('/api/answers', answers.load);
+  router.post('/api/lists/add', lists.save);
 
   app.use(router);
 
