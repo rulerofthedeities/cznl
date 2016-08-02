@@ -1,11 +1,14 @@
 .fa {
-  font-size:24px;
-  cursor:pointer;
+  font-size: 24px;
+  cursor: pointer;
 }
 .fa-star {
-  color:gold;
+  color: gold;
   text-shadow: 1px 1px grey;
 }
-.fa-star-o {
-  color:lavender;
+.fa-star-o, .fa-pencil {
+  color: gainsboro;
+}
+.fa-star-o:hover, .fa-pencil:hover {
+  color:grey;
 }

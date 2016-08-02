@@ -28,7 +28,7 @@ var getAnswers = function(db, userId, data, callback) {
 
 var updateListIds = function(db, options, answer, callback) {
   var mongoId = new mongo.ObjectID(answer._id);
-  
+  var listId = answer.listIds ? answer.listIds : [];
   db.collection('answers')
     .update(
       {userId: options.userId, _id:mongoId}, 
@@ -42,8 +42,7 @@ var updateListIds = function(db, options, answer, callback) {
       function(err, r){
         callback(r);
       }
-    )
-  
+    );
 }
 
 module.exports = {

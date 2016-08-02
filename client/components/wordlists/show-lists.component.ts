@@ -4,91 +4,24 @@ import { WordPair, Answer } from '../../models/word.model';
 import { WordlistService } from '../../services/wordlists.service';
 import { WordList } from '../../models/list.model';
 import {NewList} from './new-list.component';
+import {EditListName} from './edit-list-name.component';
 
 @Component({
     selector: 'show-lists',
-    directives: [GetKeyPress, NewList],
-    template: `
-      <key pressed 
-        key="Escape" 
-        (keyPressed)="hideLists()">
-      </key>
-      <div 
-        *ngIf="isVisible" 
-        class="modal fade show in" 
-        id="myModal">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button 
-                type="button" 
-                class="close" 
-                (click)="hideLists()"
-                data-dismiss="modal">
-                &times;
-              </button>
-              <h4 class="modal-title">Mijn Woordenlijsten</h4>
-            </div>
-            <div class="modal-body">
-              <ul class="list-group">
-                <li 
-                  *ngFor="let list of userLists"
-                   class="list-group-item">
-                  {{list.name}}
-                  <span 
-                    class="fa pull-right"
-                    [ngClass]="{
-                      'fa-star':isInList(list),
-                      'fa-star-o':!isInList(list)}"
-                    (click)="toggleInList(list)">
-                  </span>
-                </li>
-                <li 
-                  class="list-group-item"
-                  *ngIf="creatingNewList">
-                  <new-list
-                    (addNewList)="onNewListAdded($event)"></new-list>
-                </li>
-              </ul>
-            </div>
-            <div class="modal-footer">
-              <button 
-                type="button" 
-                class="btn btn-primary" 
-                (click)="saveLists()"
-                [disabled]="!changesMade">
-                Sla Wijzigingen op
-              </button>
-              <button 
-                type="button" 
-                class="btn btn-default" 
-                (click)="createNewList()"
-                [disabled]="creatingNewList"
-                >
-                Nieuwe Lijst
-              </button>
-              <button 
-                type="button" 
-                class="btn btn-default" 
-                (click)="hideLists()"
-                >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    `,
+    directives: [GetKeyPress, NewList, EditListName],
+    templateUrl: 'client/components/wordlists/show-lists.html',
+    styleUrls:['client/components/wordlists/word-list.css'],
     styles:[`
       div.modal {color: black;text-align:left;}
-    `],
-    styleUrls:['client/components/wordlists/word-list.css']
+    `]
 })
 
 export class ShowLists implements OnInit {
   isVisible = false;
   changesMade = false;
   creatingNewList = false;
+  listEditing: number;
+  listsEdited: number[] = [];
   wordAnswer: Answer;
   userLists: WordList[];
 
@@ -106,6 +39,19 @@ export class ShowLists implements OnInit {
     this.isVisible = true;
   }
 
+  editListName(list: WordList, i: number) {
+    this.listEditing = i;
+    this.listsEdited.push(i);
+  }
+
+  updateListName(newName: string) {
+    if (newName) {
+      this.userLists[this.listEditing].name = newName;
+      this.changesMade = true;
+    }
+    this.listEditing = null;
+  }
+
   hideLists() {
     this.isVisible = false;
   }
@@ -121,8 +67,11 @@ export class ShowLists implements OnInit {
 
   toggleInList(list: WordList) {
     if (this.isInList(list)) {
+      //Remove from list
+      console.log('user lists', this.userLists);
       this.wordAnswer.listIds = this.wordAnswer.listIds.filter(id => list._id !== id);
     } else {
+      //Add to list
       if(!this.wordAnswer.listIds) {
         this.wordAnswer.listIds = [];
       }
@@ -152,6 +101,11 @@ export class ShowLists implements OnInit {
       if (!list._id) {
         this.wordlistService.saveList(list);
       }
+    });
+
+    //Save edited lists
+    this.listsEdited.forEach(i => {
+      this.wordlistService.updateList(this.userLists[i]);
     });
 
     //Save lists array for this particular word

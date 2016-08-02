@@ -20,7 +20,20 @@ var saveNewList = function(db, data, options, callback) {
   if (data.name) {
     db.collection('wordlists')
       .insert({userId:options.userId, name:data.name},
-        function(err, r){
+        function(err, r) {
+          callback(r);
+        });
+  }
+}
+
+var updateList = function(db, data, options, callback) {
+  var mongoId = new mongo.ObjectID(data._id);
+  if (data.name) {
+    db.collection('wordlists')
+      .update(
+        {userId:options.userId, _id: mongoId},
+        {$set:{name:data.name}}, 
+        function(err, r) {
           callback(r);
         });
   }
@@ -56,6 +69,14 @@ module.exports = {
       userId:'demoUser'
     };
     saveNewList(mongo.DB, req.body, options, function(r){
+      res.status(200).send(r);
+    })
+  },
+  update:function(req, res) {
+    var options = {
+      userId:'demoUser'
+    };
+    updateList(mongo.DB, req.body, options, function(r){
       res.status(200).send(r);
     })
   }
