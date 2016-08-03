@@ -3,12 +3,11 @@ import { GetKeyPress } from '../../directives/get-key-pressed.directive';
 import { WordPair, Answer } from '../../models/word.model';
 import { WordlistService } from '../../services/wordlists.service';
 import { WordList } from '../../models/list.model';
-import {NewList} from './new-list.component';
-import {EditListName} from './edit-list-name.component';
+import {EditList} from './edit-list.component';
 
 @Component({
     selector: 'show-lists',
-    directives: [GetKeyPress, NewList, EditListName],
+    directives: [GetKeyPress, EditList],
     templateUrl: 'client/components/wordlists/show-lists.html',
     styleUrls:['client/components/wordlists/word-list.css'],
     styles:[`
@@ -68,7 +67,6 @@ export class ShowLists implements OnInit {
   toggleInList(list: WordList) {
     if (this.isInList(list)) {
       //Remove from list
-      console.log('user lists', this.userLists);
       this.wordAnswer.listIds = this.wordAnswer.listIds.filter(id => list._id !== id);
     } else {
       //Add to list

@@ -44,9 +44,10 @@
           <li 
             class="list-group-item"
             *ngIf="creatingNewList">
-            <new-list
+            <edit-list-name
+              name=""
               (addNewList)="onNewListAdded($event)">
-            </new-list>
+            </edit-list-name>
           </li>
         </ul>
       </div>
