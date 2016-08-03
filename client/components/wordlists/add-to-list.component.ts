@@ -12,7 +12,8 @@ import {WordPair} from '../../models/word.model';
         'fa-star':hasLists(word),
         'fa-star-o':!hasLists(word)
       }"
-      (click)="showModalLists()"></div>
+      (click)="showModalLists()">
+    </div>
     <show-lists></show-lists>
   `,
   styleUrls:['client/components/wordlists/word-list.css']

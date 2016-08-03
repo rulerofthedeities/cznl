@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { GetKeyPress } from '../../directives/get-key-pressed.directive';
-import { WordPair, Answer } from '../../models/word.model';
-import { WordlistService } from '../../services/wordlists.service';
-import { WordList } from '../../models/list.model';
+import {Component} from '@angular/core';
+import {GetKeyPress} from '../../directives/get-key-pressed.directive';
+import {WordPair, Answer} from '../../models/word.model';
+import {WordlistService} from '../../services/wordlists.service';
+import {WordList} from '../../models/list.model';
 import {EditList} from './edit-list.component';
 
 @Component({
@@ -15,7 +15,7 @@ import {EditList} from './edit-list.component';
     `]
 })
 
-export class ShowLists implements OnInit {
+export class ShowLists {
   isVisible = false;
   changesMade = false;
   creatingNewList = false;
@@ -26,16 +26,16 @@ export class ShowLists implements OnInit {
 
   constructor(private wordlistService: WordlistService) {}
 
-  ngOnInit() {
-    this.wordlistService.getWordLists()
-      .then(lists => {this.userLists = lists;});
-  }
-
   updateUserLists(word: WordPair) {
-    this.wordAnswer = word.answer;
-    this.wordAnswer.wordId = word._id;
-    this.creatingNewList = false;
-    this.isVisible = true;
+    this.wordlistService.getWordLists()
+      .then(lists => {
+        this.userLists = lists;
+        this.wordAnswer = word.answer;
+        this.wordAnswer.wordId = word._id;
+        this.creatingNewList = false;
+        this.changesMade = false;
+        this.isVisible = true;
+    });
   }
 
   editListName(list: WordList, i: number) {
