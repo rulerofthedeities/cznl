@@ -6,7 +6,6 @@ import {Filter as FilterModel} from '../models/filters.model';
 
 @Component({
   selector: 'filter',
-  providers: [FilterService],
   template: `
   <div *ngIf="filters" class="filter">
     <ul class="list-unstyled">
