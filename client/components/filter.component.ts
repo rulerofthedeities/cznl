@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter, OnInit} from '@angular/core';
+import {Component, Output, Input, EventEmitter, OnInit} from '@angular/core';
 import {FilterService} from '../services/filters.service';
 import {SettingsService} from '../services/settings.service';
 import {WordService} from '../services/words.service';
@@ -43,23 +43,23 @@ import {Filter as FilterModel} from '../models/filters.model';
         </select>
       </li>
       <li>
-      <div class="text-muted">Aantal woorden: <strong>{{totalWords}}</strong></div>
-      <div class="buttons"> 
-        <button 
-          class="btn btn-success btn-lg" 
-          [disabled]="totalWords < 1"
-          (click)="start('test', level.value, wordtpe.value, cats.value)">
-        <span class="fa fa-play"></span>
-          Start Test
-        </button>
-        <button 
-          class="btn btn-success btn-lg" 
-          [disabled]="totalWords < 1"
-          (click)="start('review', level.value, wordtpe.value, cats.value)">
-        <span class="fa fa-play"></span>
-          Toon Overzicht
-        </button>
-      </div>
+        <div class="text-muted">Aantal woorden: <strong>{{totalWords}}</strong></div>
+        <div class="buttons"> 
+          <button *ngIf="filterTpe==='exercises'"
+            class="btn btn-success btn-lg" 
+            [disabled]="totalWords < 1"
+            (click)="start('test', level.value, wordtpe.value, cats.value)">
+          <span class="fa fa-play"></span>
+            Start Test
+          </button>
+          <button *ngIf="filterTpe==='exercises'"
+            class="btn btn-success btn-lg" 
+            [disabled]="totalWords < 1"
+            (click)="start('review', level.value, wordtpe.value, cats.value)">
+          <span class="fa fa-play"></span>
+            Toon Overzicht
+          </button>
+        </div>
       </li>
     </ul>
   </div>`,
@@ -70,6 +70,7 @@ import {Filter as FilterModel} from '../models/filters.model';
 })
 
 export class Filter implements OnInit {
+  @Input('tpe') filterTpe: string;
   @Output() selectedFilter = new EventEmitter<FilterModel>();
   filters: Object;
   selected: FilterModel;
@@ -95,6 +96,9 @@ export class Filter implements OnInit {
   onChangeFilter(level: string, wordTpe: string, cat: string) {
     let filter:FilterModel = this.getFilter('none', level, wordTpe, cat);
     this.getCount(filter);
+    if (this.filterTpe === 'wordbank') {
+      this.start('wordbank', level, wordTpe, cat);
+    }
   }
 
   getCount(filter: FilterModel) {

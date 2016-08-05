@@ -154,11 +154,20 @@
   
   <div class="clearfix"></div>
 
-  <button 
+  <button *ngIf="!disableSubmit"
     type="submit" 
     class="btn btn-success" 
     [disabled]="!wordForm.valid">
     Voeg woord toe
+  </button>
+
+  <p class="bg-success">{{submitMessage}}</p>
+
+  <button *ngIf="disableSubmit"
+    type="button" 
+    (click)="resetForm()"
+    class="btn btn-success">
+    Nieuw woord
   </button>
 
 </form>

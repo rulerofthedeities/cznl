@@ -41,8 +41,8 @@ export class Menu implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.routes = [
-      {path:'/tests', label:'Tests', glyph:'list-alt'},
-      {path:'/add-words', label:'Add Words', glyph:'plus'},
+      {path:'/tests', label:'Oefeningen', glyph:'list-alt'},
+      {path:'/words', label:'Woorden', glyph:'plus'},
       {path:'/settings', label:'Settings', glyph:'cog'}
     ];
     this.subscription = this.router.events.subscribe(event => this.url = event.url);

@@ -38,11 +38,12 @@ export class WordService {
 
   buildWordPair(word: FormWordPair): WordPair {
     //Transform form data into a valid WordPair object
-    let wordPair: WordPair,
-        wordCz: Word,
-        wordNl: Word;
+    let wordPair = <WordPair>{},
+        wordCz = <Word>{},
+        wordNl = <Word>{};
 
     wordPair.tpe = word.tpe;
+
     wordPair.level = parseInt(word.level, 10);
     if (word.categories.length > 0) {
       wordPair.categories = word.categories;

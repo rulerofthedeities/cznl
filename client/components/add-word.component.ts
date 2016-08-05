@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FilterService} from '../services/filters.service';
 import {WordService} from '../services/words.service';
 import {ErrorObject} from '../models/word.model';
+import {WordPair} from '../models/word.model';
 import {
   FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES,
   FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -21,6 +22,8 @@ export class AddWord implements OnInit {
   wordForm: FormGroup;
   filters: Object;
   filtersLoaded = false;
+  submitMessage: string;
+  disableSubmit = false;
 
   constructor(
     private filterService: FilterService,
@@ -46,7 +49,17 @@ export class AddWord implements OnInit {
 
   onSubmit(form: any): void {
     console.log('you submitted:', form);
-    this.wordService.addWord(form);
+    this.wordService.addWord(form).then(word => {
+      let wordPair: WordPair = word['word'];
+      this.submitMessage = `Het woord ${wordPair['cz'].word}/${wordPair['nl'].word} is succesvol opgeslagen.`;
+      this.disableSubmit = true;
+    });
+  }
+
+  resetForm() {
+    this._buildForm();
+    this.submitMessage = '';
+    this.disableSubmit = false;
   }
 
   _buildForm() {

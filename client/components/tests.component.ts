@@ -32,7 +32,7 @@ import {shuffle} from '../utils/utils';
         </li>
       </ul>
     </div>
-    <filter 
+    <filter tpe="exercises"
       *ngIf="!started && listType=='filter'"
       (selectedFilter)="onSelectFilter($event)"
       class="col-xs-8">

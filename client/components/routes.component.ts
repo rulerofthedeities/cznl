@@ -1,14 +1,14 @@
 import {provideRouter, RouterConfig} from '@angular/router';
 import {Tests} from './tests.component';
 import {Dashboard} from './dashboard.component';
-import {AddWord} from './add-word.component';
+import {WordBank} from './wordbank.component';
 import {AppSettings} from './settings.component';
 
 const routes: RouterConfig = [
-  { path: '', component: AddWord },
+  { path: '', component: WordBank },
   { path: 'dashboard', component: Dashboard },
   { path: 'tests', component: Tests },
-  { path: 'add-words', component: AddWord },
+  { path: 'words', component: WordBank },
   { path: 'settings', component: AppSettings }
 ];
 
