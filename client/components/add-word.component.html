@@ -1,0 +1,164 @@
+<h1>Add a new word</h1>
+<form 
+  [formGroup]="wordForm"
+  (ngSubmit) = "onSubmit(wordForm.value)"
+  class="form-horizontal">
+
+
+<!-- COMMON -->
+
+  <div class="row">
+    <div class="col-xs-12">
+        <div class="panel panel-default">
+          <div class="panel-body">
+
+            <div class="form-group" *ngIf="filtersLoaded">
+              <label 
+                for="tpe" 
+                class="control-label col-xs-2">
+                Type:
+              </label>
+              <div class="col-xs-10">
+                <select 
+                  class="form-control" 
+                  id="tpe"
+                  [formControl]="wordForm.controls['tpe']">
+                  <option *ngFor="let t of filters.tpes" [value]="t.val">
+                    {{t.label}}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group" *ngIf="filtersLoaded">
+              <label 
+                for="level" 
+                class="control-label col-xs-2">
+                Niveau:
+              </label>
+              <div class="col-xs-10">
+                <select 
+                  class="form-control" 
+                  id="level"
+                  [formControl]="wordForm.controls['level']">
+                  <option *ngFor="let l of filters.levels" [value]="l.val">
+                    {{l.label}}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+        </div>
+    </div>
+  </div>
+
+<!-- CZ -->
+
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="panel panel-default">
+        <div class="panel-heading"><h3>Tsjechisch</h3></div>
+        <div class="panel-body">
+
+          <div class="form-group">
+            <label 
+              for="cz.word" 
+              class="control-label col-xs-2">
+              Woord:
+            </label>
+            <div class="col-xs-10">
+              <input 
+                type="text"
+                class="form-control"
+                id="cz.word"
+                [formControl]="wordForm.controls['cz.word']">
+              <div *ngIf="isError('cz.word', 'required')"
+                class="text-danger">Het Tsjechische woord ontbreekt.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" *ngIf="filtersLoaded && isNoun()">
+            <label 
+              for="cz.genus" 
+              class="control-label col-xs-2">
+              Genus:
+            </label>
+            <div class="col-xs-10">
+              <select 
+                class="form-control" 
+                id="cz.genus"
+                [formControl]="wordForm.controls['cz.genus']">
+                <option *ngFor="let g of filters.genus" [value]="g.val">
+                  {{g.label}}
+                </option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+<!-- NL -->
+
+    <div class="col-xs-6">
+      <div class="panel panel-default">
+        <div class="panel-heading"><h3>Nederlands</h3></div>
+        <div class="panel-body">
+
+          <div class="form-group">
+            <label for="nl.word" class="control-label col-xs-2">
+              Woord:
+            </label>
+            <div class="col-xs-10">
+              <input 
+                type="text"
+                class="form-control"
+                id="nl.word"
+                [formControl]="wordForm.controls['nl.word']">
+              <div *ngIf="isError('nl.word', 'required')"
+                class="text-danger">Het Nederlandse woord ontbreekt.
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group" *ngIf="isNoun()">
+            <label for="nl.article" class="control-label col-xs-2">
+              Lidwoord:
+            </label>
+            <div class="col-xs-10">
+              <label class="radio-inline">
+                <input 
+                  type="radio"
+                  id="nl.article"
+                  value="de"
+                  [formControl]="wordForm.controls['nl.article']">
+                  de
+              </label>
+              <label class="radio-inline">
+                <input 
+                  type="radio"
+                  id="nl.article"
+                  value="het"
+                  [formControl]="wordForm.controls['nl.article']">
+                het
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="clearfix"></div>
+
+  <button 
+    type="submit" 
+    class="btn btn-success" 
+    [disabled]="!wordForm.valid">
+    Voeg woord toe
+  </button>
+
+</form>

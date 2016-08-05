@@ -7,12 +7,13 @@ import {Filter as FilterModel} from '../models/filters.model';
 @Component({
   selector: 'filter',
   template: `
-  <div *ngIf="filters" class="filter">
+  <div *ngIf="filtersLoaded" class="filter">
     <ul class="list-unstyled">
       <li>
         <select #level 
           class="form-control input-lg"
           (change)="onChangeFilter(level.value, wordtpe.value, cats.value)">
+          <option value="-1" [selected]="'-1'==selected.level">Alle niveaus</option>
           <option 
             *ngFor="let level of filters.levels" [value]="level.val" [selected]="level.val==selected.level">
             {{level.label}}
@@ -23,6 +24,7 @@ import {Filter as FilterModel} from '../models/filters.model';
         <select #wordtpe 
           class="form-control input-lg"
           (change)="onChangeFilter(level.value, wordtpe.value, cats.value)">
+          <option value="all" [selected]="'all'==selected.tpe">Alle woordsoorten</option>
           <option 
             *ngFor="let tpe of filters.tpes" [value]="tpe.val" [selected]="tpe.val==selected.tpe">
             {{tpe.label}}
@@ -33,6 +35,7 @@ import {Filter as FilterModel} from '../models/filters.model';
         <select #cats 
           class="form-control input-lg"
           (change)="onChangeFilter(level.value, wordtpe.value, cats.value)">
+          <option value="all" [selected]="'all'==selected.cats">Alle categorieën</option>
           <option 
             *ngFor="let cat of filters.cats" [value]="cat.val" [selected]="cat.val==selected.cats">
             {{cat.label}}
@@ -71,6 +74,7 @@ export class Filter implements OnInit {
   filters: Object;
   selected: FilterModel;
   totalWords: number;
+  filtersLoaded = false;
 
   constructor(
     private filterService: FilterService,
@@ -115,6 +119,10 @@ export class Filter implements OnInit {
         this.filterService.getFilterOptions().then(
           filters => {
             this.filters = filters;
+            //this.filters.levels.unshift({label:'Alle niveaus', val:-1});
+            //this.filters.tpes.unshift({label:'Alle Woordsoorten', val:'all'});
+            //this.filters.cats.unshift({label:'Alle categorieën', val:'all'});
+            this.filtersLoaded = true;
           }
         );
       }

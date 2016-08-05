@@ -1,143 +1,17 @@
 import {Component, OnInit} from '@angular/core';
 import {FilterService} from '../services/filters.service';
+import {WordService} from '../services/words.service';
 import {
   FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES,
   FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES],
-  template:`
-    <h1>Add a new word</h1>
-    <form 
-      [formGroup]="wordForm"
-      (ngSubmit) = "onSubmit(wordForm.value)"
-      class="form-horizontal">
-
-
-<!-- COMMON -->
-
-      <div class="row">
-        <div class="col-xs-12">
-            <div class="panel panel-default">
-              <div class="panel-body">
-
-                <div class="form-group" *ngIf="filtersLoaded">
-                  <label 
-                    for="tpe" 
-                    class="control-label col-xs-2">
-                    Type:
-                  </label>
-                  <div class="col-xs-10">
-                    <select 
-                      class="form-control" 
-                      id="tpe"
-                      [formControl]="wordForm.controls['tpe']">
-                      <option *ngFor="let t of filters.tpes" [value]="t.val">
-                        {{t.label}}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-group" *ngIf="filtersLoaded">
-                  <label 
-                    for="level" 
-                    class="control-label col-xs-2">
-                    Niveau:
-                  </label>
-                  <div class="col-xs-10">
-                    <select 
-                      class="form-control" 
-                      id="level"
-                      [formControl]="wordForm.controls['level']">
-                      <option *ngFor="let l of filters.levels" [value]="l.val">
-                        {{l.label}}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-        </div>
-      </div>
-
-<!-- CZ -->
-
-      <div class="row">
-        <div class="col-xs-6">
-          <div class="panel panel-default">
-            <div class="panel-heading"><h3>Tsjechisch</h3></div>
-            <div class="panel-body">
-
-              <div class="form-group">
-                <label 
-                  for="cz.word" 
-                  class="control-label col-xs-2">
-                  Woord:
-                </label>
-                <div class="col-xs-10">
-                  <input 
-                    type="text"
-                    class="form-control"
-                    id="cz.word"
-                    [formControl]="wordForm.controls['cz.word']">
-                  <div 
-                    *ngIf="isError('cz.word', 'required')"
-                    class="text-danger">Het Tsjechische woord ontbreekt.
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-<!-- NL -->
-
-        <div class="col-xs-6">
-          <div class="panel panel-default">
-            <div class="panel-heading"><h3>Nederlands</h3></div>
-            <div class="panel-body">
-
-              <div class="form-group">
-              <label 
-                for="nl.word" 
-                class="control-label col-xs-2">
-                Woord:
-              </label>
-              <div class="col-xs-10">
-                <input 
-                  type="text"
-                  class="form-control"
-                  id="nl.word"
-                  [formControl]="wordForm.controls['nl.word']">
-                <div 
-                  *ngIf="isError('nl.word', 'required')"
-                  class="text-danger">Het Nederlandse woord ontbreekt.</div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="clearfix"></div>
-
-      <button 
-        type="submit" 
-        class="btn btn-success" 
-        [disabled]="!wordForm.valid">
-        Voeg woord toe
-      </button>
-
-    </form>
-  `,
+  templateUrl:'/client/components/add-word.component.html',
   styles:[`
     input.ng-dirty.ng-invalid {
-      border:1px dotted red;
-      border-left:5px solid red;
+      border: 1px dotted red;
+      border-left: 5px solid red;
     }
   `]
 })
@@ -149,11 +23,16 @@ export class AddWord implements OnInit {
 
   constructor(
     private filterService: FilterService,
-    private fb: FormBuilder) {}
+    private wordService: WordService,
+    private formBuilder: FormBuilder) {}
 
   ngOnInit() {
     this._getFilterOptions();
     this._buildForm();
+  }
+
+  isNoun() {
+    return this.wordForm.controls['tpe'].value === 'noun';
   }
 
   isError(fieldName: string, error: string): boolean {
@@ -166,30 +45,52 @@ export class AddWord implements OnInit {
 
   onSubmit(form: any): void {
     console.log('you submitted:', form);
+    this.wordService.addWord(form);
   }
 
   _buildForm() {
-    this.wordForm = this.fb.group({
+    this.wordForm = this.formBuilder.group({
       'tpe': ['', [Validators.required]],
       'level': ['', [Validators.required]],
       'categories': ['', []],
       'cz.word': ['', [Validators.required]],
-      'nl.word': ['', [Validators.required]]
-    });
+      'nl.word': ['', [Validators.required]],
+      'cz.genus': ['', []],
+      'nl.article': ['', []]
+    }, {validator: this.checkOptionalValidations});
   }
 
   _getFilterOptions() {
     this.filterService.getFilterOptions().then(
       filters => {
         this.filters = filters;
-        //remove first entry for each filter
-        for (let key in this.filters) {
-            let value = this.filters[key];
-            value.shift();
-        }
-        console.log(this.filters);
         this.filtersLoaded = true;
       }
     );
   }
+
+  //Check validations that are dependent on other fields
+  checkOptionalValidations(group: ControlGroup) {
+    let valid = true,
+        errObj = {};
+
+    if (group.controls['tpe'].value === 'noun') {
+      if (!group.controls['nl.article'].value) {
+        valid = false;
+        errObj.article = false;
+      };
+      if (!group.controls['cz.genus'].value) {
+        valid = false;
+        errObj.genus = false;
+      };
+    }
+
+    if (valid) {
+      return null;
+    }
+
+    return errObj;
+  }
+
 }
+

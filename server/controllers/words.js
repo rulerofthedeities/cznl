@@ -31,6 +31,22 @@ var loadWords = function(db, options, callback) {
     })
 }
 
+var saveNewWord = function(db, options, data, callback) {
+  if (data && data.word) {
+    console.log('data', data);
+    let wordToSave = data.word;
+    wordToSave.userId = data.userId;
+
+    console.log('saving', wordToSave);
+
+    db.collection('wordpairs')
+      .insert(wordToSave,
+        function(err, r) {
+          callback(r);
+        });
+  }
+}
+
 var buildFilter = function(options) {
   var filterArr = [];
   if (options.level >= 0) {
@@ -68,5 +84,11 @@ module.exports = {
         res.status(200).send({"words": docs, "answers": answers});
       });
     }
+  },
+  save: function(req, res) {
+    var options = {};
+    saveNewWord(mongo.DB, options, req.body, function(r){
+      res.status(200).send(r);
+    })
   }
 }

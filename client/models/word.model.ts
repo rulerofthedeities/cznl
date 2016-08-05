@@ -1,6 +1,6 @@
 export interface Word {
   word: string;
-  genus: string;
+  genus?: string;
   article?: string;
 }
 

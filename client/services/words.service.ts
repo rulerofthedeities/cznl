@@ -3,6 +3,7 @@ import {Http, RequestOptions, Headers, Request, RequestMethod} from '@angular/ht
 import {Filter} from '../models/filters.model';
 import 'rxjs/add/operator/toPromise';
 import {TPES} from '../data/filters';
+import {WordPair, Word} from '../models/word.model';
 
 @Injectable()
 export class WordService {
@@ -17,6 +18,47 @@ export class WordService {
           return this.processWords(words, answers);
         })
       .catch(this.handleError);
+  }
+
+  addWord(word:WordPair) {
+    let headers = new Headers(),
+        data: Object,
+        wordPair: WordPair;
+
+    wordPair = this.buildWordPair(word);
+    console.log('sending wordPair', wordPair);
+    data = {userId:'demoUser', word:wordPair};
+    headers.append('Content-Type', 'application/json');
+
+    return this.http
+      .post('/api/words', JSON.stringify(data), {headers: headers})
+      .toPromise()
+      .then(() => data)
+      .catch(this.handleError);
+  }
+
+  buildWordPair(word: Object): WordPair {
+    //Transform form data into a valid WordPair object
+    let wordPair: WordPair = {},
+        wordCz: Word = {},
+        wordNl: Word = {};
+
+    wordPair.tpe = word.tpe;
+    wordPair.level = parseInt(word.level, 10);
+    if (word.categories.length > 0) {
+      wordPair.categories = word.categories;
+    }
+
+    wordCz.word = word['cz.word'];
+    wordNl.word = word['nl.word'];
+    if (word.tpe === 'noun') {
+      wordCz.genus = word['cz.genus'];
+      wordNl.article = word['nl.article'];
+    }
+    wordPair.cz = wordCz;
+    wordPair.nl = wordNl;
+
+    return wordPair;
   }
 
   getCount(filter:Filter) {

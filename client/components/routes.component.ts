@@ -5,7 +5,7 @@ import {AddWord} from './add-word.component';
 import {AppSettings} from './settings.component';
 
 const routes: RouterConfig = [
-  { path: '', component: Tests },
+  { path: '', component: AddWord },
   { path: 'dashboard', component: Dashboard },
   { path: 'tests', component: Tests },
   { path: 'add-words', component: AddWord },
