@@ -3,7 +3,7 @@ import {Http, RequestOptions, Headers, Request, RequestMethod} from '@angular/ht
 import {Filter} from '../models/filters.model';
 import 'rxjs/add/operator/toPromise';
 import {TPES} from '../data/filters';
-import {WordPair, Word} from '../models/word.model';
+import {WordPair, Word, FormWordPair} from '../models/word.model';
 
 @Injectable()
 export class WordService {
@@ -20,13 +20,12 @@ export class WordService {
       .catch(this.handleError);
   }
 
-  addWord(word:WordPair) {
+  addWord(word:FormWordPair) {
     let headers = new Headers(),
         data: Object,
         wordPair: WordPair;
 
     wordPair = this.buildWordPair(word);
-    console.log('sending wordPair', wordPair);
     data = {userId:'demoUser', word:wordPair};
     headers.append('Content-Type', 'application/json');
 
@@ -37,11 +36,11 @@ export class WordService {
       .catch(this.handleError);
   }
 
-  buildWordPair(word: Object): WordPair {
+  buildWordPair(word: FormWordPair): WordPair {
     //Transform form data into a valid WordPair object
-    let wordPair: WordPair = {},
-        wordCz: Word = {},
-        wordNl: Word = {};
+    let wordPair: WordPair,
+        wordCz: Word,
+        wordNl: Word;
 
     wordPair.tpe = word.tpe;
     wordPair.level = parseInt(word.level, 10);

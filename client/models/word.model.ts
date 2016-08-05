@@ -20,3 +20,19 @@ export interface WordPair {
   level: number;
   categories: string[];
 }
+
+export interface FormWordPair {
+  tpe: string;
+  level: string;
+  categories: string[];
+  'cz.word': string;
+  'cz.genus': string;
+  'nl.word': string;
+  'nl.article': string;
+}
+
+
+export interface ErrorObject {
+  article?: boolean;
+  genus?: boolean;
+}

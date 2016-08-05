@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FilterService} from '../services/filters.service';
 import {WordService} from '../services/words.service';
+import {ErrorObject} from '../models/word.model';
 import {
   FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES,
   FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -70,9 +71,10 @@ export class AddWord implements OnInit {
   }
 
   //Check validations that are dependent on other fields
-  checkOptionalValidations(group: ControlGroup) {
+  checkOptionalValidations(group: FormGroup) {
+
     let valid = true,
-        errObj = {};
+        errObj:ErrorObject = {};
 
     if (group.controls['tpe'].value === 'noun') {
       if (!group.controls['nl.article'].value) {
