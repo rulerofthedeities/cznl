@@ -31,6 +31,24 @@ var loadWords = function(db, options, callback) {
     })
 }
 
+var getCats = function(db, options, callback) {
+  console.log(options);
+  db.collection('wordpairs')
+    .aggregate([
+      {$unwind: "$categories" },
+      {$match:{categories: {$regex:options.query, $options:"i"}}},
+      {$limit:options.max},
+      {$group:{_id:"all", cats:{$addToSet:"$categories"}}},
+      {$project:{_id:0, cats:1}}
+    ]).toArray(function(err, docs) {
+      if (docs.length > 0) {
+        callback(docs[0]);
+      } else {
+        callback(null);
+      }
+    });
+}
+
 var saveNewWord = function(db, options, data, callback) {
   if (data && data.word) {
     let wordToSave = data.word;
@@ -108,6 +126,16 @@ module.exports = {
     var options = {};
     updateWord(mongo.DB, options, req.body, function(r){
       res.status(200).send(r);
+    });
+  },
+  cats: function(req, res){
+    var options = {query: req.query.search, max: 20};
+    getCats(mongo.DB, options, function(docs){
+      if (docs){
+        res.status(200).send(docs);
+      } else {
+        res.status(204).send();
+      }
     });
   }
 }

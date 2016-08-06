@@ -25,7 +25,7 @@ export interface FormWordPair {
   _id: string;
   tpe: string;
   level: string;
-  categories: string[];
+  categories: string;
   'cz.word': string;
   'cz.genus': string;
   'nl.word': string;

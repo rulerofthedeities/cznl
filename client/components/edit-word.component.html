@@ -45,6 +45,36 @@
               </div>
             </div>
 
+            <div class="form-group" *ngIf="filtersLoaded">
+              <label 
+                for="categories" 
+                class="control-label col-xs-2">
+                Categorieën:
+              </label>
+              <div class="col-xs-10">
+                <input 
+                  class="form-control" 
+                  id="categories"
+                  [formControl]="wordForm.controls['categories']">
+              </div>
+            </div>
+
+              <div class="col-xs-offset-2 col-xs-10">
+                Zoek categorieën:
+                <input type="text"
+                  (keyup)="searchCats(searchcats.value)"
+                  #searchcats>
+              </div>
+
+              <div class="col-xs-offset-2 col-xs-10">
+                <ul class="searchcats list-inline">
+                  <li *ngFor="let cat of cats" 
+                    (click)="addCategory(cat)"
+                    class="label label-info">
+                      {{cat}}
+                  </li>
+                </ul>
+              </div>
           </div>
         </div>
     </div>
@@ -163,6 +193,14 @@
     class="btn btn-success" 
     [disabled]="!wordForm.valid">
     Pas woord aan
+  </button>
+
+  <button *ngIf="!disableSubmit && !isNew"
+    type="button" 
+    (click)="onSubmit(wordForm.value)"
+    class="btn btn-success" 
+    [disabled]="!wordForm.valid">
+    Pas woord aan2
   </button>
 
   <p class="bg-success">{{submitMessage}}</p>

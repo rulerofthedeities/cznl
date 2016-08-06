@@ -14,6 +14,7 @@ module.exports.initialize = function(app, router) {
   router.get('/api/words', words.load);
   router.get('/api/settings', settings.load);
   router.get('/api/wordlists', lists.load);
+  router.get('/api/cats', words.cats);
 
   router.put('/api/words', words.update);
   router.put('/api/settings', settings.update);

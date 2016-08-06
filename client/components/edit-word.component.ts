@@ -6,7 +6,7 @@ import {WordPair} from '../models/word.model';
 import {Subscription} from 'rxjs/Subscription';
 import {
   FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES,
-  FormBuilder, FormGroup, Validators} from '@angular/forms';
+  FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
 
 @Component({
   selector: 'edit-word',
@@ -16,6 +16,10 @@ import {
     input.ng-dirty.ng-invalid {
       border: 1px dotted red;
       border-left: 5px solid red;
+    }
+    .label {
+      margin:2px;
+      cursor:pointer;
     }
   `]
 })
@@ -28,6 +32,7 @@ export class EditWord implements OnInit, OnDestroy {
   disableSubmit = false;
   isNew: boolean;
   subscription: Subscription;
+  cats: string[];
 
   constructor(
     private filterService: FilterService,
@@ -123,6 +128,24 @@ export class EditWord implements OnInit, OnDestroy {
         this.filtersLoaded = true;
       }
     );
+  }
+
+  searchCats(cats: string):void {
+    console.log('searching cats ', cats);
+    if (cats.length > 0) {
+      this.wordService.searchCategories(cats)
+        .then(words => {this.cats = words ? words.cats : [];});
+    } else {
+      this.cats = [];
+    }
+  }
+
+  addCategory(newCat: string) {
+    let cat: string[] = [];
+    cat[0] = this.wordForm.controls['categories'].value;
+    cat[1] = newCat;
+    cat = cat.filter(c => !!c);
+    (<FormControl>this.wordForm.controls['categories']).updateValue(cat.join(','));
   }
 
   //Check validations that are dependent on other fields

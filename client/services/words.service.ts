@@ -72,7 +72,9 @@ export class WordService {
 
     wordPair.level = parseInt(word.level, 10);
     if (word.categories.length > 0) {
-      wordPair.categories = word.categories;
+      let cats:string[] = word.categories.toString().split(',');
+      cats = cats.map(word => word.trim().toLowerCase());
+      wordPair.categories = cats;
     }
 
     wordCz.word = word['cz.word'];
@@ -119,6 +121,13 @@ export class WordService {
       .put('/api/answer', JSON.stringify(answer), {headers: headers})
       .toPromise()
       .then(() => answer)
+      .catch(this.handleError);
+  }
+
+  searchCategories(search: string) {
+    return this.http.get('/api/cats?search=' + search)
+      .toPromise()
+      .then(response => {return response.status === 200 ? response.json(): null;})
       .catch(this.handleError);
   }
 
