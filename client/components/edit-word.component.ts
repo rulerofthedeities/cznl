@@ -1,15 +1,17 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FilterService} from '../services/filters.service';
 import {WordService} from '../services/words.service';
 import {ErrorObject} from '../models/word.model';
 import {WordPair} from '../models/word.model';
+import {Subscription} from 'rxjs/Subscription';
 import {
   FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES,
   FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
+  selector: 'edit-word',
   directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES],
-  templateUrl:'/client/components/add-word.component.html',
+  templateUrl:'/client/components/edit-word.component.html',
   styles:[`
     input.ng-dirty.ng-invalid {
       border: 1px dotted red;
@@ -18,12 +20,14 @@ import {
   `]
 })
 
-export class AddWord implements OnInit {
+export class EditWord implements OnInit, OnDestroy {
   wordForm: FormGroup;
   filters: Object;
   filtersLoaded = false;
   submitMessage: string;
   disableSubmit = false;
+  isNew: boolean;
+  subscription: Subscription;
 
   constructor(
     private filterService: FilterService,
@@ -32,7 +36,12 @@ export class AddWord implements OnInit {
 
   ngOnInit() {
     this._getFilterOptions();
-    this._buildForm();
+    this._buildNewForm();
+    this.subscription = this.wordService.editWordSource$.subscribe(
+      word => {
+        this._buildEditForm(word);
+      }
+    );
   }
 
   isNoun() {
@@ -49,6 +58,14 @@ export class AddWord implements OnInit {
 
   onSubmit(form: any): void {
     console.log('you submitted:', form);
+    if (this.isNew) {
+      this._saveWord(form);
+    } else {
+      this._updateWord(form);
+    }
+  }
+
+  _saveWord(form: any): void {
     this.wordService.addWord(form).then(word => {
       let wordPair: WordPair = word['word'];
       this.submitMessage = `Het woord ${wordPair['cz'].word}/${wordPair['nl'].word} is succesvol opgeslagen.`;
@@ -56,13 +73,23 @@ export class AddWord implements OnInit {
     });
   }
 
+  _updateWord(form: any): void {
+    this.wordService.updateWord(form).then(word => {
+      let wordPair: WordPair = word['word'];
+
+      this.submitMessage = `Het woord ${wordPair['cz'].word}/${wordPair['nl'].word} is succesvol aangepast.`;
+      this.disableSubmit = true;
+    });
+  }
+
   resetForm() {
-    this._buildForm();
+    this._buildNewForm();
     this.submitMessage = '';
     this.disableSubmit = false;
   }
 
-  _buildForm() {
+  _buildNewForm() {
+    this.isNew = true;
     this.wordForm = this.formBuilder.group({
       'tpe': ['', [Validators.required]],
       'level': ['', [Validators.required]],
@@ -71,6 +98,21 @@ export class AddWord implements OnInit {
       'nl.word': ['', [Validators.required]],
       'cz.genus': ['', []],
       'nl.article': ['', []]
+    }, {validator: this.checkOptionalValidations});
+  }
+
+  _buildEditForm(word:WordPair) {
+    this.isNew = false;
+
+    this.wordForm = this.formBuilder.group({
+      '_id': [word._id, []],
+      'tpe': [word.tpe, [Validators.required]],
+      'level': [word.level, [Validators.required]],
+      'categories': [word.categories, []],
+      'cz.word': [word.cz.word, [Validators.required]],
+      'nl.word': [word.nl.word, [Validators.required]],
+      'cz.genus': [word.cz.genus, []],
+      'nl.article': [word.nl.article, []]
     }, {validator: this.checkOptionalValidations});
   }
 
@@ -105,6 +147,10 @@ export class AddWord implements OnInit {
     }
 
     return errObj;
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }

@@ -22,6 +22,7 @@ export interface WordPair {
 }
 
 export interface FormWordPair {
+  _id: string;
   tpe: string;
   level: string;
   categories: string[];

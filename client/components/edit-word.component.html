@@ -1,4 +1,3 @@
-<h1>Add a new word</h1>
 <form 
   [formGroup]="wordForm"
   (ngSubmit) = "onSubmit(wordForm.value)"
@@ -6,12 +5,10 @@
 
 
 <!-- COMMON -->
-
   <div class="row">
     <div class="col-xs-12">
         <div class="panel panel-default">
           <div class="panel-body">
-
             <div class="form-group" *ngIf="filtersLoaded">
               <label 
                 for="tpe" 
@@ -154,20 +151,28 @@
   
   <div class="clearfix"></div>
 
-  <button *ngIf="!disableSubmit"
+  <button *ngIf="!disableSubmit && isNew"
     type="submit" 
     class="btn btn-success" 
     [disabled]="!wordForm.valid">
     Voeg woord toe
   </button>
 
+  <button *ngIf="!disableSubmit && !isNew"
+    type="submit" 
+    class="btn btn-success" 
+    [disabled]="!wordForm.valid">
+    Pas woord aan
+  </button>
+
   <p class="bg-success">{{submitMessage}}</p>
 
-  <button *ngIf="disableSubmit"
+  <button *ngIf="disableSubmit || !isNew"
     type="button" 
     (click)="resetForm()"
+    [disabled]="wordForm.valid && isNew"
     class="btn btn-success">
     Nieuw woord
   </button>
-
+  
 </form>

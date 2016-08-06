@@ -119,6 +119,10 @@ export class Filter implements OnInit {
     this.settingsService.getFilterSettings().then(
       settings => {
         this.selected = settings.filter;
+        if (this.filterTpe==='wordbank') {
+          //For wordbank, immediately load all data
+          this.onChangeFilter(this.selected.level.toString(), this.selected.tpe, this.selected.cats);
+        };
         this.getCount(settings.filter);
         this.filterService.getFilterOptions().then(
           filters => {

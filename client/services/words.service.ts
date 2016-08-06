@@ -3,10 +3,15 @@ import {Http, RequestOptions, Headers, Request, RequestMethod} from '@angular/ht
 import {Filter} from '../models/filters.model';
 import 'rxjs/add/operator/toPromise';
 import {TPES} from '../data/filters';
+import {Subject} from 'rxjs/Subject';
 import {WordPair, Word, FormWordPair} from '../models/word.model';
 
 @Injectable()
 export class WordService {
+  private editWordSource = new Subject<WordPair>();
+
+  editWordSource$ = this.editWordSource.asObservable();
+
   constructor(private http: Http) { }
 
   getWords(filter: Filter, maxWords: number) {
@@ -36,12 +41,33 @@ export class WordService {
       .catch(this.handleError);
   }
 
+  editWord(word:WordPair) {
+    this.editWordSource.next(word);
+  }
+
+  updateWord(word:FormWordPair) {
+    let headers = new Headers(),
+        data: Object,
+        wordPair: WordPair;
+
+    wordPair = this.buildWordPair(word);
+    data = {userId:'demoUser', word:wordPair};
+    headers.append('Content-Type', 'application/json');
+
+    return this.http
+      .put('/api/words', JSON.stringify(data), {headers: headers})
+      .toPromise()
+      .then(() => data)
+      .catch(this.handleError);
+  }
+
   buildWordPair(word: FormWordPair): WordPair {
     //Transform form data into a valid WordPair object
     let wordPair = <WordPair>{},
         wordCz = <Word>{},
         wordNl = <Word>{};
 
+    wordPair._id = word._id;
     wordPair.tpe = word.tpe;
 
     wordPair.level = parseInt(word.level, 10);
@@ -109,7 +135,8 @@ export class WordService {
         delete word.answer.wordId;
       }
       //Translate word type from English to Dutch
-      word.tpe = this.getTpeTranslation(word.tpe);
+      //word.tpe_nl = this.getTpeTranslation(word.tpe);
+      word.tpe = word.tpe;
       word.cz.article = this.getCardArticle(word.cz.genus);
     });
 

@@ -33,11 +33,8 @@ var loadWords = function(db, options, callback) {
 
 var saveNewWord = function(db, options, data, callback) {
   if (data && data.word) {
-    console.log('data', data);
     let wordToSave = data.word;
     wordToSave.userId = data.userId;
-
-    console.log('saving', wordToSave);
 
     db.collection('wordpairs')
       .insert(wordToSave,
@@ -45,6 +42,22 @@ var saveNewWord = function(db, options, data, callback) {
           callback(r);
         });
   }
+}
+
+var updateWord = function(db, options, data, callback) {
+  var word = data.word;
+  var mongoId = new mongo.ObjectID(word._id);
+
+  delete word._id;
+  
+  db.collection('wordpairs')
+    .update(
+    {userId: data.userId, _id:mongoId}, 
+    {$set: word},
+      function(err, r){
+        callback(r);
+      });
+
 }
 
 var buildFilter = function(options) {
@@ -90,5 +103,11 @@ module.exports = {
     saveNewWord(mongo.DB, options, req.body, function(r){
       res.status(200).send(r);
     })
+  },
+  update: function(req, res){
+    var options = {};
+    updateWord(mongo.DB, options, req.body, function(r){
+      res.status(200).send(r);
+    });
   }
 }
