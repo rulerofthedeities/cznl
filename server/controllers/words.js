@@ -32,13 +32,13 @@ var loadWords = function(db, options, callback) {
 }
 
 var getCats = function(db, options, callback) {
-  console.log(options);
   db.collection('wordpairs')
     .aggregate([
       {$unwind: "$categories" },
       {$match:{categories: {$regex:options.query, $options:"i"}}},
       {$limit:options.max},
       {$group:{_id:"all", cats:{$addToSet:"$categories"}}},
+      {$sort:{cats: 1}},
       {$project:{_id:0, cats:1}}
     ]).toArray(function(err, docs) {
       if (docs.length > 0) {
@@ -89,6 +89,10 @@ var buildFilter = function(options) {
   if (options.cat != "all") {
     filterArr.push('"categories":"' + options.cat + '"');
   }
+  if (options.word) {
+    let word = options.start === "1" ? "^" + options.word : options.word;
+    filterArr.push('"cz.word":{"$regex":"' + word + '",' + '"$options":"i"}');
+  }
   var filter = '{' + filterArr.join(',') + '}';
   return JSON.parse(filter);
 }
@@ -100,6 +104,8 @@ module.exports = {
       level:parseInt(req.query.l), 
       tpe:req.query.t, 
       cat:req.query.c, 
+      word:req.query.w, 
+      start:req.query.s, 
       maxwords:req.query.m ? parseInt(req.query.m) : 0,
       iscnt: req.query.cnt
     };
@@ -129,7 +135,10 @@ module.exports = {
     });
   },
   cats: function(req, res){
-    var options = {query: req.query.search, max: 20};
+    var options = {
+      query: req.query.search, 
+      max: req.query.max ? parseInt(req.query.max, 10) : 20
+    };
     getCats(mongo.DB, options, function(docs){
       if (docs){
         res.status(200).send(docs);

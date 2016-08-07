@@ -21,6 +21,9 @@ import {
       margin:2px;
       cursor:pointer;
     }
+    strong .form-control {
+      color:blue;
+    }
   `]
 })
 
@@ -44,7 +47,7 @@ export class EditWord implements OnInit, OnDestroy {
     this._buildNewForm();
     this.subscription = this.wordService.editWordSource$.subscribe(
       word => {
-        this._buildEditForm(word);
+        this.editForm(word);
       }
     );
   }
@@ -75,22 +78,31 @@ export class EditWord implements OnInit, OnDestroy {
       let wordPair: WordPair = word['word'];
       this.submitMessage = `Het woord ${wordPair['cz'].word}/${wordPair['nl'].word} is succesvol opgeslagen.`;
       this.disableSubmit = true;
+      this.isNew = false;
     });
   }
 
   _updateWord(form: any): void {
     this.wordService.updateWord(form).then(word => {
       let wordPair: WordPair = word['word'];
-
       this.submitMessage = `Het woord ${wordPair['cz'].word}/${wordPair['nl'].word} is succesvol aangepast.`;
       this.disableSubmit = true;
+      this.isNew = false;
     });
   }
 
+  editForm(word) {
+    this._buildEditForm(word);
+    this.submitMessage = '';
+    this.disableSubmit = false;
+  }
+
   resetForm() {
+    //Create new word
     this._buildNewForm();
     this.submitMessage = '';
     this.disableSubmit = false;
+    this.wordService.newWord();
   }
 
   _buildNewForm() {
@@ -108,7 +120,6 @@ export class EditWord implements OnInit, OnDestroy {
 
   _buildEditForm(word:WordPair) {
     this.isNew = false;
-
     this.wordForm = this.formBuilder.group({
       '_id': [word._id, []],
       'tpe': [word.tpe, [Validators.required]],

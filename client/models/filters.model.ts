@@ -8,4 +8,6 @@ export interface Filter {
   cats: string;
   tpe: string;
   test?: string;
+  word?: string;
+  start?: boolean;
 }

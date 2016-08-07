@@ -9,19 +9,39 @@ import {WordPair, Word, FormWordPair} from '../models/word.model';
 @Injectable()
 export class WordService {
   private editWordSource = new Subject<WordPair>();
+  private newWordSource = new Subject<boolean>();
 
   editWordSource$ = this.editWordSource.asObservable();
+  newWordSource$ = this.newWordSource.asObservable();
 
   constructor(private http: Http) { }
 
   getWords(filter: Filter, maxWords: number) {
-    return this.http.get('/api/words?l=' + filter.level + '&t=' + filter.tpe + '&c=' + filter.cats + '&m=' + maxWords)
+    let url = '/api/words?l=' + filter.level + '&t=' + filter.tpe + '&c=' + filter.cats + '&m=' + maxWords;
+    if (filter.word) {
+      url+= '&w=' + filter.word;
+      url+= filter.start ? '&s=1' : '';
+    }
+
+    return this.http.get(url)
       .toPromise()
       .then(response => {
           let words = response.json().words;
           let answers = response.json().answers;
           return this.processWords(words, answers);
         })
+      .catch(this.handleError);
+  }
+
+  getCount(filter:Filter) {
+    let url = '/api/words?cnt=1&l=' + filter.level + '&t=' + filter.tpe + '&c=' + filter.cats;
+    if (filter.word) {
+      url+= '&w=' + filter.word;
+      url+= filter.start ? '&s=1' : '';
+    }
+    return this.http.get(url)
+      .toPromise()
+      .then(response => response.json().total)
       .catch(this.handleError);
   }
 
@@ -39,6 +59,10 @@ export class WordService {
       .toPromise()
       .then(() => data)
       .catch(this.handleError);
+  }
+
+  newWord() {
+    this.newWordSource.next(true);
   }
 
   editWord(word:WordPair) {
@@ -87,13 +111,6 @@ export class WordService {
     wordPair.nl = wordNl;
 
     return wordPair;
-  }
-
-  getCount(filter:Filter) {
-    return this.http.get('/api/words?cnt=1&l=' + filter.level + '&t=' + filter.tpe + '&c=' + filter.cats)
-      .toPromise()
-      .then(response => response.json().total)
-      .catch(this.handleError);
   }
 
   getAnswers(wordIds:string[]) {
