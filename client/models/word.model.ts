@@ -2,6 +2,8 @@ export interface Word {
   word: string;
   genus?: string;
   article?: string;
+  hint?: string;
+  otherwords?: string[];
 }
 
 export interface Answer {
@@ -28,8 +30,12 @@ export interface FormWordPair {
   categories: string;
   'cz.word': string;
   'cz.genus': string;
+  'cz.hint'?: string;
+  'cz.otherwords'?: string[];
   'nl.word': string;
   'nl.article': string;
+  'nl.otherwords'?: string[];
+  'nl.hint'?: string;
 }
 
 

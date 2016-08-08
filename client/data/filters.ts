@@ -12,7 +12,8 @@ export const TPES:FilterOption[] = [
   {label:'Werkwoord', val: 'verb'},
   {label:'Bijwoord', val: 'adv'},
   {label:'Voegwoord', val: 'conj'},
-  {label:'Voorzetsel', val: 'prep'}
+  {label:'Voorzetsel', val: 'prep'},
+  {label:'Voornaamwoord', val: 'pronoun'}
 ];
 export const GENUS:FilterOption[] = [
   {label:'Ma', val: 'Ma'},

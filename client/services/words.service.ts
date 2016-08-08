@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Http, RequestOptions, Headers, Request, RequestMethod} from '@angular/http';
-import {Filter} from '../models/filters.model';
+import {Filter, FilterWord} from '../models/filters.model';
 import 'rxjs/add/operator/toPromise';
 import {TPES} from '../data/filters';
 import {Subject} from 'rxjs/Subject';
@@ -17,11 +17,7 @@ export class WordService {
   constructor(private http: Http) { }
 
   getWords(filter: Filter, maxWords: number) {
-    let url = '/api/words?l=' + filter.level + '&t=' + filter.tpe + '&c=' + filter.cats + '&m=' + maxWords;
-    if (filter.word) {
-      url+= '&w=' + filter.word;
-      url+= filter.start ? '&s=1' : '';
-    }
+    let url = '/api/words?a=1&l=' + filter.level + '&t=' + filter.tpe + '&c=' + filter.cats + '&m=' + maxWords;
 
     return this.http.get(url)
       .toPromise()
@@ -33,11 +29,25 @@ export class WordService {
       .catch(this.handleError);
   }
 
-  getCount(filter:Filter) {
-    let url = '/api/words?cnt=1&l=' + filter.level + '&t=' + filter.tpe + '&c=' + filter.cats;
-    if (filter.word) {
-      url+= '&w=' + filter.word;
-      url+= filter.start ? '&s=1' : '';
+  getFilterWords(filter: FilterWord, maxWords: number) {
+    let url = '/api/words?a=0&wf=1&w=' + filter.word + '&m=' + maxWords;
+    url+= filter.start ? '&s=1' : '';
+    return this.http.get(url)
+      .toPromise()
+      .then(response => {
+          return response.json().words;
+        })
+      .catch(this.handleError);
+  }
+
+  getCount(filter:Filter, wordFilter?:FilterWord) {
+    let url = '/api/words?cnt=1';
+    if (wordFilter) {
+      url+= '&wf=1';
+      url+= '&w=' + wordFilter.word;
+      url+= wordFilter.start ? '&s=1' : '';
+    } else {
+      url+= '&l=' + filter.level + '&t=' + filter.tpe + '&c=' + filter.cats;
     }
     return this.http.get(url)
       .toPromise()
@@ -95,7 +105,7 @@ export class WordService {
     wordPair.tpe = word.tpe;
 
     wordPair.level = parseInt(word.level, 10);
-    if (word.categories.length > 0) {
+    if (word.categories && word.categories.length > 0) {
       let cats:string[] = word.categories.toString().split(',');
       cats = cats.map(word => word.trim().toLowerCase());
       wordPair.categories = cats;
@@ -103,6 +113,10 @@ export class WordService {
 
     wordCz.word = word['cz.word'];
     wordNl.word = word['nl.word'];
+    if (word['cz.otherwords']) {wordCz.otherwords = word['cz.otherwords'];}
+    if (word['nl.otherwords']) {wordNl.otherwords = word['nl.otherwords'];}
+    if (word['cz.hint']) {wordCz.hint = word['cz.hint'];}
+    if (word['nl.hint']) {wordNl.hint = word['nl.hint'];}
     if (word.tpe === 'noun') {
       wordCz.genus = word['cz.genus'];
       wordNl.article = word['nl.article'];

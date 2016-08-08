@@ -3,6 +3,11 @@ export interface FilterOption {
   label: string;
 }
 
+export interface FilterWord {
+  word: string;
+  start: boolean;
+}
+
 export interface Filter {
   level: number;
   cats: string;

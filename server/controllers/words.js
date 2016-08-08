@@ -3,6 +3,7 @@ var mongo = require('mongodb'),
 
 var countWords = function(db, options, callback) {
   var filter = buildFilter(options);
+
   db.collection('wordpairs')
     .find(filter)
     .count(function(err, count) {
@@ -13,6 +14,7 @@ var countWords = function(db, options, callback) {
 var loadWords = function(db, options, callback) {
   var filter = buildFilter(options);
   //Fetch words + their answer and lists for the user
+  console.log(filter);
   db.collection('wordpairs')
     .find(filter)
     .limit(options.maxwords)
@@ -23,10 +25,14 @@ var loadWords = function(db, options, callback) {
         wordIds.push(doc._id.toString());
       })
 
-      answers.getAnswersInDoc(options.userId, wordIds, function(answers){
-        //Map answers to docs
-        callback(docs, answers);
-      })
+      if (options.answers) {
+        answers.getAnswersInDoc(options.userId, wordIds, function(answers){
+          //Map answers to docs
+          callback(docs, answers);
+        })
+      } else {
+        callback(docs);
+      }
       
     })
 }
@@ -80,18 +86,20 @@ var updateWord = function(db, options, data, callback) {
 
 var buildFilter = function(options) {
   var filterArr = [];
-  if (options.level >= 0) {
-    filterArr.push('"level":' + options.level);
-  }
-  if (options.tpe != "all") {
-    filterArr.push('"tpe":"' + options.tpe + '"');
-  }
-  if (options.cat != "all") {
-    filterArr.push('"categories":"' + options.cat + '"');
-  }
-  if (options.word) {
-    let word = options.start === "1" ? "^" + options.word : options.word;
+
+  if (options.isWordFilter) {
+    let word = options.start ? "^" + options.word : options.word;
     filterArr.push('"cz.word":{"$regex":"' + word + '",' + '"$options":"i"}');
+  } else {
+    if (options.level >= 0) {
+      filterArr.push('"level":' + options.level);
+    }
+    if (options.tpe != "all") {
+      filterArr.push('"tpe":"' + options.tpe + '"');
+    }
+    if (options.cat != "all") {
+      filterArr.push('"categories":"' + options.cat + '"');
+    } 
   }
   var filter = '{' + filterArr.join(',') + '}';
   return JSON.parse(filter);
@@ -102,10 +110,12 @@ module.exports = {
     var options = {
       userId:'demoUser',
       level:parseInt(req.query.l), 
+      answers:req.query.a === "1" ? true: false, 
       tpe:req.query.t, 
       cat:req.query.c, 
       word:req.query.w, 
-      start:req.query.s, 
+      isWordFilter:req.query.wf === "1" ? true: false,
+      start:req.query.s === "1" ? true: false, 
       maxwords:req.query.m ? parseInt(req.query.m) : 0,
       iscnt: req.query.cnt
     };

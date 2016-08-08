@@ -24,6 +24,9 @@ import {
     strong .form-control {
       color:blue;
     }
+    .optional {
+      color: grey;
+    }
   `]
 })
 
@@ -110,25 +113,33 @@ export class EditWord implements OnInit, OnDestroy {
     this.wordForm = this.formBuilder.group({
       'tpe': ['', [Validators.required]],
       'level': ['', [Validators.required]],
-      'categories': ['', []],
+      'categories': [''],
       'cz.word': ['', [Validators.required]],
+      'cz.otherwords': [''],
+      'cz.hint': [''],
       'nl.word': ['', [Validators.required]],
-      'cz.genus': ['', []],
-      'nl.article': ['', []]
+      'nl.otherwords': [''],
+      'nl.hint': [''],
+      'cz.genus': [''],
+      'nl.article': ['']
     }, {validator: this.checkOptionalValidations});
   }
 
   _buildEditForm(word:WordPair) {
     this.isNew = false;
     this.wordForm = this.formBuilder.group({
-      '_id': [word._id, []],
+      '_id': [word._id],
       'tpe': [word.tpe, [Validators.required]],
       'level': [word.level, [Validators.required]],
-      'categories': [word.categories, []],
+      'categories': [word.categories],
       'cz.word': [word.cz.word, [Validators.required]],
+      'cz.otherwords': [word.cz.otherwords],
+      'cz.hint': [word.cz.hint],
       'nl.word': [word.nl.word, [Validators.required]],
-      'cz.genus': [word.cz.genus, []],
-      'nl.article': [word.nl.article, []]
+      'nl.otherwords': [word.cz.otherwords],
+      'nl.hint': [word.nl.hint],
+      'cz.genus': [word.cz.genus],
+      'nl.article': [word.nl.article]
     }, {validator: this.checkOptionalValidations});
   }
 
@@ -142,7 +153,6 @@ export class EditWord implements OnInit, OnDestroy {
   }
 
   searchCats(cats: string):void {
-    console.log('searching cats ', cats);
     if (cats.length > 0) {
       this.wordService.searchCategories(cats)
         .then(words => {this.cats = words ? words.cats : [];});

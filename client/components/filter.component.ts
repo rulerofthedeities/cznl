@@ -43,23 +43,6 @@ import {Filter as FilterModel} from '../models/filters.model';
         </select>
       </li>
       <li>
-        <div *ngIf="filterTpe==='wordbank'" class="form-inline">
-          <div class="form-group">
-            <label for="wordFilter" class="sr-only">Filter woord:</label>
-            <input #wordFilter
-              type="text"
-              id="wordFilter"
-              placeholder="Filter woord"
-              class="form-control">
-          </div>
-          <div class="checkbox">
-            <label><input type="checkbox" value='1' #startcb>Vanaf begin</label>
-          </div>
-          <button class="btn btn-success"
-            (click)="onChangeFilter(level.value, wordtpe.value, cats.value, wordFilter.value, startcb.checked)">
-          Toon woorden
-          </button>
-        </div>
         <div class="text-muted">Aantal woorden: <strong>{{totalWords}}</strong></div>
         <div class="buttons"> 
           <button *ngIf="filterTpe==='exercises'"
@@ -103,18 +86,18 @@ export class Filter implements OnInit {
     this.getFilterOptions();
   }
 
-  start(testTpe: string, level: string, wordTpe: string, cat: string, word?: string, start?: string) {
+  start(testTpe: string, level: string, wordTpe: string, cat: string) {
     if (this.totalWords < 1) {return;}
-    let filter:FilterModel = this.getFilter(testTpe, level, wordTpe, cat, word, start);
+    let filter:FilterModel = this.getFilter(testTpe, level, wordTpe, cat);
     this.settingsService.setFilterSettings(filter);
     this.selectedFilter.emit(filter);
   }
 
-  onChangeFilter(level: string, wordTpe: string, cat: string, word?: string, start?: string) {
-    let filter:FilterModel = this.getFilter('none', level, wordTpe, cat, word, start);
+  onChangeFilter(level: string, wordTpe: string, cat: string) {
+    let filter:FilterModel = this.getFilter('none', level, wordTpe, cat);
     this.getCount(filter);
     if (this.filterTpe === 'wordbank') {
-      this.start('wordbank', level, wordTpe, cat, word, start);
+      this.start('wordbank', level, wordTpe, cat);
     }
   }
 
@@ -123,19 +106,13 @@ export class Filter implements OnInit {
       .then(total => {this.totalWords = total;});
   }
 
-  getFilter(testTpe: string, level: string, wordTpe: string, cat: string, word?:string, start?:string) {
+  getFilter(testTpe: string, level: string, wordTpe: string, cat: string) {
     let filter:FilterModel = {
       'level': parseInt(level, 10),
       'tpe': wordTpe,
       'cats': cat,
       'test': testTpe
     };
-    if (word) {
-      filter.word = word;
-      if (start) {
-        filter.start = true;
-      }
-    }
 
     return  filter;
   }
@@ -144,10 +121,6 @@ export class Filter implements OnInit {
     this.settingsService.getFilterSettings().then(
       settings => {
         this.selected = settings.filter;
-        if (this.filterTpe==='wordbank') {
-          //For wordbank, immediately load all data
-          //this.onChangeFilter(this.selected.level.toString(), this.selected.tpe, this.selected.cats);
-        };
         this.getCount(settings.filter);
         this.filterService.getFilterOptions().then(
           filters => {
