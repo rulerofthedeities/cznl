@@ -1,9 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
-import {LEVELS} from '../data/filters';
-import {TPES} from '../data/filters';
-import {GENUS} from '../data/filters';
-//import {CATS} from '../data/filters';
+import {LEVELS, TPES, GENUS, CASES} from '../data/filters';
 
 @Injectable()
 export class FilterService {
@@ -19,6 +16,7 @@ export class FilterService {
         'levels': LEVELS,
         'tpes': TPES,
         'genus': GENUS,
+        'cases': CASES,
         'cats': cats};
       })
       .catch(this.handleError);

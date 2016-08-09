@@ -27,6 +27,9 @@ import {
     .optional {
       color: grey;
     }
+    .fa-times {
+      color: red;
+    }
   `]
 })
 
@@ -57,6 +60,15 @@ export class EditWord implements OnInit, OnDestroy {
 
   isNoun() {
     return this.wordForm.controls['tpe'].value === 'noun';
+  }
+
+  isVerb() {
+    return this.wordForm.controls['tpe'].value === 'verb';
+  }
+
+  canHaveCase() {
+    let tpe = this.wordForm.controls['tpe'].value;
+    return tpe === 'verb' || tpe === 'prep';
   }
 
   isError(fieldName: string, error: string): boolean {
@@ -94,6 +106,10 @@ export class EditWord implements OnInit, OnDestroy {
     });
   }
 
+  removeCase(ctrlName: string) {
+    (<FormControl>this.wordForm.controls[ctrlName]).updateValue('');
+  }
+
   editForm(word) {
     this._buildEditForm(word);
     this.submitMessage = '';
@@ -115,12 +131,22 @@ export class EditWord implements OnInit, OnDestroy {
       'level': ['', [Validators.required]],
       'categories': [''],
       'cz.word': ['', [Validators.required]],
+      'cz.genus': [''],
+      'cz.case': [''],
       'cz.otherwords': [''],
       'cz.hint': [''],
+      'cz.info': [''],
+      'cz.firstpersonsingular': [''],
+      'czP.word': [''],
+      'czP.case': [''],
+      'czP.otherwords': [''],
+      'czP.hint': [''],
+      'czP.info': [''],
+      'czP.firstpersonsingular': [''],
       'nl.word': ['', [Validators.required]],
       'nl.otherwords': [''],
       'nl.hint': [''],
-      'cz.genus': [''],
+      'nl.info': [''],
       'nl.article': ['']
     }, {validator: this.checkOptionalValidations});
   }
@@ -133,12 +159,22 @@ export class EditWord implements OnInit, OnDestroy {
       'level': [word.level, [Validators.required]],
       'categories': [word.categories],
       'cz.word': [word.cz.word, [Validators.required]],
+      'cz.genus': [word.cz.genus],
+      'cz.case': [word.cz.case],
       'cz.otherwords': [word.cz.otherwords],
       'cz.hint': [word.cz.hint],
+      'cz.info': [word.cz.info],
+      'cz.firstpersonsingular': [word.cz.firstpersonsingular],
+      'czP.word': [word.czP.word],
+      'czP.case': [word.czP.case],
+      'czP.otherwords': [word.czP.otherwords],
+      'czP.hint': [word.czP.hint],
+      'czP.info': [word.czP.info],
+      'czP.firstpersonsingular': [word.czP.firstpersonsingular],
       'nl.word': [word.nl.word, [Validators.required]],
-      'nl.otherwords': [word.cz.otherwords],
+      'nl.otherwords': [word.nl.otherwords],
       'nl.hint': [word.nl.hint],
-      'cz.genus': [word.cz.genus],
+      'nl.info': [word.nl.info],
       'nl.article': [word.nl.article]
     }, {validator: this.checkOptionalValidations});
   }

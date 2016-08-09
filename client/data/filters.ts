@@ -13,7 +13,9 @@ export const TPES:FilterOption[] = [
   {label:'Bijwoord', val: 'adv'},
   {label:'Voegwoord', val: 'conj'},
   {label:'Voorzetsel', val: 'prep'},
-  {label:'Voornaamwoord', val: 'pronoun'}
+  {label:'Voornaamwoord', val: 'pronoun'},
+  {label:'Eigennaam', val: 'propernoun'},
+  {label:'Telwoord', val: 'numeral'}
 ];
 export const GENUS:FilterOption[] = [
   {label:'Ma', val: 'Ma'},
@@ -21,7 +23,12 @@ export const GENUS:FilterOption[] = [
   {label:'F', val: 'F'},
   {label:'N', val: 'N'}
 ];
-export const CATS:FilterOption[] = [
-  {label:'Dieren', val: 'dieren'},
-  {label:'Beroepen', val: 'beroepen'}
+export const CASES:FilterOption[] = [
+  {label:'N', val: '1'},
+  {label:'G', val: '2'},
+  {label:'D', val: '3'},
+  {label:'A', val: '4'},
+  {label:'V', val: '5'},
+  {label:'L', val: '6'},
+  {label:'I', val: '7'},
 ];

@@ -99,6 +99,7 @@ export class WordService {
     //Transform form data into a valid WordPair object
     let wordPair = <WordPair>{},
         wordCz = <Word>{},
+        wordCzP = <Word>{}, //Perfective
         wordNl = <Word>{};
 
     wordPair._id = word._id;
@@ -114,12 +115,27 @@ export class WordService {
     wordCz.word = word['cz.word'];
     wordNl.word = word['nl.word'];
     if (word['cz.otherwords']) {wordCz.otherwords = word['cz.otherwords'];}
-    if (word['nl.otherwords']) {wordNl.otherwords = word['nl.otherwords'];}
     if (word['cz.hint']) {wordCz.hint = word['cz.hint'];}
+    if (word['cz.info']) {wordCz.info = word['cz.info'];}
+    if (word['nl.otherwords']) {wordNl.otherwords = word['nl.otherwords'];}
     if (word['nl.hint']) {wordNl.hint = word['nl.hint'];}
+    if (word['nl.info']) {wordNl.info = word['nl.info'];}
+    if (word['cz.firstpersonsingular']) {wordCz.firstpersonsingular = word['cz.firstpersonsingular'];}
     if (word.tpe === 'noun') {
       wordCz.genus = word['cz.genus'];
       wordNl.article = word['nl.article'];
+    }
+    if (word.tpe === 'prep' || word.tpe === 'verb') {
+      wordCz.case = word['cz.case'];
+    }
+    if (word.tpe === 'verb') {
+      if (word['czP.word']) {wordCzP.word = word['czP.word'];}
+      if (word['czP.case']) {wordCzP.case = word['czP.case'];}
+      if (word['czP.otherwords']) {wordCzP.otherwords = word['czP.otherwords'];}
+      if (word['czP.hint']) {wordCzP.hint = word['czP.hint'];}
+      if (word['czP.info']) {wordCzP.info = word['czP.info'];}
+      if (word['czP.firstpersonsingular']) {wordCzP.firstpersonsingular = word['czP.firstpersonsingular'];}
+      if (word['czP.word']) {wordPair.czP = wordCzP;}
     }
     wordPair.cz = wordCz;
     wordPair.nl = wordNl;

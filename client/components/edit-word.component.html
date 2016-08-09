@@ -38,7 +38,7 @@
       <div class="panel panel-default">
         <div class="panel-heading"><h3>Tsjechisch</h3></div>
         <div class="panel-body">
-
+          <h4 *ngIf="isVerb()">Imperfectief</h4>
           <div class="form-group">
             <label 
               for="cz.word" 
@@ -59,6 +59,19 @@
             </div>
           </div>
 
+          <div class="form-group" *ngIf="isVerb()">
+            <label for="cz.firstpersonsingular" class="control-label col-xs-2">
+              1.p.e.:
+            </label>
+            <div class="col-xs-10">
+              <input 
+                type="text"
+                class="form-control"
+                id="cz.firstpersonsingular"
+                [formControl]="wordForm.controls['cz.firstpersonsingular']">
+            </div>
+          </div>
+
           <div class="form-group" *ngIf="filtersLoaded && isNoun()">
             <label 
               for="cz.genus" 
@@ -74,6 +87,27 @@
                   {{g.label}}
                 </option>
               </select>
+            </div>
+          </div>
+
+          <div class="form-group" *ngIf="filtersLoaded && canHaveCase()">
+            <label 
+              for="cz.case" 
+              class="control-label col-xs-3">
+              Naamval:
+            </label>
+            <div class="col-xs-3">
+              <select 
+                class="form-control" 
+                id="cz.case"
+                [formControl]="wordForm.controls['cz.case']">
+                <option *ngFor="let g of filters.cases" [value]="g.val">
+                  {{g.label}}
+                </option>
+            </select>
+            </div>
+            <div class="col-xs-6">
+              <span class="fa fa-times" (click)="removeCase('cz.case')"></span>
             </div>
           </div>
 
@@ -103,6 +137,114 @@
             </div>
           </div>
 
+          <div class="form-group">
+            <label for="cz.info" class="control-label optional col-xs-2">
+              Info:
+            </label>
+            <div class="col-xs-10">
+              <input 
+                type="text"
+                class="form-control"
+                id="cz.info"
+                [formControl]="wordForm.controls['cz.info']">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Perfective -->
+
+        <div class="panel-body" *ngIf="isVerb()">
+          <h4>Perfectief</h4>
+
+          <div class="form-group">
+            <label 
+              for="czP.word" 
+              class="control-label col-xs-2">
+              Woord:
+            </label>
+            <div class="col-xs-10">
+              <strong>
+                <input 
+                  type="text"
+                  class="form-control"
+                  id="czP.word"
+                  [formControl]="wordForm.controls['czP.word']">
+              </strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="czP.firstpersonsingular" class="control-label col-xs-2">
+              1.p.e.:
+            </label>
+            <div class="col-xs-10">
+              <input 
+                type="text"
+                class="form-control"
+                id="czP.firstpersonsingular"
+                [formControl]="wordForm.controls['czP.firstpersonsingular']">
+            </div>
+          </div>
+
+          <div class="form-group" *ngIf="filtersLoaded">
+            <label 
+              for="czP.case" 
+              class="control-label col-xs-3">
+              Naamval:
+            </label>
+            <div class="col-xs-3">
+              <select 
+                class="form-control" 
+                id="czP.case"
+                [formControl]="wordForm.controls['czP.case']">
+                <option *ngFor="let g of filters.cases" [value]="g.val">
+                  {{g.label}}
+                </option>
+            </select>
+            </div>
+            <div class="col-xs-6">
+              <span class="fa fa-times" (click)="removeCase('czP.case')"></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="czP.otherwords" class="control-label optional col-xs-2">
+              Alt.:
+            </label>
+            <div class="col-xs-10">
+              <input 
+                type="text"
+                class="form-control"
+                id="czP.otherwords"
+                [formControl]="wordForm.controls['czP.otherwords']">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="czP.hint" class="control-label optional col-xs-2">
+              Hint:
+            </label>
+            <div class="col-xs-10">
+              <input 
+                type="text"
+                class="form-control"
+                id="czP.hint"
+                [formControl]="wordForm.controls['czP.hint']">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="czP.info" class="control-label optional col-xs-2">
+              Info:
+            </label>
+            <div class="col-xs-10">
+              <input 
+                type="text"
+                class="form-control"
+                id="czP.info"
+                [formControl]="wordForm.controls['czP.info']">
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -182,6 +324,18 @@
             </div>
           </div>
 
+          <div class="form-group">
+            <label for="nl.info" class="control-label optional col-xs-2">
+              Info:
+            </label>
+            <div class="col-xs-10">
+              <input 
+                type="text"
+                class="form-control"
+                id="nl.info"
+                [formControl]="wordForm.controls['nl.info']">
+            </div>
+          </div>
         </div>
       </div>
     </div>
