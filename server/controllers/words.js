@@ -14,7 +14,6 @@ var countWords = function(db, options, callback) {
 var loadWords = function(db, options, callback) {
   var filter = buildFilter(options);
   //Fetch words + their answer and lists for the user
-  console.log(filter);
   db.collection('wordpairs')
     .find(filter)
     .limit(options.maxwords)

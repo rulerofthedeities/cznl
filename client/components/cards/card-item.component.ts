@@ -1,12 +1,13 @@
 import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
 import {AddToList} from '../wordlists/add-to-list.component';
+import {GetFilterValue} from '../../directives/get-filter-value.directive';
 import {WordPair, Word} from '../../models/word.model';
 import {AllSettings} from '../../models/settings.model';
 import {WordService} from '../../services/words.service';
 
 @Component({
   selector: 'card-item',
-  directives: [AddToList],
+  directives: [AddToList, GetFilterValue],
   template: `
     <div class="card center-block">
       <add-to-list
@@ -19,7 +20,11 @@ import {WordService} from '../../services/words.service';
         <div class="wordwrapper center-block">
             <h2 class="word">{{cardData.word}}</h2>
         </div>
-        <em>{{card.tpe}}</em>
+        <em 
+          getFilterValue 
+          [value]="card.tpe" 
+          [tpe]="'tpes'">
+        </em>
       </div>
       <div *ngIf="!isQuestion" class="answer">
         <div class="wordwrapper center-block">

@@ -8,7 +8,7 @@ import {EditList} from './edit-list.component';
 @Component({
     selector: 'show-lists',
     directives: [GetKeyPress, EditList],
-    templateUrl: 'client/components/wordlists/show-lists.html',
+    templateUrl: 'client/components/wordlists/show-lists.component.html',
     styleUrls:['client/components/wordlists/word-list.css'],
     styles:[`
       div.modal {color: black;text-align:left;}
@@ -27,7 +27,7 @@ export class ShowLists {
   constructor(private wordlistService: WordlistService) {}
 
   updateUserLists(word: WordPair) {
-    this.wordlistService.getWordLists()
+    this.wordlistService.getWordLists('user')
       .then(lists => {
         this.userLists = lists;
         this.wordAnswer = word.answer;

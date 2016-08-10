@@ -11,20 +11,20 @@ module.exports.initialize = function(app, router) {
     response.sendFile(home);
   });
   
-  router.get('/api/words', words.load);
-  router.get('/api/settings', settings.load);
-  router.get('/api/wordlists', lists.load);
-  router.get('/api/cats', words.cats);
+  router.get('/words', words.load);
+  router.get('/settings', settings.load);
+  router.get('/wordlists', lists.load);
+  router.get('/cats', words.cats);
 
-  router.put('/api/words', words.update);
-  router.put('/api/settings', settings.update);
-  router.put('/api/answer', answers.update);
-  router.put('/api/lists/edit', lists.update);
+  router.put('/words', words.update);
+  router.put('/settings', settings.update);
+  router.put('/answer', answers.update);
+  router.put('/lists/edit', lists.update);
   
-  router.post('/api/answers', answers.load);
-  router.post('/api/words', words.save);
-  router.post('/api/lists/add', lists.save);
+  router.post('/answers', answers.load);
+  router.post('/words', words.save);
+  router.post('/lists/add', lists.save);
 
-  app.use(router);
+  app.use('/api/', router);
 
 };

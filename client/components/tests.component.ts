@@ -25,6 +25,12 @@ import {shuffle} from '../utils/utils';
           Willekeurige woordenlijst
         </li>
         <li 
+          (click)="selectListType('dynamic')"
+          class="btn"
+          [ngClass]="{'btn-primary':listType==='dynamic'}">
+          Dynamische woordenlijsten
+        </li>
+        <li 
           (click)="selectListType('wordlist')"
           class="btn"
           [ngClass]="{'btn-primary':listType==='wordlist'}">
@@ -39,6 +45,12 @@ import {shuffle} from '../utils/utils';
     </filter>
     <word-lists 
       *ngIf="!started && listType=='wordlist'" 
+      [created]="'user'"
+      class="col-xs-8">
+    </word-lists>
+    <word-lists 
+      *ngIf="!started && listType=='dynamic'" 
+      [created]="'auto'"
       class="col-xs-8">
     </word-lists>
     <div *ngIf="started && exerciseTpe=='test'" class="col-xs-12">

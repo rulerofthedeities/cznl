@@ -1,7 +1,5 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {WordService} from '../services/words.service';
-import {FilterService} from '../services/filters.service';
-import {Filter} from './filter.component';
 import {EditWord} from './edit-word.component';
 import {FilterWord} from '../models/filters.model';
 import {WordPair} from '../models/word.model';
@@ -58,8 +56,7 @@ export class WordBank implements OnInit, OnDestroy {
   totalWords: number;
 
   constructor(
-    private wordService: WordService,
-    private filterService: FilterService) {}
+    private wordService: WordService) {}
 
   ngOnInit() {
     //A new word is being created

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {WordlistService} from '../../services/wordlists.service';
 import {WordList} from '../../models/list.model';
 
@@ -30,6 +30,7 @@ import {WordList} from '../../models/list.model';
 })
 
 export class WordLists implements OnInit {
+  @Input('created') tpe;
   lists: WordList[];
   ready = false;
   selectedList: WordList;
@@ -38,7 +39,7 @@ export class WordLists implements OnInit {
   constructor(private wordlistService: WordlistService) {}
 
   ngOnInit() {
-    this.wordlistService.getWordLists()
+    this.wordlistService.getWordLists(this.tpe)
       .then(lists => {
         this.lists = lists;
         this.ready = true;

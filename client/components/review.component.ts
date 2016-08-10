@@ -1,5 +1,6 @@
 import {Component, Input, Output, OnInit, EventEmitter} from '@angular/core';
 import {AddToList} from './wordlists/add-to-list.component';
+import {GetFilterValue} from '../directives/get-filter-value.directive';
 import {WordPair} from '../models/word.model';
 import {AllSettings} from '../models/settings.model';
 import {RestartService} from '../services/restart.service';
@@ -7,11 +8,11 @@ import {SettingsService} from '../services/settings.service';
 
 @Component({
   selector: 'review',
-  directives: [AddToList],
+  directives: [AddToList, GetFilterValue],
   template: `
   <div class="review-list row" *ngIf="ready">
     <div class="col-sm-7">
-      <ul class="list-group text-center">
+      <ul class="list-group">
         <li 
           *ngFor="let word of words;let i = index;"
           class="list-group-item"
@@ -40,7 +41,11 @@ import {SettingsService} from '../services/settings.service';
                 </span>
               </div>
               <div class="pull-left small">
-                <em>{{word.tpe}}</em>
+                <em 
+                  getFilterValue 
+                  [value]="word.tpe" 
+                  [tpe]="'tpes'">
+                </em>
               </div>
           </div>
           <add-to-list [word]="word"></add-to-list>
@@ -48,16 +53,31 @@ import {SettingsService} from '../services/settings.service';
         </li>
       </ul> 
     </div>  
-    <div class="translation col-sm-5">
-      <div class="word text-center">
-        <span class="genus" *ngIf="translation.article">
-          {{translation.article}}
-        </span>
-        {{translation.word}}
-        <span class="genus" *ngIf="translation.genus && settings.lanDir=='nlcz'">
-          ({{translation.genus}})
-        </span>
-      </div>
+
+    <div class="col-sm-5">
+      <ul class="list-group text-center translation">
+        <li 
+          *ngFor="let word of words;let i = index;"
+          class="list-group-item">
+          <div *ngIf="selected===i" class="word text-center">
+            <span class="genus" *ngIf="translation.article">
+              {{translation.article}}
+            </span>
+            {{translation.word}}
+            <span class="genus" *ngIf="translation.genus && settings.lanDir=='nlcz'">
+              ({{translation.genus}})
+            </span>
+            <span class="case" *ngIf="translation.case && settings.lanDir=='nlcz'">
+              +<span 
+                getFilterValue
+                [value]="translation.case"
+                [tpe]="'cases'">
+              </span>
+            </span>
+          </div>
+        </li>
+      </ul>
+
     </div>
   </div>
   <div class="clearfix"></div>
@@ -81,6 +101,8 @@ import {SettingsService} from '../services/settings.service';
   .word {font-size:28px;}
   .translation .word {font-size:36px;}
   .genus {font-size:14px;}
+  li{height:80px;}
+  .translation .list-group-item{border:0;}
   li .fa {width: 40px;}
   .btn .fa {margin-right:3px;}
   .no {
@@ -92,7 +114,7 @@ export class Review implements OnInit {
   @Input() words: WordPair[];
   @Output() restart = new EventEmitter();
   selected: number;
-  translation = {word:'', genus:'', article:''};
+  translation = {word:'', genus:'', case:'', article:''};
   ready = false;
   settings: AllSettings;
 
@@ -143,6 +165,7 @@ export class Review implements OnInit {
     this.selected = i;
     this.translation.word = word.word;
     this.translation.genus = word.genus;
+    this.translation.case = word.case;
     if (this.settings.showPronoun) {
       this.translation.article = word.article;
     }
