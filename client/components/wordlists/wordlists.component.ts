@@ -26,7 +26,10 @@ import {WordList} from '../../models/list.model';
       [disabled]="!wordsInList || wordsInList < 1">
     <span class="fa fa-play"></span>
       Toon Overzicht
-    </button>`
+    </button>`,
+  styles:[`
+    li {cursor:default;}
+    `]
 })
 
 export class WordLists implements OnInit {

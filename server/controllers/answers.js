@@ -2,11 +2,17 @@ var mongo = require('mongodb');
 
 var updateAnswers = function(db, options, data, callback) {
   var mongoId = new mongo.ObjectID(data.wordId);
-  
+  var counterObj = data.correct ? {'total.correct':1} : {'total.incorrect':1};
+
   db.collection('answers')
     .update(
       {_id:mongoId}, 
-      {$set: {userId:data.userId, wordId:data.wordId, correct:data.correct, dt: new Date()}},
+      {$set: {
+        userId:data.userId, 
+        wordId:data.wordId, 
+        correct:data.correct, 
+        dt: new Date()},
+      $inc:counterObj},
       {upsert:true},
       function(err, r){
         callback(r);
