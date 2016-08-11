@@ -38,7 +38,7 @@
       <div class="panel panel-default">
         <div class="panel-heading"><h3>Tsjechisch</h3></div>
         <div class="panel-body">
-          <h4 *ngIf="isVerb()">Imperfectief</h4>
+          <h4 *ngIf="isVerb()">Imperfectief Aspect</h4>
           <div class="form-group">
             <label 
               for="cz.word" 
@@ -154,7 +154,7 @@
         <!-- Perfective -->
 
         <div class="panel-body" *ngIf="isVerb()">
-          <h4>Perfectief</h4>
+          <h4>Perfectief Aspect</h4>
 
           <div class="form-group">
             <label 
@@ -255,6 +255,7 @@
       <div class="panel panel-default">
         <div class="panel-heading"><h3>Nederlands</h3></div>
         <div class="panel-body">
+          <h4 *ngIf="isVerb()">Imperfectief Aspect</h4>
 
           <div class="form-group">
             <label for="nl.word" class="control-label col-xs-2">
@@ -334,6 +335,66 @@
                 class="form-control"
                 id="nl.info"
                 [formControl]="wordForm.controls['nl.info']">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Perfective -->
+
+        <div class="panel-body" *ngIf="isVerb()">
+          <h4>Perfectief Aspect</h4>
+
+          <div class="form-group">
+            <label for="nlP.word" class="control-label col-xs-2">
+              Woord:
+            </label>
+            <div class="col-xs-10">
+              <strong>
+                <input 
+                  type="text"
+                  class="form-control"
+                  id="nlP.word"
+                  [formControl]="wordForm.controls['nlP.word']">
+              </strong>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="nlP.otherwords" class="control-label optional col-xs-2">
+              Alt.:
+            </label>
+            <div class="col-xs-10">
+              <input 
+                type="text"
+                class="form-control"
+                id="nlP.otherwords"
+                [formControl]="wordForm.controls['nlP.otherwords']">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="nlP.hint" class="control-label optional col-xs-2">
+              Hint:
+            </label>
+            <div class="col-xs-10">
+              <input 
+                type="text"
+                class="form-control"
+                id="nlP.hint"
+                [formControl]="wordForm.controls['nlP.hint']">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="nlP.info" class="control-label optional col-xs-2">
+              Info:
+            </label>
+            <div class="col-xs-10">
+              <input 
+                type="text"
+                class="form-control"
+                id="nlP.info"
+                [formControl]="wordForm.controls['nlP.info']">
             </div>
           </div>
         </div>

@@ -21,6 +21,7 @@ export interface WordPair {
   cz: Word;
   czP?: Word;
   nl: Word;
+  nlP: Word;
   answer?: Answer;
   tpe: string;
   level: any;

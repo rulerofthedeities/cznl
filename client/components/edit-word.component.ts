@@ -149,7 +149,11 @@ export class EditWord implements OnInit, OnDestroy {
       'nl.otherwords': [word ? word.nl.otherwords : ''],
       'nl.hint': [word ? word.nl.hint : ''],
       'nl.info': [word ? word.nl.info : ''],
-      'nl.article': [word ? word.nl.article : '']
+      'nl.article': [word ? word.nl.article : ''],
+      'nlP.word': [word && word.nlP ? word.nlP.word : ''],
+      'nlP.otherwords': [word && word.nlP ? word.nlP.otherwords : ''],
+      'nlP.hint': [word && word.nlP ? word.nlP.hint : ''],
+      'nlP.info': [word && word.nlP ? word.nlP.info : ''],
     }, {validator: this.checkOptionalValidations});
   }
 

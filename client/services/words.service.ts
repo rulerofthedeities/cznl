@@ -79,7 +79,6 @@ export class WordService {
     word = this.cleanWord(word);
     data = {userId:'demoUser', word:word};
     headers.append('Content-Type', 'application/json');
-    console.log('saving', word);
     return this.http
       .put('/api/words', JSON.stringify(data), {headers: headers})
       .toPromise()
@@ -92,7 +91,8 @@ export class WordService {
     let wordPair = <WordPair>{},
         wordCz = <Word>{},
         wordCzP = <Word>{}, //Perfective
-        wordNl = <Word>{};
+        wordNl = <Word>{},
+        wordNlP = <Word>{};//Perfective
 
     if (word._id) {wordPair._id = word._id;}
     wordPair.tpe = word.tpe;
@@ -128,6 +128,11 @@ export class WordService {
       if (word['czP.info']) {wordCzP.info = word['czP.info'];}
       if (word['czP.firstpersonsingular']) {wordCzP.firstpersonsingular = word['czP.firstpersonsingular'];}
       if (word['czP.word']) {wordPair.czP = wordCzP;}
+      if (word['nlP.word']) {wordNlP.word = word['nlP.word'];}
+      if (word['nlP.otherwords']) {wordNlP.otherwords = word['nlP.otherwords'];}
+      if (word['nlP.hint']) {wordNlP.hint = word['nlP.hint'];}
+      if (word['nlP.info']) {wordNlP.info = word['nlP.info'];}
+      if (word['nlP.word']) {wordPair.nlP = wordNlP;}
     }
     wordPair.cz = wordCz;
     wordPair.nl = wordNl;
