@@ -39,7 +39,7 @@ export class EditWord implements OnInit, OnDestroy {
   filtersLoaded = false;
   submitMessage: string;
   disableSubmit = false;
-  isNew: boolean;
+  isNew = true;
   subscription: Subscription;
   cats: string[];
 
@@ -50,7 +50,7 @@ export class EditWord implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._getFilterOptions();
-    this._buildNewForm();
+    this._buildForm();
     this.subscription = this.wordService.editWordSource$.subscribe(
       word => {
         this.editForm(word);
@@ -91,7 +91,7 @@ export class EditWord implements OnInit, OnDestroy {
   _saveWord(form: any): void {
     this.wordService.addWord(form).then(word => {
       let wordPair: WordPair = word['word'];
-      this.submitMessage = `Het woord ${wordPair['cz'].word}/${wordPair['nl'].word} is succesvol opgeslagen.`;
+      this.submitMessage = `Het woord ${wordPair['cz.word']}/${wordPair['nl.word']} is succesvol opgeslagen.`;
       this.disableSubmit = true;
       this.isNew = false;
     });
@@ -100,7 +100,7 @@ export class EditWord implements OnInit, OnDestroy {
   _updateWord(form: any): void {
     this.wordService.updateWord(form).then(word => {
       let wordPair: WordPair = word['word'];
-      this.submitMessage = `Het woord ${wordPair['cz'].word}/${wordPair['nl'].word} is succesvol aangepast.`;
+      this.submitMessage = `Het woord ${wordPair['cz.word']}/${wordPair['nl.word']} is succesvol aangepast.`;
       this.disableSubmit = true;
       this.isNew = false;
     });
@@ -111,71 +111,45 @@ export class EditWord implements OnInit, OnDestroy {
   }
 
   editForm(word) {
-    this._buildEditForm(word);
+    this.isNew = false;
+    this._buildForm(word);
     this.submitMessage = '';
     this.disableSubmit = false;
   }
 
   resetForm() {
     //Create new word
-    this._buildNewForm();
+    this.isNew = true;
+    this._buildForm();
     this.submitMessage = '';
     this.disableSubmit = false;
     this.wordService.newWord();
   }
 
-  _buildNewForm() {
-    this.isNew = true;
+  _buildForm(word?:WordPair) {
     this.wordForm = this.formBuilder.group({
-      'tpe': ['', [Validators.required]],
-      'level': ['', [Validators.required]],
-      'categories': [''],
-      'cz.word': ['', [Validators.required]],
-      'cz.genus': [''],
-      'cz.case': [''],
-      'cz.otherwords': [''],
-      'cz.hint': [''],
-      'cz.info': [''],
-      'cz.firstpersonsingular': [''],
-      'czP.word': [''],
-      'czP.case': [''],
-      'czP.otherwords': [''],
-      'czP.hint': [''],
-      'czP.info': [''],
-      'czP.firstpersonsingular': [''],
-      'nl.word': ['', [Validators.required]],
-      'nl.otherwords': [''],
-      'nl.hint': [''],
-      'nl.info': [''],
-      'nl.article': ['']
-    }, {validator: this.checkOptionalValidations});
-  }
-
-  _buildEditForm(word:WordPair) {
-    this.isNew = false;
-    this.wordForm = this.formBuilder.group({
-      '_id': [word._id],
-      'tpe': [word.tpe, [Validators.required]],
-      'level': [word.level, [Validators.required]],
-      'categories': [word.categories],
-      'cz.word': [word.cz.word, [Validators.required]],
-      'cz.genus': [word.cz.genus],
-      'cz.case': [word.cz.case],
-      'cz.otherwords': [word.cz.otherwords],
-      'cz.hint': [word.cz.hint],
-      'cz.info': [word.cz.info],
-      'cz.firstpersonsingular': [word.cz.firstpersonsingular],
-      'czP.word': [word.czP ? word.czP.word : ''],
-      'czP.case': [word.czP ? word.czP.case : ''],
-      'czP.otherwords': [word.czP ? word.czP.otherwords : ''],
-      'czP.hint': [word.czP ? word.czP.hint : ''],
-      'czP.info': [word.czP ? word.czP.info : ''],
-      'czP.firstpersonsingular': [word.czP ? word.czP.firstpersonsingular : ''],
-      'nl.word': [word.nl.word, [Validators.required]],
-      'nl.otherwords': [word.nl.otherwords],
-      'nl.hint': [word.nl.hint],
-      'nl.info': [word.nl.info],
-      'nl.article': [word.nl.article]
+      '_id': [word ? word._id : ''],
+      'tpe': [word ? word.tpe : '', [Validators.required]],
+      'level': [word ? word.level : '', [Validators.required]],
+      'categories': [word ? word.categories : ''],
+      'cz.word': [word ? word.cz.word : '', [Validators.required]],
+      'cz.genus': [word ? word.cz.genus : ''],
+      'cz.case': [word ? word.cz.case : ''],
+      'cz.otherwords': [word ? word.cz.otherwords : ''],
+      'cz.hint': [word ? word.cz.hint : ''],
+      'cz.info': [word ? word.cz.info : ''],
+      'cz.firstpersonsingular': [word ? word.cz.firstpersonsingular : ''],
+      'czP.word': [word && word.czP ? word.czP.word : ''],
+      'czP.case': [word && word.czP ? word.czP.case : ''],
+      'czP.otherwords': [word && word.czP ? word.czP.otherwords : ''],
+      'czP.hint': [word && word.czP ? word.czP.hint : ''],
+      'czP.info': [word && word.czP ? word.czP.info : ''],
+      'czP.firstpersonsingular': [word && word.czP ? word.czP.firstpersonsingular : ''],
+      'nl.word': [word ? word.nl.word : '', [Validators.required]],
+      'nl.otherwords': [word ? word.nl.otherwords : ''],
+      'nl.hint': [word ? word.nl.hint : ''],
+      'nl.info': [word ? word.nl.info : ''],
+      'nl.article': [word ? word.nl.article : '']
     }, {validator: this.checkOptionalValidations});
   }
 

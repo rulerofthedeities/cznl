@@ -4,7 +4,7 @@ import {Filter, FilterWord} from '../models/filters.model';
 import 'rxjs/add/operator/toPromise';
 import {TPES} from '../data/filters';
 import {Subject} from 'rxjs/Subject';
-import {WordPair, Word, FormWordPair} from '../models/word.model';
+import {WordPair, Word} from '../models/word.model';
 
 @Injectable()
 export class WordService {
@@ -55,15 +55,16 @@ export class WordService {
       .catch(this.handleError);
   }
 
-  addWord(word:FormWordPair) {
+  addWord(word:WordPair) {
     let headers = new Headers(),
         data: Object,
         wordPair: WordPair;
 
-    wordPair = this.buildWordPair(word);
+    wordPair = this.cleanWord(word);
     data = {userId:'demoUser', word:wordPair};
     headers.append('Content-Type', 'application/json');
 
+    console.log('adding ', data);
     return this.http
       .post('/api/words', JSON.stringify(data), {headers: headers})
       .toPromise()
@@ -71,23 +72,14 @@ export class WordService {
       .catch(this.handleError);
   }
 
-  newWord() {
-    this.newWordSource.next(true);
-  }
-
-  editWord(word:WordPair) {
-    this.editWordSource.next(word);
-  }
-
-  updateWord(word:FormWordPair) {
+  updateWord(word:WordPair) {
     let headers = new Headers(),
-        data: Object,
-        wordPair: WordPair;
+        data: Object;
 
-    wordPair = this.buildWordPair(word);
-    data = {userId:'demoUser', word:wordPair};
+    word = this.cleanWord(word);
+    data = {userId:'demoUser', word:word};
     headers.append('Content-Type', 'application/json');
-
+    console.log('saving', word);
     return this.http
       .put('/api/words', JSON.stringify(data), {headers: headers})
       .toPromise()
@@ -95,14 +87,14 @@ export class WordService {
       .catch(this.handleError);
   }
 
-  buildWordPair(word: FormWordPair): WordPair {
-    //Transform form data into a valid WordPair object
+  cleanWord(word: WordPair): WordPair {
+    //Clear unnecessary fields so as not to pollute db data
     let wordPair = <WordPair>{},
         wordCz = <Word>{},
         wordCzP = <Word>{}, //Perfective
         wordNl = <Word>{};
 
-    wordPair._id = word._id;
+    if (word._id) {wordPair._id = word._id;}
     wordPair.tpe = word.tpe;
 
     wordPair.level = parseInt(word.level, 10);
@@ -197,6 +189,14 @@ export class WordService {
     });
 
     return words;
+  }
+
+  newWord() {
+    this.newWordSource.next(true);
+  }
+
+  editWord(word:WordPair) {
+    this.editWordSource.next(word);
   }
 
   getTpeTranslation(tpe: string) {

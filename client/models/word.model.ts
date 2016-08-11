@@ -23,30 +23,9 @@ export interface WordPair {
   nl: Word;
   answer?: Answer;
   tpe: string;
-  level: number;
+  level: any;
   categories: string[];
 }
-
-export interface FormWordPair {
-  _id: string;
-  tpe: string;
-  level: string;
-  categories: string;
-  'cz.word': string;
-  'cz.genus': string;
-  'cz.case'?: string;
-  'cz.hint'?: string;
-  'cz.otherwords'?: string[];
-  'czP.word': string;
-  'czP.case'?: string;
-  'czP.hint'?: string;
-  'czP.otherwords'?: string[];
-  'nl.word': string;
-  'nl.article': string;
-  'nl.otherwords'?: string[];
-  'nl.hint'?: string;
-}
-
 
 export interface ErrorObject {
   article?: boolean;
