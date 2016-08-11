@@ -13,7 +13,7 @@ module.exports.initialize = function(app, router) {
   
   router.get('/words', words.load);
   router.get('/settings', settings.load);
-  router.get('/wordlists', lists.load);
+  router.get('/wordlists/:listTpe?', lists.load);
   router.get('/cats', words.cats);
 
   router.put('/words', words.update);

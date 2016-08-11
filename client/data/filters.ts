@@ -9,13 +9,14 @@ export const LEVELS:FilterOption[] = [
 export const TPES:FilterOption[] = [
   {label:'Zelfst. naamwoord', val:'noun'},
   {label:'Bijv. naamwoord', val: 'adj'},
-  {label:'Werkwoord', val: 'verb'},
   {label:'Bijwoord', val: 'adv'},
+  {label:'Werkwoord', val: 'verb'},
   {label:'Voegwoord', val: 'conj'},
   {label:'Voorzetsel', val: 'prep'},
   {label:'Voornaamwoord', val: 'pronoun'},
   {label:'Eigennaam', val: 'propernoun'},
-  {label:'Telwoord', val: 'numeral'}
+  {label:'Telwoord', val: 'numeral'},
+  {label:'Partikel', val: 'part'}
 ];
 export const GENUS:FilterOption[] = [
   {label:'Ma', val: 'Ma'},

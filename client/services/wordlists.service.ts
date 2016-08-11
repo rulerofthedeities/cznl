@@ -9,17 +9,10 @@ export class WordlistService {
   constructor(private http: Http) {}
 
   getWordLists(tpe) {
-    if (tpe === 'user') {
-    //User-created lists
-    return this.http.get('/api/wordlists')
+    return this.http.get('/api/wordlists/' + tpe)
       .toPromise()
       .then(response => response.json().lists)
       .catch(this.handleError);
-    } else {
-    //Dynamic auto-created lists
-
-    }
-
   }
 
   updateWordLists(listAnswer: Answer) {
