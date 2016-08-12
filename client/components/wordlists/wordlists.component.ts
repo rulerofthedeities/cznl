@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {WordlistService} from '../../services/wordlists.service';
 import {WordList} from '../../models/list.model';
 
@@ -9,7 +9,7 @@ import {WordList} from '../../models/list.model';
       <li 
         *ngFor="let list of lists; let i = index;"
         (click)="selectList(i)"
-        [ngClass]="{'active':list==selectedList}"
+        [ngClass]="{'active':list==selected}"
         class="list-group-item">
           {{list.name}}
         <span class="badge" *ngIf="list.count>0">{{list.count}}</span>
@@ -23,6 +23,7 @@ import {WordList} from '../../models/list.model';
     </button>
     <button 
       class="btn btn-success btn-lg" 
+      (click)="start()"
       [disabled]="!wordsInList || wordsInList < 1">
     <span class="fa fa-play"></span>
       Toon Overzicht
@@ -34,9 +35,10 @@ import {WordList} from '../../models/list.model';
 
 export class WordLists implements OnInit {
   @Input('created') tpe;
+  @Output() selectedList = new EventEmitter<string>();
   lists: WordList[];
   ready = false;
-  selectedList: WordList;
+  selected: WordList;
   wordsInList = 0;
 
   constructor(private wordlistService: WordlistService) {}
@@ -50,8 +52,12 @@ export class WordLists implements OnInit {
   }
 
   selectList(i: number) {
-    this.selectedList = this.lists[i];
-    this.wordsInList = this.selectedList.count;
+    this.selected = this.lists[i];
+    this.wordsInList = this.selected.count;
+  }
+
+  start() {
+    this.selectedList.emit(this.selected._id);
   }
 
 }

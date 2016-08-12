@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {Http, RequestOptions, Headers, Request, RequestMethod} from '@angular/http';
 import {Filter, FilterWord} from '../models/filters.model';
 import 'rxjs/add/operator/toPromise';
-import {TPES} from '../data/filters';
 import {Subject} from 'rxjs/Subject';
 import {WordPair, Word} from '../models/word.model';
 
@@ -16,9 +15,17 @@ export class WordService {
 
   constructor(private http: Http) { }
 
-  getWords(filter: Filter, maxWords: number) {
+  getWordsFromFilter(filter: Filter, maxWords: number) {
     let url = '/api/words?a=1&l=' + filter.level + '&t=' + filter.tpe + '&c=' + filter.cats + '&m=' + maxWords;
+    return this._getWords(url);
+  }
 
+  getWordsFromWordList(_id:string, maxWords: number) {
+    let url = '/api/words?listid=' + _id;
+    return this._getWords(url);
+  }
+
+  _getWords(url: string) {
     return this.http.get(url)
       .toPromise()
       .then(response => {
@@ -30,13 +37,12 @@ export class WordService {
   }
 
   getFilterWords(filter: FilterWord, maxWords: number) {
+    //Filter the list of words with regex on specific word
     let url = '/api/words?a=0&wf=1&w=' + filter.word + '&m=' + maxWords;
     url+= filter.start ? '&s=1' : '';
     return this.http.get(url)
       .toPromise()
-      .then(response => {
-          return response.json().words;
-        })
+      .then(response => response.json().words)
       .catch(this.handleError);
   }
 
@@ -187,8 +193,6 @@ export class WordService {
         word.answer = answersAssoc[word._id];
         delete word.answer.wordId;
       }
-      //Translate word type from English to Dutch
-      //word.tpe_nl = this.getTpeTranslation(word.tpe);
       word.tpe = word.tpe;
       word.cz.article = this.getCardArticle(word.cz.genus);
     });
@@ -202,17 +206,6 @@ export class WordService {
 
   editWord(word:WordPair) {
     this.editWordSource.next(word);
-  }
-
-  getTpeTranslation(tpe: string) {
-    let nl_tpe = '', i = 0;
-    while (!nl_tpe && i < TPES.length) {
-      if (TPES[i].val === tpe) {
-        nl_tpe = TPES[i].label;
-      }
-      i++;
-    }
-    return nl_tpe;
   }
 
   getCardArticle(genus: string) {

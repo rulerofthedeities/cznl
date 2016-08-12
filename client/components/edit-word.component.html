@@ -451,9 +451,9 @@
               <div class="col-xs-offset-2 col-xs-10">
                 <ul class="searchcats list-inline">
                   <li *ngFor="let cat of cats" 
-                    (click)="addCategory(cat)"
+                    (click)="addCategory(cat.name)"
                     class="label label-info">
-                      {{cat}}
+                      {{cat.name}}
                   </li>
                 </ul>
               </div>

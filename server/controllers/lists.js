@@ -35,7 +35,6 @@ var loadAutoLists = function(db, options, callback) {
   }
 
   var loadAutoListNotLearned = function(callback) {
-    console.log('loading nog niet geleerde woorden');
     db.collection('wordpairs')
       .count({}, function(err, allCount) {
         db.collection('answers')
@@ -98,7 +97,6 @@ var getUserListCount = function(lists, callback) {
       list.count = total;
       //Return lists only after we've got all the totals per list
       if (cnt === listLength) {
-        console.log('return lists', {"lists": lists});
         callback(lists);
       }
     });

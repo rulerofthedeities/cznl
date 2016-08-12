@@ -20,9 +20,11 @@ var loadWords = function(db, options, callback) {
     .toArray(function(err, docs) {
       //Fetch answer and list for each word for this user
       var wordIds = [];
-      docs.forEach(function(doc){
-        wordIds.push(doc._id.toString());
-      })
+      if (docs) {
+        docs.forEach(function(doc){
+          wordIds.push(doc._id.toString());
+        })
+      }
 
       if (options.answers) {
         answers.getAnswersInDoc(options.userId, wordIds, function(answers){
@@ -41,13 +43,13 @@ var getCats = function(db, options, callback) {
     .aggregate([
       {$unwind: "$categories" },
       {$match:{categories: {$regex:options.query, $options:"i"}}},
+      {$group:{_id:"$categories"}},
+      {$sort:{_id: 1}},
       {$limit:options.max},
-      {$group:{_id:"all", cats:{$addToSet:"$categories"}}},
-      {$sort:{cats: 1}},
-      {$project:{_id:0, cats:1}}
+      {$project:{_id:0,name:"$_id"}}
     ]).toArray(function(err, docs) {
-      if (docs.length > 0) {
-        callback(docs[0]);
+      if (docs && docs.length > 0) {
+        callback(docs);
       } else {
         callback(null);
       }
@@ -56,7 +58,7 @@ var getCats = function(db, options, callback) {
 
 var saveNewWord = function(db, options, data, callback) {
   if (data && data.word) {
-    let wordToSave = data.word;
+    var wordToSave = data.word;
     wordToSave.userId = data.userId;
 
     db.collection('wordpairs')
@@ -84,12 +86,18 @@ var updateWord = function(db, options, data, callback) {
 }
 
 var buildFilter = function(options) {
-  var filterArr = [];
+  var filterArr = [],
+      filter;
 
   if (options.isWordFilter) {
-    let word = options.start ? "^" + options.word : options.word;
-    filterArr.push('"cz.word":{"$regex":"' + word + '",' + '"$options":"i"}');
+    //Search for a specific word
+    var word = options.start ? "^" + options.word : options.word;
+    filter = {'cz.word':{"$regex": word, "$options":"i"}};
+  } else if(options.listId) {
+    //Get words by ID
+    filter = { _id: { $in: options.ids } };
   } else {
+    //Get list of words from filter
     if (options.level >= 0) {
       filterArr.push('"level":' + options.level);
     }
@@ -99,15 +107,16 @@ var buildFilter = function(options) {
     if (options.cat != "all") {
       filterArr.push('"categories":"' + options.cat + '"');
     } 
+    filter = JSON.parse('{' + filterArr.join(',') + '}');
   }
-  var filter = '{' + filterArr.join(',') + '}';
-  return JSON.parse(filter);
+  return filter;
 }
 
 module.exports = {
   load: function(req, res) {
     var options = {
       userId:'demoUser',
+      listId:req.query.listid,
       level:parseInt(req.query.l), 
       answers:req.query.a === "1" ? true: false, 
       tpe:req.query.t, 
@@ -117,8 +126,7 @@ module.exports = {
       start:req.query.s === "1" ? true: false, 
       maxwords:req.query.m ? parseInt(req.query.m) : 0,
       iscnt: req.query.cnt
-    };
-
+    }; 
     if (req.query.cnt == '1') {
       //Count # of words
       countWords(mongo.DB, options, function(count){
@@ -126,9 +134,22 @@ module.exports = {
       });
     } else {
       //Search for words
-      loadWords(mongo.DB, options, function(docs, answers){
-        res.status(200).send({"words": docs, "answers": answers});
-      });
+      if (req.query.listid) {
+        //Get word ids from the wordlist first
+        
+        answers.getWordIds(options, function(ids){
+          options.ids = ids;
+          options.answers = true;
+          loadWords(mongo.DB, options, function(docs, answers){
+            res.status(200).send({"words": docs, "answers": answers});
+          });
+
+        }) 
+      } else {
+        loadWords(mongo.DB, options, function(docs, answers){
+          res.status(200).send({"words": docs, "answers": answers});
+        });
+      }
     }
   },
   save: function(req, res) {
@@ -150,7 +171,7 @@ module.exports = {
     };
     getCats(mongo.DB, options, function(docs){
       if (docs){
-        res.status(200).send(docs);
+        res.status(200).send({"cats": docs});
       } else {
         res.status(204).send();
       }

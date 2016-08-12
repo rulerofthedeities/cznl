@@ -37,8 +37,8 @@ import {Filter as FilterModel} from '../models/filters.model';
           (change)="onChangeFilter(level.value, wordtpe.value, cats.value)">
           <option value="all" [selected]="'all'==selected.cats">Alle categorieën</option>
           <option 
-            *ngFor="let cat of filters.cats" [value]="cat" [selected]="cat==selected.cats">
-            {{cat}}
+            *ngFor="let cat of filters.cats" [value]="cat.name" [selected]="cat==selected.cats">
+            {{cat.name}}
           </option>
         </select>
       </li>

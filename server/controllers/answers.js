@@ -21,12 +21,25 @@ var updateAnswers = function(db, options, data, callback) {
 }
 
 var getAnswers = function(db, userId, data, callback) {
-
   db.collection('answers')
     .find({
       userId:userId,
       wordId:{$in:data}},
       {_id:1, wordId:1, correct:1, listIds:1})
+    .toArray(function(err, docs) {
+      callback(docs);
+    })
+}
+
+var getWordIds = function(db, userId, listId, callback) {
+  db.collection('answers')
+    .find({
+      userId:userId, 
+      listIds:listId
+    }, {
+      _id:0, 
+      wordId:1
+    })
     .toArray(function(err, docs) {
       callback(docs);
     })
@@ -77,5 +90,17 @@ module.exports = {
     getAnswers(mongo.DB, userId, words, function(docs){
       callback(docs);
     });
+  },
+  getWordIds: function(options, callback) {
+    getWordIds(mongo.DB, options.userId, options.listId, function(ids){
+      //create array of mongoIDs
+      var idsArr = [],
+          mongoId;
+      ids.forEach(function(id) {
+        mongoId = new mongo.ObjectID(id.wordId);
+        idsArr.push(mongoId);
+      })
+      callback(idsArr);
+    })
   }
 }

@@ -40,12 +40,13 @@ import {shuffle} from '../utils/utils';
     </div>
     <filter tpe="exercises"
       *ngIf="!started && listType=='filter'"
-      (selectedFilter)="onSelectFilter($event)"
+      (selectedFilter)="getWordsFromFilter($event)"
       class="col-xs-8">
     </filter>
     <word-lists 
       *ngIf="!started && listType=='wordlist'" 
       [created]="'user'"
+      (selectedList)="getWordsFromWordList($event)"
       class="col-xs-8">
     </word-lists>
     <word-lists 
@@ -73,7 +74,6 @@ import {shuffle} from '../utils/utils';
 export class Tests implements OnDestroy {
   maxWords = 20;
   listType: string = 'filter';
-  filterData: FilterModel;
   started: boolean = false;
   cards: WordPair[];
   exerciseTpe:string;
@@ -92,16 +92,20 @@ export class Tests implements OnDestroy {
     this.listType = tpe;
   }
 
-  onSelectFilter(filter: FilterModel) {
-    this.filterData = filter;
-    this.getWords(filter);
+  getWordsFromFilter(filter: FilterModel) {
+    this.wordService.getWordsFromFilter(filter, this.maxWords)
+      .then(words => {
+        this.cards = words;
+        this.exerciseTpe = filter.test;
+        this.started = true;
+      });
   }
 
-  getWords(filter: FilterModel) {
-    this.wordService.getWords(filter, this.maxWords)
-      .then(wordlist => {
-        this.cards = wordlist;
-        this.exerciseTpe = filter.test;
+  getWordsFromWordList(_id: string) {
+    this.wordService.getWordsFromWordList(_id, this.maxWords)
+      .then(words => {
+        this.cards = words;
+        this.exerciseTpe = 'review';
         this.started = true;
       });
   }
