@@ -46,11 +46,12 @@ import {shuffle} from '../utils/utils';
     <word-lists 
       *ngIf="!started && listType=='wordlist'" 
       [created]="'user'"
-      (selectedList)="getWordsFromWordList($event)"
+      (selectedUserList)="getWordsFromUserList($event)"
       class="col-xs-8">
     </word-lists>
     <word-lists 
       *ngIf="!started && listType=='dynamic'" 
+      (selectedUserList)="getWordsFromAutoList($event)"
       [created]="'auto'"
       class="col-xs-8">
     </word-lists>
@@ -101,14 +102,24 @@ export class Tests implements OnDestroy {
       });
   }
 
-  getWordsFromWordList(_id: string) {
-    this.wordService.getWordsFromWordList(_id, this.maxWords)
+  getWordsFromUserList(data: any) {
+    this.wordService.getWordsFromWordList(data.selected._id, this.maxWords)
       .then(words => {
         this.cards = words;
-        this.exerciseTpe = 'review';
+        this.exerciseTpe = data.exerciseTpe;
         this.started = true;
       });
   }
+
+  getWordsFromAutoList(data: any) {
+    this.wordService.getWordsFromAutoList(data.selected.id, this.maxWords)
+      .then(words => {
+        this.cards = words;
+        this.exerciseTpe = data.exerciseTpe;
+        this.started = true;
+      });
+  }
+
 
   restart() {
     shuffle(this.cards);

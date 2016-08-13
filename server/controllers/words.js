@@ -5,8 +5,7 @@ var countWords = function(db, options, callback) {
   var filter = buildFilter(options);
 
   db.collection('wordpairs')
-    .find(filter)
-    .count(function(err, count) {
+    .count(filter, function(err, count) {
       callback(count);
   })
 }
@@ -36,6 +35,50 @@ var loadWords = function(db, options, callback) {
       }
       
     })
+}
+
+var getAutoListWords = function(db, options, callback) {
+  switch (options.autoId) {
+    case "1": 
+      //get incorrect answers for user;
+      answers.getIncorrectWordIds(options, function(ids){
+        callback(ids);
+      });
+    break;
+    case "2": 
+      //get correct answers for user;
+      answers.getCorrectWordIds(options, function(ids){
+        callback(ids);
+      });
+    break;
+    case "3": 
+      //get all already answered for this user
+      answers.getAnsweredWordIds(options, function(ids){
+        callback(ids);
+      });
+    break;
+    default: callback(null);
+  }
+}
+
+var getAllNotAnswered = function(db, options, callback) {
+  //get all words for this user that do not have an answer
+  var cursor = db.collection('wordpairs').find({});
+  var list = [],
+      sent = false;
+
+  cursor.forEach(function(doc) { 
+    answers.hasAnswer(doc._id, options.userId, function(result){
+      if (!result) {
+        if (list.length < options.maxwords) {
+          list.push(doc);
+        } else if (!sent) {
+          sent = true;
+          callback(list);
+        }
+      }
+    })
+  });
 }
 
 var getCats = function(db, options, callback) {
@@ -93,7 +136,7 @@ var buildFilter = function(options) {
     //Search for a specific word
     var word = options.start ? "^" + options.word : options.word;
     filter = {'cz.word':{"$regex": word, "$options":"i"}};
-  } else if(options.listId) {
+  } else if(options.listId || options.autoId) {
     //Get words by ID
     filter = { _id: { $in: options.ids } };
   } else {
@@ -117,6 +160,7 @@ module.exports = {
     var options = {
       userId:'demoUser',
       listId:req.query.listid,
+      autoId:req.query.autoid,
       level:parseInt(req.query.l), 
       answers:req.query.a === "1" ? true: false, 
       tpe:req.query.t, 
@@ -136,7 +180,6 @@ module.exports = {
       //Search for words
       if (req.query.listid) {
         //Get word ids from the wordlist first
-        
         answers.getWordIds(options, function(ids){
           options.ids = ids;
           options.answers = true;
@@ -145,7 +188,25 @@ module.exports = {
           });
 
         }) 
+      } else if (req.query.autoid) {
+        //Get words for automated list
+        var autoid = parseInt(req.query.autoid);
+        if (autoid < 4) {
+          getAutoListWords(mongo.DB, options, function(ids) {
+            options.ids = ids;
+              options.answers = true;
+              loadWords(mongo.DB, options, function(docs, answers){
+                res.status(200).send({"words": docs, "answers": answers});
+              });
+            })
+        } else {
+          // get autolist with words with no answers for this user
+          getAllNotAnswered(mongo.DB, options, function(docs){
+            res.status(200).send({"words": docs, "answers": null});
+          })
+        }
       } else {
+        //Get words with filter data
         loadWords(mongo.DB, options, function(docs, answers){
           res.status(200).send({"words": docs, "answers": answers});
         });

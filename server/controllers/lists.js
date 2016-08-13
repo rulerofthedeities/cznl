@@ -13,14 +13,17 @@ var loadAutoLists = function(db, options, callback) {
   var lists = [];
   var listTpes = [{
     collection:'answers', 
+    id:1,
     name:'Foute antwoorden', 
     filter: {userId:options.userId, correct: false}
   },{
     collection:'answers', 
+    id:2,
     name:'Juiste antwoorden', 
     filter: {userId:options.userId, correct: true}
   },{
     collection:'answers',
+    id:3,
     name:'Reeds geteste woorden',
     filter: {userId:options.userId}
 
@@ -29,7 +32,7 @@ var loadAutoLists = function(db, options, callback) {
   var loadAutoList = function(tpe, callback) {
     db.collection(tpe.collection)
       .count(tpe.filter, function(err, count) {
-        lists.push({name:tpe.name, count:count});
+        lists.push({name:tpe.name, id: tpe.id, count:count});
         callback();
       });
   }
@@ -39,7 +42,11 @@ var loadAutoLists = function(db, options, callback) {
       .count({}, function(err, allCount) {
         db.collection('answers')
           .count({userId:options.userId}, function(err, doneCount) {
-            lists.push({name:'Nog niet geteste woorden', count:allCount - doneCount});
+            lists.push({
+              name:'Nog niet geteste woorden', 
+              id:4, 
+              count:allCount - doneCount
+            });
             callback();
           })
       });
@@ -95,7 +102,7 @@ var getUserListCount = function(lists, callback) {
     getWordCount(mongo.DB, options, function(total){
       cnt++;
       list.count = total;
-      //Return lists only after we've got all the totals per list
+      //Return lists only after we've got all the totals per list -> to async
       if (cnt === listLength) {
         callback(lists);
       }

@@ -5,11 +5,11 @@ import {WordBank} from './wordbank.component';
 import {AppSettings} from './settings.component';
 
 const routes: RouterConfig = [
-  { path: '', component: Tests },
-  { path: 'dashboard', component: Dashboard },
-  { path: 'tests', component: Tests },
-  { path: 'words', component: WordBank },
-  { path: 'settings', component: AppSettings }
+  {path: '', component: Tests},
+  {path: 'dashboard', component: Dashboard },
+  {path: 'tests', component: Tests },
+  {path: 'words', component: WordBank },
+  {path: 'settings', component: AppSettings }
 ];
 
 export const appRouterProviders = [

@@ -31,18 +31,22 @@ var getAnswers = function(db, userId, data, callback) {
     })
 }
 
-var getWordIds = function(db, userId, listId, callback) {
+var getWordIds = function(db, filter, callback) {
   db.collection('answers')
-    .find({
-      userId:userId, 
-      listIds:listId
-    }, {
+    .find(filter, {
       _id:0, 
       wordId:1
     })
     .toArray(function(err, docs) {
       callback(docs);
     })
+}
+
+var hasAnswerById = function(db, id, userId, callback) {
+  db.collection('answers')
+    .count({_id:id,userId:userId}, function(err, count) {
+      callback(count);
+  })
 }
 
 var updateListIds = function(db, options, answer, callback) {
@@ -62,6 +66,18 @@ var updateListIds = function(db, options, answer, callback) {
         callback(r);
       }
     );
+}
+
+var makeIdArray = function(ids) {
+  //create array of mongoIDs
+  //could - should? - be done in aggregation
+  var idsArr = [],
+      mongoId;
+  ids.forEach(function(id) {
+    mongoId = new mongo.ObjectID(id.wordId);
+    idsArr.push(mongoId);
+  })
+  return idsArr;
 }
 
 module.exports = {
@@ -92,15 +108,43 @@ module.exports = {
     });
   },
   getWordIds: function(options, callback) {
-    getWordIds(mongo.DB, options.userId, options.listId, function(ids){
-      //create array of mongoIDs
-      var idsArr = [],
-          mongoId;
-      ids.forEach(function(id) {
-        mongoId = new mongo.ObjectID(id.wordId);
-        idsArr.push(mongoId);
-      })
-      callback(idsArr);
+    var filter = {
+      userId:options.userId, 
+      listIds:options.listId
+    }
+    getWordIds(mongo.DB, filter, function(ids){
+      callback(makeIdArray(ids));
     })
+  },
+  getIncorrectWordIds: function(options, callback) {
+    var filter = {
+      userId:options.userId, 
+      correct:false
+    }
+    getWordIds(mongo.DB, filter, function(ids){
+      callback(makeIdArray(ids));
+    })
+  },
+  getCorrectWordIds: function(options, callback) {
+    var filter = {
+      userId:options.userId, 
+      correct:true
+    }
+    getWordIds(mongo.DB, filter, function(ids){
+      callback(makeIdArray(ids));
+    })
+  },
+  getAnsweredWordIds: function(options, callback) {
+    var filter = {
+      userId:options.userId
+    }
+    getWordIds(mongo.DB, filter, function(ids){
+      callback(makeIdArray(ids));
+    })
+  },
+  hasAnswer: function(id, userId, callback) {
+    hasAnswerById(mongo.DB, id, userId, function(count){
+      callback(count > 0);
+    });
   }
 }

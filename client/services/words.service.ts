@@ -17,15 +17,20 @@ export class WordService {
 
   getWordsFromFilter(filter: Filter, maxWords: number) {
     let url = '/api/words?a=1&l=' + filter.level + '&t=' + filter.tpe + '&c=' + filter.cats + '&m=' + maxWords;
-    return this._getWords(url);
+    return this._getWordsAndAnswers(url);
   }
 
   getWordsFromWordList(_id:string, maxWords: number) {
-    let url = '/api/words?listid=' + _id;
-    return this._getWords(url);
+    let url = '/api/words?listid=' + _id + '&m=' + maxWords;
+    return this._getWordsAndAnswers(url);
   }
 
-  _getWords(url: string) {
+  getWordsFromAutoList(id:string, maxWords: number) {
+    let url = '/api/words?autoid=' + id + '&m=' + maxWords;
+    return this._getWordsAndAnswers(url);
+  }
+
+  _getWordsAndAnswers(url: string) {
     return this.http.get(url)
       .toPromise()
       .then(response => {
@@ -70,7 +75,6 @@ export class WordService {
     data = {userId:'demoUser', word:wordPair};
     headers.append('Content-Type', 'application/json');
 
-    console.log('adding ', data);
     return this.http
       .post('/api/words', JSON.stringify(data), {headers: headers})
       .toPromise()
@@ -183,19 +187,23 @@ export class WordService {
 
   processWords(words, answers) {
     const answersAssoc: { [id: string]: boolean; } = { };
-    answers.forEach(function(answer) {
-      answersAssoc[answer.wordId] = answer;
-    });
+    if (answers) {
+      answers.forEach(function(answer) {
+        answersAssoc[answer.wordId] = answer;
+      });
+    }
 
-    words.forEach(word => {
-      //Add answers data to word object
-      if (answersAssoc[word._id]) {
-        word.answer = answersAssoc[word._id];
-        delete word.answer.wordId;
-      }
-      word.tpe = word.tpe;
-      word.cz.article = this.getCardArticle(word.cz.genus);
-    });
+    if (words) {
+      words.forEach(word => {
+        //Add answers data to word object
+        if (answersAssoc[word._id]) {
+          word.answer = answersAssoc[word._id];
+          delete word.answer.wordId;
+        }
+        word.tpe = word.tpe;
+        word.cz.article = this.getCardArticle(word.cz.genus);
+      });
+    }
 
     return words;
   }

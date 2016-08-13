@@ -17,13 +17,14 @@ import {WordList} from '../../models/list.model';
     </ul>
     <button
       class="btn btn-success btn-lg"
+      (click)="start('test')"
       [disabled]="!wordsInList || wordsInList < 1">
       <span class="fa fa-play"></span>
       Start Test
     </button>
     <button 
       class="btn btn-success btn-lg" 
-      (click)="start()"
+      (click)="start('review')"
       [disabled]="!wordsInList || wordsInList < 1">
     <span class="fa fa-play"></span>
       Toon Overzicht
@@ -35,7 +36,7 @@ import {WordList} from '../../models/list.model';
 
 export class WordLists implements OnInit {
   @Input('created') tpe;
-  @Output() selectedList = new EventEmitter<string>();
+  @Output() selectedUserList = new EventEmitter<Object>();
   lists: WordList[];
   ready = false;
   selected: WordList;
@@ -56,8 +57,12 @@ export class WordLists implements OnInit {
     this.wordsInList = this.selected.count;
   }
 
-  start() {
-    this.selectedList.emit(this.selected._id);
+  start(exerciseTpe: string) {
+    this.selectedUserList.emit({
+      selected: this.selected,
+      exerciseTpe: exerciseTpe,
+      listTpe: this.tpe
+    });
   }
 
 }
