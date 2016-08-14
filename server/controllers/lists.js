@@ -1,4 +1,5 @@
 var mongo = require('mongodb'),
+    answers = require("./answers"),
     async = require('async');
 
 var loadUserLists = function(db, options, callback) {
@@ -26,7 +27,6 @@ var loadAutoLists = function(db, options, callback) {
     id:3,
     name:'Reeds geteste woorden',
     filter: {userId:options.userId}
-
   }];
 
   var loadAutoList = function(tpe, callback) {
@@ -44,7 +44,7 @@ var loadAutoLists = function(db, options, callback) {
           .count({userId:options.userId}, function(err, doneCount) {
             lists.push({
               name:'Nog niet geteste woorden', 
-              id:4, 
+              id:5, 
               count:allCount - doneCount
             });
             callback();
@@ -52,9 +52,22 @@ var loadAutoLists = function(db, options, callback) {
       });
   }
 
+  var loadAutoListLowPercentage = function(callback) {
+    answers.getPercentageWordCount({userId:options.userId}, function(count){
+      lists.push({
+              name:'Woorden met lage score (<60%)', 
+              id:4, 
+              count:count
+            });
+            callback();
+    })
+  }
+
   async.eachSeries(listTpes, loadAutoList, function (err) {
-    loadAutoListNotLearned(function(err){
-      callback(lists);
+    loadAutoListLowPercentage(function(err){
+      loadAutoListNotLearned(function(err){
+        callback(lists);
+      })
     })
   });
 }

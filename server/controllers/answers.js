@@ -42,6 +42,42 @@ var getWordIds = function(db, filter, callback) {
     })
 }
 
+var getWordIdsAbovePercentage = function(db, filter, callback) {
+
+db.collection('answers').aggregate([
+  {$match:filter},
+  {$project:{
+    wordId:1,
+    cor:{$cond:{
+      if:{$gt:['$total.correct',0]}, 
+      then:'$total.correct', 
+      else:0}},
+    incor:{$cond:{
+      if:{$gt:['$total.incorrect',0]}, 
+      then:'$total.incorrect', 
+      else:0}}
+  }},
+  {$project:{
+    _id:0,
+    wordId:1,
+    perc: {
+      $cond:{
+        if:{$gt:['$incor',0]}, 
+        then:{$divide: ['$cor', {$add:['$incor','$cor']}]}, 
+        else: 1
+      }
+    },
+  }},
+  {$match:{perc:{$lt:0.6}}},
+  {$sort:{perc:1}}
+], function(err, docs) {
+  console.log(docs);
+  callback(docs);
+})
+
+}
+
+
 var hasAnswerById = function(db, id, userId, callback) {
   db.collection('answers')
     .count({_id:id,userId:userId}, function(err, count) {
@@ -140,6 +176,24 @@ module.exports = {
     }
     getWordIds(mongo.DB, filter, function(ids){
       callback(makeIdArray(ids));
+    })
+  },
+  getPercentageWordIds: function(options, callback) {
+    var filter = {
+      userId:options.userId,
+      total:{$exists:true}
+    }
+    getWordIdsAbovePercentage(mongo.DB, filter, function(ids){
+      callback(makeIdArray(ids));
+    })
+  },
+  getPercentageWordCount: function(options, callback) {
+    var filter = {
+      userId:options.userId,
+      total:{$exists:true}
+    }
+    getWordIdsAbovePercentage(mongo.DB, filter, function(ids){
+      callback(ids.length);
     })
   },
   hasAnswer: function(id, userId, callback) {

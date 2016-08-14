@@ -16,7 +16,9 @@ export const TPES:FilterOption[] = [
   {label:'Voornaamwoord', val: 'pronoun'},
   {label:'Eigennaam', val: 'propernoun'},
   {label:'Telwoord', val: 'numeral'},
-  {label:'Partikel', val: 'part'}
+  {label:'Partikel', val: 'part'},
+  {label:'Uitdrukking', val: 'phrase'}
+
 ];
 export const GENUS:FilterOption[] = [
   {label:'Ma', val: 'Ma'},

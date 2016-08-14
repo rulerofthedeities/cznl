@@ -57,6 +57,12 @@ var getAutoListWords = function(db, options, callback) {
         callback(ids);
       });
     break;
+    case "4": 
+      //get all answers with %<60 for this user
+      answers.getPercentageWordIds(options, function(ids){
+        callback(ids);
+      });
+    break;
     default: callback(null);
   }
 }
@@ -191,7 +197,7 @@ module.exports = {
       } else if (req.query.autoid) {
         //Get words for automated list
         var autoid = parseInt(req.query.autoid);
-        if (autoid < 4) {
+        if (autoid < 5) {
           getAutoListWords(mongo.DB, options, function(ids) {
             options.ids = ids;
               options.answers = true;
