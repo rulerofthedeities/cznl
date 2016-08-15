@@ -1,0 +1,86 @@
+<div class="review-list row" *ngIf="ready">
+  <div class="col-sm-7">
+    <ul class="list-group">
+      <li 
+        *ngFor="let word of words;let i = index;"
+        class="list-group-item"
+        (mouseover)="onSelected(i)"
+        [ngClass]="{active:selected == i}">
+        <div class="pull-left no">
+          <span
+            class="fa pull-left" 
+            style="margin-top:3px;"
+            [ngClass]="{
+              'fa-check':word.answer.correct===true,
+              'fa-times':word.answer.correct===false,
+              'fa-circle-o':isUndefined(word.answer.correct)}"
+            [ngStyle]="{'color': getColor(word.answer.correct)}">
+          </span>
+          <span>{{i + 1}}.</span>
+        </div>
+        <div class="pull-left">
+            <div class="word">
+              <span class="genus" *ngIf="word.cz.article && settings.lanDir=='cznl' && settings.showPronoun">
+                {{word.cz.article}}
+              </span>
+              {{settings.lanDir=="cznl" ? word.cz.word : word.nl.word}}
+              <span class="genus" *ngIf="word.cz.genus && settings.lanDir=='cznl'">
+                ({{word.cz.genus}})
+              </span>
+            </div>
+            <div class="pull-left small">
+              <em 
+                getFilterValue 
+                [value]="word.tpe" 
+                [tpe]="'tpes'">
+              </em>
+            </div>
+        </div>
+        <add-to-list [word]="word"></add-to-list>
+        <div class="clearfix"></div>
+      </li>
+    </ul> 
+  </div>  
+
+  <div class="col-sm-5">
+    <ul class="list-group translation">
+      <li 
+        *ngFor="let word of words;let i = index;"
+        class="list-group-item">
+        <div *ngIf="selected===i" class="word">
+          <span class="genus" *ngIf="translation.article">
+            {{translation.article}}
+          </span>
+          {{translation.word}}
+          <span class="genus" *ngIf="(translation.genus || translation.aspect) && settings.lanDir=='nlcz'">
+            ({{translation.genus}}{{translation.aspect}})
+          </span>
+          <span class="case" *ngIf="translation.case && settings.lanDir=='nlcz'">
+            +<span 
+              getFilterValue
+              [value]="translation.case"
+              [tpe]="'cases'">
+            </span>
+          </span>
+          <div class="subword" *ngIf="translation.firstpersonsingular">{{translation.firstpersonsingular}}</div>
+        </div>
+      </li>
+    </ul>
+
+  </div>
+</div>
+<div class="clearfix"></div>
+<div class="buttons center-block">
+  <button 
+    class="btn btn-success btn-lg btn-block"
+    (click)="doRestart()">
+    <span class="fa fa-play"></span>
+    Test deze lijst
+  </button>
+  <button 
+    class="btn btn-success btn-lg btn-block"
+    (click)="doNewTest()">
+    <span class="fa fa-file-o"></span>
+    Nieuwe test
+  </button>
+</div>

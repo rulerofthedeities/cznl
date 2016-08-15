@@ -7,6 +7,7 @@ export interface Word {
   otherwords?: string[];
   firstpersonsingular?: string;
   info?: string;
+  aspect?:string;
 }
 
 export interface Answer {

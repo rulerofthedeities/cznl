@@ -1,7 +1,7 @@
 import {Component, Input, Output, OnInit, EventEmitter} from '@angular/core';
 import {AddToList} from './wordlists/add-to-list.component';
 import {GetFilterValue} from '../directives/get-filter-value.directive';
-import {WordPair} from '../models/word.model';
+import {WordPair, Word} from '../models/word.model';
 import {AllSettings} from '../models/settings.model';
 import {RestartService} from '../services/restart.service';
 import {SettingsService} from '../services/settings.service';
@@ -9,98 +9,12 @@ import {SettingsService} from '../services/settings.service';
 @Component({
   selector: 'review',
   directives: [AddToList, GetFilterValue],
-  template: `
-  <div class="review-list row" *ngIf="ready">
-    <div class="col-sm-7">
-      <ul class="list-group">
-        <li 
-          *ngFor="let word of words;let i = index;"
-          class="list-group-item"
-          (mouseover)="onSelected(i)"
-          [ngClass]="{active:selected == i}">
-          <div class="pull-left no">
-            <span
-              class="fa pull-left" 
-              style="margin-top:3px;"
-              [ngClass]="{
-                'fa-check':word.answer.correct===true,
-                'fa-times':word.answer.correct===false,
-                'fa-circle-o':isUndefined(word.answer.correct)}"
-              [ngStyle]="{'color': getColor(word.answer.correct)}">
-            </span>
-            <span>{{i + 1}}.</span>
-          </div>
-          <div class="pull-left">
-              <div class="word">
-                <span class="genus" *ngIf="word.cz.article && settings.lanDir=='cznl' && settings.showPronoun">
-                  {{word.cz.article}}
-                </span>
-                {{settings.lanDir=="cznl" ? word.cz.word : word.nl.word}}
-                <span class="genus" *ngIf="word.cz.genus && settings.lanDir=='cznl'">
-                  ({{word.cz.genus}})
-                </span>
-              </div>
-              <div class="pull-left small">
-                <em 
-                  getFilterValue 
-                  [value]="word.tpe" 
-                  [tpe]="'tpes'">
-                </em>
-              </div>
-          </div>
-          <add-to-list [word]="word"></add-to-list>
-          <div class="clearfix"></div>
-        </li>
-      </ul> 
-    </div>  
-
-    <div class="col-sm-5">
-      <ul class="list-group text-center translation">
-        <li 
-          *ngFor="let word of words;let i = index;"
-          class="list-group-item">
-          <div *ngIf="selected===i" class="word text-center">
-            <span class="genus" *ngIf="translation.article">
-              {{translation.article}}
-            </span>
-            {{translation.word}}
-            <span class="genus" *ngIf="translation.genus && settings.lanDir=='nlcz'">
-              ({{translation.genus}})
-            </span>
-            <span class="case" *ngIf="translation.case && settings.lanDir=='nlcz'">
-              +<span 
-                getFilterValue
-                [value]="translation.case"
-                [tpe]="'cases'">
-              </span>
-            </span>
-          </div>
-        </li>
-      </ul>
-
-    </div>
-  </div>
-  <div class="clearfix"></div>
-  <div class="buttons center-block">
-    <button 
-      class="btn btn-success btn-lg btn-block"
-      (click)="doRestart()">
-      <span class="fa fa-play"></span>
-      Test deze lijst
-    </button>
-    <button 
-      class="btn btn-success btn-lg btn-block"
-      (click)="doNewTest()">
-      <span class="fa fa-file-o"></span>
-      Nieuwe test
-    </button>
-  </div>
-  `,
+  templateUrl: '/client/components/review.component.html',
   styles:[`
   .buttons {max-width: 240px;}
   .word {font-size:28px;}
   .translation .word {font-size:36px;}
-  .genus {font-size:14px;}
+  .genus,.subword {font-size:14px;}
   li{height:80px;}
   .translation .list-group-item{border:0;}
   li .fa {width: 40px;}
@@ -114,7 +28,7 @@ export class Review implements OnInit {
   @Input() words: WordPair[];
   @Output() restart = new EventEmitter();
   selected: number;
-  translation = {word:'', genus:'', case:'', article:''};
+  translation: Word = {word:'', article:'',genus:''};
   ready = false;
   settings: AllSettings;
 
@@ -145,11 +59,7 @@ export class Review implements OnInit {
   }
 
   isUndefined(correct: boolean): boolean {
-    if (typeof correct === 'undefined') {
-      return true;
-    } else {
-      return false;
-    }
+    return (typeof correct === 'undefined');
   }
 
   getColor(correct: boolean) : string {
@@ -161,13 +71,19 @@ export class Review implements OnInit {
   }
 
   onSelected(i: number) {
-    let word = this.settings.lanDir === 'cznl' ? this.words[i].nl : this.words[i].cz;
+    //console.log('all', this.words[i]);
+    //console.log('nl', this.words[i].nl);
+    //console.log('cz', this.words[i].cz);
+    let word = this.words[i];
+    let tgtword = this.settings.lanDir === 'cznl' ? word.nl : word.cz;
     this.selected = i;
-    this.translation.word = word.word;
-    this.translation.genus = word.genus;
-    this.translation.case = word.case;
+    this.translation.word = tgtword.word;
+    this.translation.genus = tgtword.genus;
+    this.translation.case = tgtword.case;
+    this.translation.aspect = word.tpe === 'verb' ? 'impf' : '';
+    this.translation.firstpersonsingular = word.tpe === 'verb' ? tgtword.firstpersonsingular : '';
     if (this.settings.showPronoun) {
-      this.translation.article = word.article;
+      this.translation.article = tgtword.article;
     }
   }
 }
