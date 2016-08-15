@@ -1,13 +1,10 @@
 import {Component} from '@angular/core';
-import {GetKeyPress} from '../../directives/get-key-pressed.directive';
 import {WordPair, Answer} from '../../models/word.model';
 import {WordlistService} from '../../services/wordlists.service';
 import {WordList} from '../../models/list.model';
-import {EditList} from './edit-list.component';
 
 @Component({
     selector: 'show-lists',
-    directives: [GetKeyPress, EditList],
     templateUrl: 'client/components/wordlists/show-lists.component.html',
     styleUrls:['client/components/wordlists/word-list.css'],
     styles:[`

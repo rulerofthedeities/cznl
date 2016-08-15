@@ -1,17 +1,4 @@
-import {bootstrap}    from '@angular/platform-browser-dynamic';
-import {AppComponent} from './components/app.component';
-import {HTTP_PROVIDERS} from '@angular/http';
-import {LocationStrategy, HashLocationStrategy} from '@angular/common';
-import {appRouterProviders} from './components/routes.component';
-import {SettingsService} from './services/settings.service';
-import {disableDeprecatedForms, provideForms} from '@angular/forms';
-import {provide} from '@angular/core';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import {AppModule} from './app.module';
 
-bootstrap(AppComponent, [
-  HTTP_PROVIDERS,
-  disableDeprecatedForms(),
-  provideForms(),
-	appRouterProviders,
-  provide(LocationStrategy, {useClass: HashLocationStrategy}),
-  SettingsService])
-.catch(err => console.error(err));
+platformBrowserDynamic().bootstrapModule(AppModule);

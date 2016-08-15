@@ -1,6 +1,4 @@
 import {Component, Input, Output, OnInit, EventEmitter} from '@angular/core';
-import {AddToList} from './wordlists/add-to-list.component';
-import {GetFilterValue} from '../directives/get-filter-value.directive';
 import {WordPair, Word} from '../models/word.model';
 import {AllSettings} from '../models/settings.model';
 import {RestartService} from '../services/restart.service';
@@ -8,7 +6,6 @@ import {SettingsService} from '../services/settings.service';
 
 @Component({
   selector: 'review',
-  directives: [AddToList, GetFilterValue],
   templateUrl: '/client/components/review.component.html',
   styles:[`
   .buttons {max-width: 240px;}

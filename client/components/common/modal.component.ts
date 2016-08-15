@@ -1,9 +1,7 @@
 import {Component, Input} from '@angular/core';
-import {GetKeyPress} from '../../directives/get-key-pressed.directive';
 
 @Component({
   selector: 'simple-modal',
-  directives: [GetKeyPress],
   template: `
     <key pressed
       key="Escape" 

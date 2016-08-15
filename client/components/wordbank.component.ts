@@ -1,12 +1,10 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {WordService} from '../services/words.service';
-import {EditWord} from './edit-word.component';
 import {FilterWord} from '../models/filters.model';
 import {WordPair} from '../models/word.model';
 import {Subscription} from 'rxjs/Subscription';
 
 @Component({
-  directives: [EditWord],
   template: `
     <div class="form-inline">
       <div class="form-group">

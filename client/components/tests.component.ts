@@ -1,19 +1,13 @@
 import {Component, OnDestroy} from '@angular/core';
 import {Filter} from './filter.component';
-import {Cards} from './cards/cards.component';
-import {Review} from './review.component';
-import {WordLists} from './wordlists/wordlists.component';
 import {WordPair} from '../models/word.model';
 import {Filter as FilterModel} from '../models/filters.model';
 import {WordService} from '../services/words.service';
-import {WordlistService} from '../services/wordlists.service';
 import {RestartService} from '../services/restart.service';
 import {Subscription}   from 'rxjs/Subscription';
 import {shuffle} from '../utils/utils';
 
 @Component({
-  directives: [Filter, Cards, Review, WordLists],
-  providers: [WordService, WordlistService],
   template:`
   <div class="row">
     <div *ngIf="!started" class="col-xs-4">

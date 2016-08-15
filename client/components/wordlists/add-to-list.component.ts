@@ -4,7 +4,6 @@ import {WordPair} from '../../models/word.model';
 
 @Component({
   selector: 'add-to-list',
-  directives: [ShowLists],
   template: `
     <div 
       class="fa pull-right"

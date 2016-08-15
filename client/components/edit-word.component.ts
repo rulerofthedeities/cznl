@@ -4,13 +4,10 @@ import {WordService} from '../services/words.service';
 import {ErrorObject} from '../models/word.model';
 import {WordPair} from '../models/word.model';
 import {Subscription} from 'rxjs/Subscription';
-import {
-  FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES,
-  FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
 
 @Component({
   selector: 'edit-word',
-  directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES],
   templateUrl:'/client/components/edit-word.component.html',
   styles:[`
     input.ng-dirty.ng-invalid {

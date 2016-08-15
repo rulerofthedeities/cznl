@@ -1,10 +1,9 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {ROUTER_DIRECTIVES, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {Subscription}   from 'rxjs/Subscription';
 
 @Component({
   selector: 'menu',
-  directives: [ROUTER_DIRECTIVES],
   template: `
     <nav>
       <ul class="nav nav-pills">

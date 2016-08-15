@@ -1,16 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {SettingsService} from '../../services/settings.service';
-import {CardItem} from './card-item.component';
-import {CardScore} from './card-score.component';
-import {Review} from '../review.component';
 import {WordPair} from '../../models/word.model';
 import {shuffle} from '../../utils/utils';
 import {Subscription}   from 'rxjs/Subscription';
 
 @Component({
   selector: 'cards',
-  directives: [CardItem, CardScore, Review],
-  providers: [SettingsService],
   template: `
     <div>
       <div 

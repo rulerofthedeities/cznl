@@ -1,14 +1,7 @@
 import {Component} from '@angular/core';
-import {ROUTER_DIRECTIVES} from '@angular/router';
-import {Menu} from './menu.component';
-import {RestartService} from '../services/restart.service';
-import {FilterService} from '../services/filters.service';
-import {WordService} from '../services/words.service';
 
 @Component({
   selector: 'cz',
-  directives: [ROUTER_DIRECTIVES, Menu],
-  providers: [RestartService, FilterService, WordService],
   template: `
     <div class="container">
       <div class="panel-top">
@@ -31,6 +24,5 @@ import {WordService} from '../services/words.service';
       }
     `]
 })
-export class AppComponent {
 
-}
+export class AppComponent {}
