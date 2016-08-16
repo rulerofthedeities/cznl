@@ -88,7 +88,7 @@ export class EditWord implements OnInit, OnDestroy {
   _saveWord(form: any): void {
     this.wordService.addWord(form).then(word => {
       let wordPair: WordPair = word['word'];
-      this.submitMessage = `Het woord ${wordPair['cz.word']}/${wordPair['nl.word']} is succesvol opgeslagen.`;
+      this.submitMessage = `Het woord ${wordPair.cz.word}/${wordPair.nl.word} is succesvol opgeslagen.`;
       this.disableSubmit = true;
       this.isNew = false;
     });
@@ -97,7 +97,7 @@ export class EditWord implements OnInit, OnDestroy {
   _updateWord(form: any): void {
     this.wordService.updateWord(form).then(word => {
       let wordPair: WordPair = word['word'];
-      this.submitMessage = `Het woord ${wordPair['cz.word']}/${wordPair['nl.word']} is succesvol aangepast.`;
+      this.submitMessage = `Het woord ${wordPair.cz.word}/${wordPair.nl.word} is succesvol aangepast.`;
       this.disableSubmit = true;
       this.isNew = false;
     });
