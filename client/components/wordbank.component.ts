@@ -72,6 +72,8 @@ export class WordBank implements OnInit, OnDestroy {
       start:start
     };
     this.getWords(filter);
+    this.selected = null;
+    this.editing = null;
   }
 
   editWord(word: WordPair, i) {
