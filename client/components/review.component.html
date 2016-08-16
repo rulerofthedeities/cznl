@@ -21,9 +21,10 @@
         <div class="pull-left">
             <div class="word">
               <span class="genus" *ngIf="word.cz.article && settings.lanDir=='cznl' && settings.showPronoun">
-                {{word.cz.article}}
               </span>
-              {{settings.lanDir=="cznl" ? word.cz.word : word.nl.word}}
+              <span>
+                {{settings.lanDir==="cznl" ? word.cz.word : word.nl.word}}
+              </span>
               <span class="genus" *ngIf="word.cz.genus && settings.lanDir=='cznl'">
                 ({{word.cz.genus}})
               </span>
@@ -51,7 +52,11 @@
           <span class="genus" *ngIf="translation.article">
             {{translation.article}}
           </span>
-          {{translation.word}}
+          <span genusColor 
+            [genus]="word.cz.genus" 
+            [tpe]="word.tpe">
+            {{translation.word}}
+          </span>
           <span class="genus" *ngIf="(translation.genus || translation.aspect) && settings.lanDir=='nlcz'">
             ({{translation.genus}}{{translation.aspect}})
           </span>

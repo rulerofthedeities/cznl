@@ -25,6 +25,7 @@ import {CardScore} from './components/cards/card-score.component';
 
 import {GetFilterValue} from './directives/get-filter-value.directive';
 import {GetKeyPress} from './directives/get-key-pressed.directive';
+import {GenusColor} from './directives/show-color.directive';
 
 import {WordService} from './services/words.service';
 import {WordlistService} from './services/wordlists.service';
@@ -67,7 +68,8 @@ import {RestartService} from './services/restart.service';
     CardItem,
     CardScore,
     GetFilterValue,
-    GetKeyPress
+    GetKeyPress,
+    GenusColor
   ],
   bootstrap: [ AppComponent ]
 })

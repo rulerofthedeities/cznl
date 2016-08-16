@@ -222,7 +222,7 @@ export class WordService {
       case 'Ma':
       case 'Mi': article = 'ten'; break;
       case 'F': article = 'ta'; break;
-      case 'O': article = 'to'; break;
+      case 'N': article = 'to'; break;
       default: article = '';
     }
 

@@ -31,7 +31,8 @@ var updateSettings = function(db, data, options, callback) {
       set = {all:{
         maxWords:data.maxWords, 
         lanDir:data.lanDir,
-        showPronoun:data.showPronoun}, 
+        showPronoun:data.showPronoun,
+        showColors:data.showColors}, 
         dt: new Date()};
       break;
     case "filter":
