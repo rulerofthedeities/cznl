@@ -16,6 +16,7 @@ var loadWords = function(db, options, callback) {
   db.collection('wordpairs')
     .find(filter)
     .limit(options.maxwords)
+    .sort({'cz.word':1})
     .toArray(function(err, docs) {
       //Fetch answer and list for each word for this user
       var wordIds = [];

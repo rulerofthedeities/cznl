@@ -24,7 +24,7 @@ import {Subscription} from 'rxjs/Subscription';
       </button>
     <div class="text-muted">Aantal woorden: <strong>{{totalWords}}</strong></div>
     </div>
-    <ul class="list-group col-xs-2"
+    <ul class="list-group col-xs-2 scroll"
         on-mouseout="deselectWord()">
       <li *ngFor="let word of words; let i = index" 
           class="list-group-item"
@@ -42,11 +42,12 @@ import {Subscription} from 'rxjs/Subscription';
   styles: [`
     li {cursor:pointer;}
     .over {color:blue;}
+    .scroll {overflow: auto;height: 100%;}
   `]
 })
 
 export class WordBank implements OnInit, OnDestroy {
-  maxWords = 100;
+  maxWords = 1000;
   words: WordPair[];
   selected: number; //shown on mouseover
   editing: number; //shown on clicked
