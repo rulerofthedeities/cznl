@@ -5,7 +5,7 @@
   #settingsForm="ngForm">
 
     <div class="row form-group col-md-6 col-md-offset-3">
-      <label for="maxWords"># of words:</label>
+      <label for="maxWords">Aantal woorden per test:</label>
       <select 
         class="form-control" 
         name="maxWords"
@@ -18,7 +18,7 @@
     </div>
 
     <div class="row form-group col-md-6 col-md-offset-3">
-      <label for="landir">Language direction:</label>
+      <label for="landir">Taalrichting:</label>
       <select 
         class="form-control"
         name="landir"
@@ -58,5 +58,5 @@
 </form>
 
 <div [hidden]="!isSubmitted">
-  <strong>New settings saved</strong>
+  <info-msg>De nieuwe instellingen zijn opgeslagen</info-msg>
 </div>

@@ -29,7 +29,6 @@ export class GenusColor implements OnInit {
       case 'ma': color = 'dodgerBlue'; break;
       case 'n': color = 'green'; break;
       default: color = 'black';
-
     }
     this.el.nativeElement.style.color = color;
   }
@@ -37,7 +36,7 @@ export class GenusColor implements OnInit {
   _getSettings() {
     this.settingsService.getAppSettings().then(
       settings => {
-        if (settings.all.showColors && settings.lanDir==='cznl') {
+        if (settings.all.showColors) {
           this._showGenusColors();
         }
       }

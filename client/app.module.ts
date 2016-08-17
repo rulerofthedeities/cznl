@@ -22,6 +22,7 @@ import {EditList} from './components/wordlists/edit-list.component';
 import {ShowLists} from './components/wordlists/show-lists.component';
 import {CardItem} from './components/cards/card-item.component';
 import {CardScore} from './components/cards/card-score.component';
+import {InfoMessage} from './components/common/info-message.component';
 
 import {GetFilterValue} from './directives/get-filter-value.directive';
 import {GetKeyPress} from './directives/get-key-pressed.directive';
@@ -67,6 +68,7 @@ import {RestartService} from './services/restart.service';
     ShowLists,
     CardItem,
     CardScore,
+    InfoMessage,
     GetFilterValue,
     GetKeyPress,
     GenusColor

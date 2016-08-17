@@ -16,7 +16,7 @@ import {shuffle} from '../utils/utils';
           (click)="selectListType('filter')"
           class="btn"
           [ngClass]="{'btn-primary':listType==='filter'}">
-          Willekeurige woordenlijst
+          Filter woordenlijst
         </li>
         <li 
           (click)="selectListType('dynamic')"

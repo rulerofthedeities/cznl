@@ -42,7 +42,7 @@ export class Menu implements OnInit, OnDestroy {
     this.routes = [
       {path:'/tests', label:'Oefeningen', glyph:'list-alt'},
       {path:'/words', label:'Woorden', glyph:'plus'},
-      {path:'/settings', label:'Settings', glyph:'cog'}
+      {path:'/settings', label:'Instellingen', glyph:'cog'}
     ];
     this.subscription = this.router.events.subscribe(event => this.url = event.url);
   }
