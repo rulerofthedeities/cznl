@@ -53,7 +53,7 @@
             {{translation.article}}
           </span>
           <span genusColor 
-            [genus]="word.cz.genus" 
+            [genus]="translation.genus" 
             [tpe]="word.tpe">
             {{translation.word}}
           </span>
@@ -67,7 +67,29 @@
               [tpe]="'cases'">
             </span>
           </span>
-          <div class="subword" *ngIf="translation.firstpersonsingular">{{translation.firstpersonsingular}}</div>
+          <div class="subword" *ngIf="translation.firstpersonsingular">
+            {{translation.firstpersonsingular}}
+          </div>
+        </div>
+        <!-- Perfective aspect -->
+        <div 
+          *ngIf="translationPf && (selected===i-1 || (selected===words.length - 1 && selected===i+1))" class="word">
+          <span>
+            {{translationPf.word}}
+          </span>
+          <span class="genus" *ngIf="(translationPf.genus || translation.aspect) && settings.lanDir=='nlcz'">
+            ({{translationPf.genus}}{{translationPf.aspect}})
+          </span>
+          <span class="case" *ngIf="translationPf.case">
+            +<span 
+              getFilterValue
+              [value]="translationPf.case"
+              [tpe]="'cases'">
+            </span>
+          </span>
+          <div class="subword" *ngIf="translationPf.firstpersonsingular">
+            {{translationPf.firstpersonsingular}}
+          </div> 
         </div>
       </li>
     </ul>

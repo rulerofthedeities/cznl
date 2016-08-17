@@ -26,6 +26,7 @@ export class Review implements OnInit {
   @Output() restart = new EventEmitter();
   selected: number;
   translation: Word = {word:'', article:'',genus:''};
+  translationPf: Word = null;
   ready = false;
   settings: AllSettings;
 
@@ -68,19 +69,28 @@ export class Review implements OnInit {
   }
 
   onSelected(i: number) {
-    //console.log('all', this.words[i]);
-    //console.log('nl', this.words[i].nl);
-    //console.log('cz', this.words[i].cz);
     let word = this.words[i];
     let tgtword = this.settings.lanDir === 'cznl' ? word.nl : word.cz;
     this.selected = i;
     this.translation.word = tgtword.word;
-    this.translation.genus = tgtword.genus;
+    this.translation.genus = this.settings.lanDir === 'cznl' ? '' : tgtword.genus;
     this.translation.case = tgtword.case;
     this.translation.aspect = word.tpe === 'verb' ? 'impf' : '';
     this.translation.firstpersonsingular = word.tpe === 'verb' ? tgtword.firstpersonsingular : '';
     if (this.settings.showPronoun) {
       this.translation.article = tgtword.article;
+    }
+    this.translationPf = null;
+    if (word.tpe==='verb' && this.settings.lanDir === 'nlcz') {
+      //Show perfective for this verb
+      tgtword = this.words[i].czP;
+      if (tgtword) {
+        this.translationPf = {word:'', article:'',genus:''};
+        this.translationPf.word = tgtword.word;
+        this.translationPf.case = tgtword.case;
+        this.translationPf.firstpersonsingular = tgtword.firstpersonsingular;
+        this.translationPf.aspect = 'pf';
+      }
     }
   }
 }
