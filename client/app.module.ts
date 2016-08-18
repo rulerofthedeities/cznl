@@ -21,6 +21,7 @@ import {AddToList} from './components/wordlists/add-to-list.component';
 import {EditList} from './components/wordlists/edit-list.component';
 import {ShowLists} from './components/wordlists/show-lists.component';
 import {CardItem} from './components/cards/card-item.component';
+import {CardItemAnswer} from './components/cards/card-item-answer.component';
 import {CardScore} from './components/cards/card-score.component';
 import {InfoMessage} from './components/common/info-message.component';
 
@@ -67,6 +68,7 @@ import {RestartService} from './services/restart.service';
     EditList,
     ShowLists,
     CardItem,
+    CardItemAnswer,
     CardScore,
     InfoMessage,
     GetFilterValue,

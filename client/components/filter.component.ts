@@ -57,7 +57,7 @@ import {Filter as FilterModel} from '../models/filters.model';
             [disabled]="totalWords < 1"
             (click)="start('review', level.value, wordtpe.value, cats.value)">
           <span class="fa fa-play"></span>
-            Toon Overzicht
+            Bereid test voor
           </button>
         </div>
       </li>

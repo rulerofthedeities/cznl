@@ -86,9 +86,7 @@ export class Cards implements OnInit {
     let card:WordPair = this.cards[this.cardsIndex - 1];
     if (!card.answer) {
       card.answer = {_id:card._id};
-      console.log('no answer');
     }
-    console.log(card);
     this.cards[this.cardsIndex - 1].answer.correct = isCorrect;
     this.getNextCard();
     if (isCorrect) {

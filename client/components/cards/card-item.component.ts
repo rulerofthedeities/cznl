@@ -10,6 +10,8 @@ import {WordService} from '../../services/words.service';
       <add-to-list
         [word]="card"
       ></add-to-list>
+
+<!-- Question -->
       <div 
         *ngIf="isQuestion"
         (click)="turnCard()"
@@ -22,18 +24,27 @@ import {WordService} from '../../services/words.service';
           [value]="card.tpe" 
           [tpe]="'tpes'">
         </em>
+        <div class="text-info" *ngIf="cardData.hint">hint: {{cardData.hint}}</div>
       </div>
+
+<!-- Answer -->
       <div *ngIf="!isQuestion" class="answer">
-        <div class="wordwrapper center-block">
-            <div class="word" *ngIf="settings.showPronoun">{{cardData.article}}</div>
-            <h2 class="word">
-              <span genusColor
-              [genus]="cardData.genus" 
-              [tpe]="card.tpe">
-                {{cardData.word}}
-              </span>
-            </h2>
+        <card-answer 
+          [cardData]="cardData"
+          [tpe]="card.tpe"
+          [showPronoun]="settings.showPronoun">
+        </card-answer>
+
+<!-- Perfective aspect -->
+        <div class="clearfix" *ngIf="this.cardDataPf">
+          <card-answer 
+            [cardData]="cardDataPf"
+            [tpe]="card.tpe"
+            [showPronoun]="false">
+          </card-answer>
         </div>
+
+<!-- Buttons -->
         <div class="clearfix">
           <div 
             class="btn btn-success btn-sm pull-right" 
@@ -56,6 +67,7 @@ export class CardItem implements OnChanges {
   @Output() cardAnswered = new EventEmitter();
   isQuestion = true;
   cardData: Word;
+  cardDataPf: Word;
 
   constructor(private wordService: WordService) {}
 
@@ -78,7 +90,19 @@ export class CardItem implements OnChanges {
     if (this.isQuestion) {
       this.cardData = this.settings.lanDir === 'cznl' ? this.card.cz : this.card.nl;
     } else {
-      this.cardData = this.settings.lanDir === 'cznl' ? this.card.nl : this.card.cz;
+      this.cardDataPf = null;
+      if (this.settings.lanDir === 'cznl') {
+        this.cardData = this.card.nl;
+      } else {
+        this.cardData = this.card.cz;
+        if(this.card.tpe === 'verb') {
+          this.cardData.aspect = 'impf';
+          this.cardDataPf = this.card.czP;
+          if (this.cardDataPf) {
+            this.cardDataPf.aspect = 'pf';
+          }
+        }
+      }
     }
   }
 

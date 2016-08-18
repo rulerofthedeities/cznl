@@ -10,32 +10,49 @@ var countWords = function(db, options, callback) {
   })
 }
 
-var loadWords = function(db, options, callback) {
+var loadFilterWords = function(db, options, callback) {
   var filter = buildFilter(options);
-  //Fetch words + their answer and lists for the user
+
   db.collection('wordpairs')
     .find(filter)
     .limit(options.maxwords)
     .sort({'cz.word':1})
     .toArray(function(err, docs) {
-      //Fetch answer and list for each word for this user
-      var wordIds = [];
-      if (docs) {
-        docs.forEach(function(doc){
-          wordIds.push(doc._id.toString());
-        })
-      }
+      callback(docs);
+    });
+}
 
-      if (options.answers) {
-        answers.getAnswersInDoc(options.userId, wordIds, function(answers){
-          //Map answers to docs
-          callback(docs, answers);
-        })
-      } else {
-        callback(docs);
-      }
-      
+var loadWords = function(db, options, callback) {
+  var filter = buildFilter(options);
+  //Fetch words + their answer and lists for the user (note: $sample requires v3.2)
+  db.collection('wordpairs')
+    .aggregate([
+      {$match:filter},
+      {$sample:{size:options.maxwords}},
+      {$limit:options.maxwords}
+    ])
+    .toArray(function(err, docs) {
+      fetchAnswer(docs, options, callback);
     })
+}
+
+//Fetch answer and list for each word for this user
+var fetchAnswer = function(docs, options, callback) {
+  var wordIds = [];
+  if (docs) {
+    docs.forEach(function(doc){
+      wordIds.push(doc._id.toString());
+    })
+  }
+
+  if (options.answers) {
+    answers.getAnswersInDoc(options.userId, wordIds, function(answers){
+      //Map answers to docs
+      callback(docs, answers);
+    })
+  } else {
+    callback(docs);
+  }
 }
 
 var getAutoListWords = function(db, options, callback) {
@@ -214,9 +231,16 @@ module.exports = {
         }
       } else {
         //Get words with filter data
-        loadWords(mongo.DB, options, function(docs, answers){
-          res.status(200).send({"words": docs, "answers": answers});
-        });
+        if (options.isWordFilter){
+          loadFilterWords(mongo.DB, options, function(docs){
+            res.status(200).send({"words": docs});
+          });
+        } else {
+          //get words randomized
+          loadWords(mongo.DB, options, function(docs, answers){
+            res.status(200).send({"words": docs, "answers": answers});
+          });
+        }
       }
     }
   },

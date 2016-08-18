@@ -71,7 +71,6 @@ db.collection('answers').aggregate([
   {$match:{perc:{$lt:0.6}}},
   {$sort:{perc:1}}
 ], function(err, docs) {
-  console.log(docs);
   callback(docs);
 })
 

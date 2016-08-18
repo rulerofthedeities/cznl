@@ -3,6 +3,9 @@
   margin-top: 20px;
   margin-bottom: 20px;
 }
+.left {
+  margin-left:10%;
+}
 .word {
   display: table-cell; 
   vertical-align: bottom;
@@ -22,7 +25,7 @@ em{
   border-radius: 9px;
   border: 1px solid #ddd;
   padding: 12px;
-  max-width: 240px;
+  max-width: 300px;
 }
 .card:hover {
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
@@ -31,3 +34,5 @@ em{
 .answer .btn {margin:20px 6px 3px 3px;}
 .score .buttons {margin-top:20px;}
 .fa {margin-right:3px;}
+.case {font-size:24px;}
+.subword {font-size:14px;}
