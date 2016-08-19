@@ -100,7 +100,7 @@ export class ShowLists {
 
     //Save edited lists
     this.listsEdited.forEach(i => {
-      this.wordlistService.updateList(this.userLists[i]);
+      this.wordlistService.updateListName(this.userLists[i]);
     });
 
     //Save lists array for this particular word

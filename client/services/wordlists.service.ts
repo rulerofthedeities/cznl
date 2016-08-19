@@ -8,8 +8,8 @@ import 'rxjs/add/operator/toPromise';
 export class WordlistService {
   constructor(private http: Http) {}
 
-  getWordLists(tpe) {
-    return this.http.get('/api/wordlists/' + tpe)
+  getWordLists(listTpe: string) {
+    return this.http.get('/api/lists/' + listTpe)
       .toPromise()
       .then(response => response.json().lists)
       .catch(this.handleError);
@@ -35,7 +35,7 @@ export class WordlistService {
       .catch(this.handleError);
   }
 
-  updateList(list: WordList) {
+  updateListName(list: WordList) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return this.http
