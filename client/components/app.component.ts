@@ -9,6 +9,7 @@ import {Component} from '@angular/core';
       </div>
       <div class="panel-main">
         <router-outlet></router-outlet>
+        <error-msg></error-msg>
       </div>
     </div>`,
     styles: [`

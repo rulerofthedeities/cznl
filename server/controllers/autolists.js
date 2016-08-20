@@ -58,7 +58,7 @@ var loadAutoLists = function(db, options, callback) {
   async.eachSeries(listTpes, loadAutoList, function (err) {
     loadAutoListLowPercentage(function(err){
       loadAutoListNotLearned(function(err){
-        callback(lists);
+        callback(lists, err);
       })
     })
   });
@@ -70,8 +70,17 @@ module.exports = {
     var options = {
       userId:'demoUser'
     };
-    loadAutoLists(mongo.DB, options, function(listData){
-      res.status(200).send({"lists": listData});
+    loadAutoLists(mongo.DB, options, function(listData, err){
+      if (err) {
+        return res.status(500).json({
+          title: 'Error loading auto list',
+          error: err
+        });
+      }
+      res.status(200).json({
+        message: 'Success',
+        lists: listData
+      });
     })
   }
 }

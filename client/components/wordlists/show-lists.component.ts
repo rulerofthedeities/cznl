@@ -105,9 +105,9 @@ export class ShowLists {
         .then(update => {
           this.userlistChanged.emit(update);
         });
-      this.hideLists();
     });
 
+    this.hideLists();
   }
 
   createNewList() {

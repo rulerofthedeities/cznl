@@ -24,6 +24,7 @@ import {CardItem} from './components/cards/card-item.component';
 import {CardItemAnswer} from './components/cards/card-item-answer.component';
 import {CardScore} from './components/cards/card-score.component';
 import {InfoMessage} from './components/common/info-message.component';
+import {ErrorMessage} from './components/common/error-message.component';
 
 import {GetFilterValue} from './directives/get-filter-value.directive';
 import {GetKeyPress} from './directives/get-key-pressed.directive';
@@ -34,7 +35,7 @@ import {WordlistService} from './services/wordlists.service';
 import {SettingsService} from './services/settings.service';
 import {FilterService} from './services/filters.service';
 import {RestartService} from './services/restart.service';
-
+import {ErrorService} from './services/error.service';
 
 @NgModule({
   imports: [
@@ -50,6 +51,7 @@ import {RestartService} from './services/restart.service';
     SettingsService,
     FilterService,
     RestartService,
+    ErrorService,
     {provide: LocationStrategy, useClass: HashLocationStrategy}
   ],
   declarations: [
@@ -71,6 +73,7 @@ import {RestartService} from './services/restart.service';
     CardItemAnswer,
     CardScore,
     InfoMessage,
+    ErrorMessage,
     GetFilterValue,
     GetKeyPress,
     GenusColor

@@ -23,7 +23,7 @@ var updateListName = function(db, data, options, callback) {
   if (data.name) {
     db.collection('wordlists')
       .update(
-        {_id: mongoId, listId:options.userId},
+        {_id: listId, userId:options.userId},
         {$set:{name:data.name}}, 
         function(err, result) {
           callback(err, result);
@@ -73,24 +73,21 @@ module.exports = {
   updateList: function(req, res) {
     var options = {userId:'demoUser'};
     updateUserList(mongo.DB, req.body, options, function(err, result){
-      res.status(200).json({
-          message: 'Success',
-          obj: result
-      });
+      res.status(200).send(result);
     });
   },
   updateName: function(req, res) {
     var options = {userId:'demoUser'};
     updateListName(mongo.DB, req.body, options, function(err, result){
       if (err) {
-          return res.status(500).json({
-              title: 'Error updating list',
-              error: err
-          });
+        return res.status(500).json({
+          title: 'Error updating list',
+          error: err
+        });
       }
       res.status(200).json({
-          message: 'Success',
-          obj: result
+        message: 'Success',
+        obj: result
       });
     })
   },
