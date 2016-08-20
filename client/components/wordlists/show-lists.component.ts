@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {WordPair, Answer} from '../../models/word.model';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {WordPair} from '../../models/word.model';
 import {WordlistService} from '../../services/wordlists.service';
 import {WordList} from '../../models/list.model';
 
@@ -13,22 +13,36 @@ import {WordList} from '../../models/list.model';
 })
 
 export class ShowLists {
+  @Input() word: WordPair;
+  @Output() userlistChanged = new EventEmitter<any>();
+  userLists: WordList[];
+  isWordInList: boolean[] = [];
   isVisible = false;
   changesMade = false;
   creatingNewList = false;
   listEditing: number;
   listsEdited: number[] = [];
-  wordAnswer: Answer;
-  userLists: WordList[];
+  listsToggled: number[] = [];
 
   constructor(private wordlistService: WordlistService) {}
+
+  _checkIfWordInLists() {
+    //build array that shows which lists the current word is in
+    let filtered_list: string[], i = 0;
+    this.userLists.forEach(list => {
+      filtered_list = [];
+      if (list.wordIds) {
+        filtered_list = list.wordIds.filter(wordId => wordId === this.word._id);
+      }
+      this.isWordInList[i++] = filtered_list.length > 0;
+    });
+  }
 
   updateUserLists(word: WordPair) {
     this.wordlistService.getWordLists('user')
       .then(lists => {
         this.userLists = lists;
-        this.wordAnswer = word.answer;
-        this.wordAnswer.wordId = word._id;
+        this._checkIfWordInLists();
         this.creatingNewList = false;
         this.changesMade = false;
         this.isVisible = true;
@@ -52,39 +66,19 @@ export class ShowLists {
     this.isVisible = false;
   }
 
-  isInList(list: WordList) {
-    let isInList = false;
-    if (this.wordAnswer.listIds) {
-      let filtered_list = this.wordAnswer.listIds.filter(id => list._id === id);
-      isInList = filtered_list.length > 0;
-    }
-    return isInList;
-  }
-
-  toggleInList(list: WordList) {
-    if (this.isInList(list)) {
-      //Remove from list
-      this.wordAnswer.listIds = this.wordAnswer.listIds.filter(id => list._id !== id);
-    } else {
-      //Add to list
-      if(!this.wordAnswer.listIds) {
-        this.wordAnswer.listIds = [];
-      }
-      this.wordAnswer.listIds.push(list._id);
-    }
+  toggleInList(i: number) {
+    this.isWordInList[i] = !this.isWordInList[i];
+    this.listsToggled.push(i);
     this.changesMade = true;
   }
 
   onNewListAdded(listName: string) {
     if (listName) { // null = cancelled new list
       //add to list array
-      let newList: WordList = {
-        name: listName,
-        count: 0
-      };
+      let newList: WordList = {name: listName, count: 0};
       if (!this.userLists) { this.userLists = [];}
       this.userLists.push(newList);
-      this.toggleInList(newList);
+      this.toggleInList(this.userLists.length - 1);
       this.changesMade = true;
     }
     this.creatingNewList = false;
@@ -103,14 +97,21 @@ export class ShowLists {
       this.wordlistService.updateListName(this.userLists[i]);
     });
 
-    //Save lists array for this particular word
-    this.wordlistService.updateWordLists(this.wordAnswer);
-    this.hideLists();
+    //Edit list of words in this list
+    this.listsToggled.forEach(i => {
+      //add list , list ID, word ID
+      this.wordlistService
+        .updateWordList(this.isWordInList[i], this.userLists[i]._id, this.word._id)
+        .then(update => {
+          this.userlistChanged.emit(update);
+        });
+      this.hideLists();
+    });
+
   }
 
   createNewList() {
     this.creatingNewList = true;
   }
-
 
 }

@@ -1,6 +1,8 @@
-import {Component, Input, ViewChild} from '@angular/core';
+import {Component, Input, ViewChild, OnInit} from '@angular/core';
 import {ShowLists} from './show-lists.component';
 import {WordPair} from '../../models/word.model';
+import {WordList} from '../../models/list.model';
+import {WordlistService} from '../../services/wordlists.service';
 
 @Component({
   selector: 'add-to-list',
@@ -8,29 +10,52 @@ import {WordPair} from '../../models/word.model';
     <div 
       class="fa pull-right"
       [ngClass]="{
-        'fa-star':hasLists(word),
-        'fa-star-o':!hasLists(word)
+        'fa-star':isInList,
+        'fa-star-o':!isInList
       }"
       (click)="showModalLists()">
     </div>
-    <show-lists></show-lists>
+    <show-lists [word]="word" (userlistChanged)="onListUpdated($event)"></show-lists>
   `,
   styleUrls:['client/components/wordlists/word-list.css']
 })
 
-export class AddToList {
+export class AddToList implements OnInit {
   @Input() word: WordPair;
   @ViewChild(ShowLists) lists: ShowLists;
+  isInList = false;
+
+  constructor(private wordlistService: WordlistService) {}
+
+  ngOnInit() {
+    this.wordlistService.getWordLists('user')
+      .then(lists => {
+        this.isInList = this._checkIfInUserlist(lists);
+      });
+  }
 
   showModalLists() {
     this.lists.updateUserLists(this.word);
   }
 
-  hasLists(word: WordPair) {
-    if (this.word.answer && this.word.answer.listIds) {
-      return this.word.answer.listIds.length > 0;
-    } else {
-      return false;
+  onListUpdated(update: any) {
+    let isInList = false;
+    this.lists.isWordInList.forEach(inList => {
+      if (inList) {isInList = true;}
+    });
+    this.isInList = isInList;
+  }
+
+  private _checkIfInUserlist(lists: WordList[]): boolean {
+    let list: string[];
+    for (let i = 0; i < lists.length; i++) {
+      if (lists[i].wordIds) {
+        list = lists[i].wordIds.filter(id => this.word._id === id);
+        if (list.length > 0) {
+          return true;
+        }
+      }
     }
+    return false;
   }
 }

@@ -14,7 +14,6 @@ export interface Answer {
   _id: string;
   wordId?: string;
   correct?: boolean;
-  listIds?: string[];
 }
 
 export interface WordPair {

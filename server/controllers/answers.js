@@ -1,19 +1,22 @@
 var mongo = require('mongodb');
 
-var updateAnswers = function(db, options, data, callback) {
-  var mongoId = new mongo.ObjectID(data.wordId);
+var upsertAnswer = function(db, options, data, callback) {
+  var mongoAnswerId = new mongo.ObjectID(data.answerId);
+  var mongoWordId = new mongo.ObjectID(data.wordId);
   var counterObj = data.correct ? {'total.correct':1} : {'total.incorrect':1};
 
   db.collection('answers')
     .update(
-      {_id:mongoId}, 
-      {$set: {
-        userId:data.userId, 
-        wordId:data.wordId, 
-        correct:data.correct, 
-        dt: new Date()},
-      $inc:counterObj},
-      {upsert:true},
+      {_id: mongoAnswerId}, 
+        {$set: {
+          userId: data.userId, 
+          wordId: mongoWordId, 
+          correct: data.correct, 
+          dt: new Date()
+        },
+        $inc:counterObj
+      },
+      {upsert: true},
       function(err, r){
         callback(r);
       }
@@ -44,73 +47,49 @@ var getWordIds = function(db, filter, callback) {
 
 var getWordIdsAbovePercentage = function(db, filter, callback) {
 
-db.collection('answers').aggregate([
-  {$match:filter},
-  {$project:{
-    wordId:1,
-    cor:{$cond:{
-      if:{$gt:['$total.correct',0]}, 
-      then:'$total.correct', 
-      else:0}},
-    incor:{$cond:{
-      if:{$gt:['$total.incorrect',0]}, 
-      then:'$total.incorrect', 
-      else:0}}
-  }},
-  {$project:{
-    _id:0,
-    wordId:1,
-    perc: {
-      $cond:{
-        if:{$gt:['$incor',0]}, 
-        then:{$divide: ['$cor', {$add:['$incor','$cor']}]}, 
-        else: 1
-      }
-    },
-  }},
-  {$match:{perc:{$lt:0.6}}},
-  {$sort:{perc:1}}
-], function(err, docs) {
-  callback(docs);
-})
-
+  db.collection('answers').aggregate([
+    {$match:filter},
+    {$project:{
+      wordId:1,
+      cor:{$cond:{
+        if:{$gt:['$total.correct',0]}, 
+        then:'$total.correct', 
+        else:0}},
+      incor:{$cond:{
+        if:{$gt:['$total.incorrect',0]}, 
+        then:'$total.incorrect', 
+        else:0}}
+    }},
+    {$project:{
+      _id:0,
+      wordId:1,
+      perc: {
+        $cond:{
+          if:{$gt:['$incor',0]}, 
+          then:{$divide: ['$cor', {$add:['$incor','$cor']}]}, 
+          else: 1
+        }
+      },
+    }},
+    {$match:{perc:{$lt:0.6}}},
+    {$sort:{perc:1}}
+  ], function(err, docs) {
+    callback(docs);
+  })
 }
-
 
 var hasAnswerById = function(db, id, userId, callback) {
   db.collection('answers')
-    .count({_id:id,userId:userId}, function(err, count) {
+    .count({wordId:id,userId:userId}, function(err, count) {
       callback(count);
   })
 }
 
-var updateListIds = function(db, options, answer, callback) {
-  var mongoId = new mongo.ObjectID(answer._id);
-  var listId = answer.listIds ? answer.listIds : [];
-  db.collection('answers')
-    .update(
-      {userId: options.userId, _id:mongoId}, 
-      {$set: {listIds:answer.listIds}, 
-        $setOnInsert:{
-          userId:options.userId,
-          wordId:answer.wordId, 
-          dt: new Date()
-      }},
-      {upsert:true},
-      function(err, r){
-        callback(r);
-      }
-    );
-}
-
 var makeIdArray = function(ids) {
   //create array of mongoIDs
-  //could - should? - be done in aggregation
-  var idsArr = [],
-      mongoId;
+  var idsArr = [];
   ids.forEach(function(id) {
-    mongoId = new mongo.ObjectID(id.wordId);
-    idsArr.push(mongoId);
+    idsArr.push(id.wordId);
   })
   return idsArr;
 }
@@ -127,29 +106,14 @@ module.exports = {
     var options = {
       userId:'demoUser'
     };
-    if (req.query.tpe === "listids") {
-      updateListIds(mongo.DB, options, req.body, function(r){
-        res.status(200).send(r);
-      });
-    } else {
-      updateAnswers(mongo.DB, options, req.body, function(r){
-        res.status(200).send(r);
-      });
-    }
+    upsertAnswer(mongo.DB, options, req.body, function(r){
+      res.status(200).send(r);
+    });
   },
   getAnswersInDoc: function(userId, words, callback){
     getAnswers(mongo.DB, userId, words, function(docs){
       callback(docs);
     });
-  },
-  getWordIds: function(options, callback) {
-    var filter = {
-      userId:options.userId, 
-      listIds:options.listId
-    }
-    getWordIds(mongo.DB, filter, function(ids){
-      callback(makeIdArray(ids));
-    })
   },
   getIncorrectWordIds: function(options, callback) {
     var filter = {

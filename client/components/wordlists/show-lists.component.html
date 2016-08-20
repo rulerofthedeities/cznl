@@ -32,9 +32,9 @@
             <span 
               class="fa pull-right"
               [ngClass]="{
-                'fa-star':isInList(list),
-                'fa-star-o':!isInList(list)}"
-              (click)="toggleInList(list)">
+                'fa-star':isWordInList[i],
+                'fa-star-o':!isWordInList[i]}"
+              (click)="toggleInList(i)">
             </span>
             <span 
               class="fa fa-pencil pull-right"

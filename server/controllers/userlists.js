@@ -1,18 +1,10 @@
-var mongo = require('mongodb'),
-    answers = require("./answers");
+var mongo = require('mongodb');
 
 var loadUserLists = function(db, options, callback) {
   db.collection('wordlists')
     .find({userId:options.userId})
     .toArray(function(err, docs) {
       callback(docs);
-    });
-}
-
-var getWordCount = function(db, options, callback) {
-  db.collection('answers')
-    .count({userId:options.userId, listIds:options.id}, function(err, count) {
-      callback(count);
     });
 }
 
@@ -27,64 +19,88 @@ var saveNewList = function(db, data, options, callback) {
 }
 
 var updateListName = function(db, data, options, callback) {
-  var mongoId = new mongo.ObjectID(data._id);
+  var listId = new mongo.ObjectID(data._id);
   if (data.name) {
     db.collection('wordlists')
       .update(
-        {userId:options.userId, _id: mongoId},
+        {_id: mongoId, listId:options.userId},
         {$set:{name:data.name}}, 
-        function(err, r) {
-          callback(r);
+        function(err, result) {
+          callback(err, result);
         });
   }
 }
 
-var getUserListCount = function(lists, callback) {
-  //For each list, get the number of words in the list
-  var cnt = 0;
-  var listLength = lists.length;
-  lists.forEach(function(list) {
-    var options = {
-      userId:'demoUser',
-      id: list._id.toString()
-    };
-    getWordCount(mongo.DB, options, function(total){
-      cnt++;
-      list.count = total;
-      //Return lists only after we've got all the totals per list -> to async
-      if (cnt === listLength) {
-        callback(lists);
-      }
+var updateUserList = function(db, data, options, callback) {
+  var listId = new mongo.ObjectID(data.userListId);
+  var wordId = new mongo.ObjectID(data.wordId);
+  //if word is in list, add it to the list, otherwise remove it from the list
+  var update = data.isInList ? {$addToSet:{'wordIds':wordId}} : {$pull:{'wordIds':wordId}};
+  db.collection('wordlists')
+  .update(
+    {_id:listId},
+    update, 
+    function(err, result) {
+      callback(err, result);
     });
-  });
+}
+
+var getWordIds = function(db, filter, callback) {
+  db.collection('wordlists')
+    .find(filter, {
+      _id:0, 
+      wordIds:1
+    })
+    .toArray(function(err, docs) {
+      callback(docs);
+    })
 }
 
 module.exports = {
   load: function(req, res) {
-    var listTpe = req.params.listTpe ? req.params.listTpe : 'user';
-    var options = {
-      userId:'demoUser'
-    };
+    var options = {userId: 'demoUser'};
     loadUserLists(mongo.DB, options, function(lists){
-      getUserListCount(lists, function(listData){
-        res.status(200).send({"lists": listData});
-      });
+      lists.forEach(function(list) {list.count = list.wordIds ? list.wordIds.length : 0;});
+      res.status(200).send({"lists": lists});
     });
   },
   save: function(req, res) {
-    var options = {
-      userId:'demoUser'
-    };
+    var options = {userId: 'demoUser'};
     saveNewList(mongo.DB, req.body, options, function(r){
       res.status(200).send(r);
     })
   },
-  updateName:function(req, res) {
-    var options = {
-      userId:'demoUser'
-    };
-    updateListName(mongo.DB, req.body, options, function(r){
-      res.status(200).send(r);
+  updateList: function(req, res) {
+    var options = {userId:'demoUser'};
+    updateUserList(mongo.DB, req.body, options, function(err, result){
+      res.status(200).json({
+          message: 'Success',
+          obj: result
+      });
+    });
+  },
+  updateName: function(req, res) {
+    var options = {userId:'demoUser'};
+    updateListName(mongo.DB, req.body, options, function(err, result){
+      if (err) {
+          return res.status(500).json({
+              title: 'Error updating list',
+              error: err
+          });
+      }
+      res.status(200).json({
+          message: 'Success',
+          obj: result
+      });
     })
-  }
+  },
+  getWordIds: function(options, callback) {
+    var filter = {
+      userId:options.userId, 
+      _id:new mongo.ObjectID(options.listId)
+    }
+    getWordIds(mongo.DB, filter, function(ids){
+      callback(ids[0].wordIds);
+    })
+  },
 }

@@ -22,6 +22,7 @@ module.exports.initialize = function(app, router) {
   router.put('/settings', settings.update);
   router.put('/answer', answers.update);
   router.put('/lists/edit', userlists.updateName);
+  router.put('/lists/words', userlists.updateList);
   
   router.post('/answers', answers.load);
   router.post('/words', words.save);

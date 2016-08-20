@@ -7,9 +7,7 @@ import {WordService} from '../../services/words.service';
   selector: 'card-item',
   template: `
     <div class="card center-block">
-      <add-to-list
-        [word]="card"
-      ></add-to-list>
+      <add-to-list [word]="card"></add-to-list>
 
 <!-- Question -->
       <div 

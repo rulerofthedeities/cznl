@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers} from '@angular/http';
-import {Answer} from '../models/word.model';
 import {WordList} from '../models/list.model';
 import 'rxjs/add/operator/toPromise';
 
@@ -15,13 +14,14 @@ export class WordlistService {
       .catch(this.handleError);
   }
 
-  updateWordLists(listAnswer: Answer) {
+  updateWordList(isInList: boolean, userListId: string, wordId: string) {
+    const listUpdate = {isInList, userListId, wordId};
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return this.http
-      .put('/api/answer?tpe=listids', JSON.stringify(listAnswer), {headers: headers})
+      .put('/api/lists/words', JSON.stringify(listUpdate), {headers: headers})
       .toPromise()
-      .then(() => listAnswer)
+      .then(() => listUpdate)
       .catch(this.handleError);
   }
 

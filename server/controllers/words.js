@@ -1,5 +1,6 @@
 var mongo = require('mongodb'),
-    answers = require("./answers");
+    answers = require("./answers"),
+    userLists = require("./userlists");
 
 var countWords = function(db, options, callback) {
   var filter = buildFilter(options);
@@ -41,7 +42,7 @@ var fetchAnswer = function(docs, options, callback) {
   var wordIds = [];
   if (docs) {
     docs.forEach(function(doc){
-      wordIds.push(doc._id.toString());
+      wordIds.push(doc._id);
     })
   }
 
@@ -90,7 +91,7 @@ var getAllNotAnswered = function(db, options, callback) {
   var cursor = db.collection('wordpairs').find({});
   var list = [],
       sent = false;
-
+  
   cursor.forEach(function(doc) { 
     answers.hasAnswer(doc._id, options.userId, function(result){
       if (!result) {
@@ -204,7 +205,8 @@ module.exports = {
       //Search for words
       if (req.query.listid) {
         //Get word ids from the wordlist first
-        answers.getWordIds(options, function(ids){
+        console.log('list', req.query.listid);
+        userLists.getWordIds(options, function(ids){
           options.ids = ids;
           options.answers = true;
           loadWords(mongo.DB, options, function(docs, answers){
