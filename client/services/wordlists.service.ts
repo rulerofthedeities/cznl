@@ -31,7 +31,7 @@ export class WordlistService {
     return this.http
       .post('/api/lists/add', JSON.stringify(list), {headers: headers})
       .toPromise()
-      .then(() => list)
+      .then(response => response.json())
       .catch(this.handleError);
   }
 

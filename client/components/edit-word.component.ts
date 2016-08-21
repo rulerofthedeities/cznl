@@ -77,7 +77,6 @@ export class EditWord implements OnInit, OnDestroy {
   }
 
   onSubmit(form: any): void {
-    console.log('you submitted:', form);
     if (this.isNew) {
       this._saveWord(form);
     } else {

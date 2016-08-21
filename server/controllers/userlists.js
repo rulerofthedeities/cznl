@@ -12,8 +12,8 @@ var saveNewList = function(db, data, options, callback) {
   if (data.name) {
     db.collection('wordlists')
       .insert({userId:options.userId, name:data.name},
-        function(err, r) {
-          callback(r);
+        function(err, result) {
+          callback(err, result);
         });
   }
 }
@@ -66,11 +66,21 @@ module.exports = {
   },
   save: function(req, res) {
     var options = {userId: 'demoUser'};
-    saveNewList(mongo.DB, req.body, options, function(r){
-      res.status(200).send(r);
+    saveNewList(mongo.DB, req.body, options, function(err, result){
+      if (err) {
+        return res.status(500).json({
+          title: 'Error saving list',
+          error: err
+        });
+      }
+      res.status(200).json({
+        message: 'Success',
+        obj: result
+      });
     })
   },
   updateList: function(req, res) {
+    console.log('updating', req.body);
     var options = {userId:'demoUser'};
     updateUserList(mongo.DB, req.body, options, function(err, result){
       res.status(200).send(result);

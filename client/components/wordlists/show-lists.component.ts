@@ -1,7 +1,8 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {WordPair} from '../../models/word.model';
-import {WordlistService} from '../../services/wordlists.service';
 import {WordList} from '../../models/list.model';
+import {WordlistService} from '../../services/wordlists.service';
+import {ErrorService} from '../../services/error.service';
 
 @Component({
     selector: 'show-lists',
@@ -24,7 +25,10 @@ export class ShowLists {
   listsEdited: number[] = [];
   listsToggled: number[] = [];
 
-  constructor(private wordlistService: WordlistService) {}
+  constructor(
+    private wordlistService: WordlistService,
+    private errorService: ErrorService
+  ) {}
 
   _checkIfWordInLists() {
     //build array that shows which lists the current word is in
@@ -85,18 +89,51 @@ export class ShowLists {
   }
 
   saveLists() {
+    let toSaveLists: WordList[] = this.userLists.filter(list => !list._id);
+    this._saveNewLists(toSaveLists, () => {
+      this._saveEditedLists();
+      this._saveWordsInLists();
+    });
+
+    this.hideLists();
+  }
+
+  _saveNewLists(lists: WordList[], callback) {
     //Save new lists -> if no _id, list is new
-    this.userLists.forEach( list => {
-      if (!list._id) {
-        this.wordlistService.saveList(list);
-      }
+    let cnt = 0;
+    lists.map((list) => {
+      cnt++;
+      this._saveNewList(list, cnt, function(){
+        if (cnt === lists.length) {
+          callback();
+        }
+      });
     });
+  }
 
-    //Save edited lists
+  _saveNewList(list: WordList, cnt: number, callback) {
+    this.wordlistService.saveList(list)
+      .then(
+        result  => {
+          list._id = result.obj.insertedIds[0];
+          callback();
+        },
+        error => this.errorService.handleError(error)
+      );
+  }
+
+  _saveEditedLists() {
+    //Save edited lists (name changed)
     this.listsEdited.forEach(i => {
-      this.wordlistService.updateListName(this.userLists[i]);
+      this.wordlistService.updateListName(this.userLists[i])
+        .then(
+          list  => {;},
+          error => this.errorService.handleError(error)
+        );
     });
+  }
 
+  _saveWordsInLists() {
     //Edit list of words in this list
     this.listsToggled.forEach(i => {
       //add list , list ID, word ID
@@ -106,8 +143,6 @@ export class ShowLists {
           this.userlistChanged.emit(update);
         });
     });
-
-    this.hideLists();
   }
 
   createNewList() {
