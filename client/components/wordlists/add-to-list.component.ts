@@ -3,6 +3,7 @@ import {ShowLists} from './show-lists.component';
 import {WordPair} from '../../models/word.model';
 import {WordList} from '../../models/list.model';
 import {WordlistService} from '../../services/wordlists.service';
+import {ErrorService} from '../../services/error.service';
 
 @Component({
   selector: 'add-to-list',
@@ -25,13 +26,18 @@ export class AddToList implements OnInit {
   @ViewChild(ShowLists) lists: ShowLists;
   isInList = false;
 
-  constructor(private wordlistService: WordlistService) {}
+  constructor(
+    private wordlistService: WordlistService,
+    private errorService: ErrorService) {}
 
   ngOnInit() {
     this.wordlistService.getWordLists('user')
-      .then(lists => {
-        this.isInList = this._checkIfInUserlist(lists);
-      });
+      .then(
+        lists => {
+          this.isInList = this._checkIfInUserlist(lists);
+        },
+        error => this.errorService.handleError(error)
+      );
   }
 
   showModalLists() {
@@ -48,11 +54,13 @@ export class AddToList implements OnInit {
 
   private _checkIfInUserlist(lists: WordList[]): boolean {
     let list: string[];
-    for (let i = 0; i < lists.length; i++) {
-      if (lists[i].wordIds) {
-        list = lists[i].wordIds.filter(id => this.word._id === id);
-        if (list.length > 0) {
-          return true;
+    if (lists) {
+      for (let i = 0; i < lists.length; i++) {
+        if (lists[i].wordIds) {
+          list = lists[i].wordIds.filter(id => this.word._id === id);
+          if (list.length > 0) {
+            return true;
+          }
         }
       }
     }

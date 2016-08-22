@@ -4,7 +4,7 @@ var loadUserLists = function(db, options, callback) {
   db.collection('wordlists')
     .find({userId:options.userId})
     .toArray(function(err, docs) {
-      callback(docs);
+      callback(err, docs);
     });
 }
 
@@ -56,48 +56,57 @@ var getWordIds = function(db, filter, callback) {
     })
 }
 
+var handleError = function(err, res, statusno, title, callback) {
+  if (err) {
+    return res.status(statusno).json({
+      title: title,
+      error: err
+    });
+  } else {
+    callback();
+  }
+}
+
+var handleSuccess = function(res, result, statusno, message, objname) {
+  objname = objname || 'obj';
+  var returnObj = {message:message};
+  returnObj[objname] = result;
+  
+  res.status(statusno).send(returnObj);
+}
+
 module.exports = {
   load: function(req, res) {
+    console.log('loading lists');
     var options = {userId: 'demoUser'};
-    loadUserLists(mongo.DB, options, function(lists){
+    loadUserLists(mongo.DB, options, function(err, lists){
       lists.forEach(function(list) {list.count = list.wordIds ? list.wordIds.length : 0;});
-      res.status(200).send({"lists": lists});
+      handleError(err, res, 500, 'Error retrieving list', function(){
+        handleSuccess(res, lists, 200, 'Retrieved list', 'lists');
+      });
     });
   },
   save: function(req, res) {
     var options = {userId: 'demoUser'};
     saveNewList(mongo.DB, req.body, options, function(err, result){
-      if (err) {
-        return res.status(500).json({
-          title: 'Error saving list',
-          error: err
-        });
-      }
-      res.status(200).json({
-        message: 'Success',
-        obj: result
+      handleError(err, res, 500, 'Error saving list', function(){
+        handleSuccess(res, result, 200, 'Saved list');
       });
     })
   },
   updateList: function(req, res) {
-    console.log('updating', req.body);
     var options = {userId:'demoUser'};
     updateUserList(mongo.DB, req.body, options, function(err, result){
-      res.status(200).send(result);
+      handleError(err, res, 500, 'Error updating list', function(){
+        handleSuccess(res, result, 200, 'Updated list');
+      })
     });
   },
   updateName: function(req, res) {
     var options = {userId:'demoUser'};
     updateListName(mongo.DB, req.body, options, function(err, result){
-      if (err) {
-        return res.status(500).json({
-          title: 'Error updating list',
-          error: err
-        });
-      }
-      res.status(200).json({
-        message: 'Success',
-        obj: result
+      handleError(err, res, 500, 'Error updating list name', function(){
+        handleSuccess(res, result, 200, 'Updated list name');
       });
     })
   },

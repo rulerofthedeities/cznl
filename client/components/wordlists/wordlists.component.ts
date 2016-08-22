@@ -1,5 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {WordlistService} from '../../services/wordlists.service';
+import {ErrorService} from '../../services/error.service';
 import {WordList} from '../../models/list.model';
 
 @Component({
@@ -42,14 +43,19 @@ export class WordLists implements OnInit {
   selected: WordList;
   wordsInList = 0;
 
-  constructor(private wordlistService: WordlistService) {}
+  constructor(
+    private wordlistService: WordlistService,
+    private errorService: ErrorService) {}
 
   ngOnInit() {
     this.wordlistService.getWordLists(this.tpe)
-      .then(lists => {
-        this.lists = lists;
-        this.ready = true;
-      });
+      .then(
+        lists => {
+          this.lists = lists;
+          this.ready = true;
+        },
+        error => this.errorService.handleError(error)
+      );
   }
 
   selectList(i: number) {

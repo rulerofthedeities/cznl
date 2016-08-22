@@ -44,13 +44,15 @@ export class ShowLists {
 
   updateUserLists(word: WordPair) {
     this.wordlistService.getWordLists('user')
-      .then(lists => {
-        this.userLists = lists;
-        this._checkIfWordInLists();
-        this.creatingNewList = false;
-        this.changesMade = false;
-        this.isVisible = true;
-    });
+      .then(
+        lists => {
+          this.userLists = lists;
+          this._checkIfWordInLists();
+          this.creatingNewList = false;
+          this.changesMade = false;
+          this.isVisible = true;
+        },
+        error => this.errorService.handleError(error));
   }
 
   editListName(list: WordList, i: number) {
@@ -90,10 +92,15 @@ export class ShowLists {
 
   saveLists() {
     let toSaveLists: WordList[] = this.userLists.filter(list => !list._id);
-    this._saveNewLists(toSaveLists, () => {
-      this._saveEditedLists();
-      this._saveWordsInLists();
-    });
+    if (toSaveLists.length > 0) {
+      this._saveNewLists(toSaveLists, () => {
+        this._saveEditedLists();
+        this._saveWordsInLists();
+      });
+    } else {
+        this._saveEditedLists();
+        this._saveWordsInLists();
+    }
 
     this.hideLists();
   }
@@ -139,9 +146,10 @@ export class ShowLists {
       //add list , list ID, word ID
       this.wordlistService
         .updateWordList(this.isWordInList[i], this.userLists[i]._id, this.word._id)
-        .then(update => {
-          this.userlistChanged.emit(update);
-        });
+        .then(
+          update => this.userlistChanged.emit(update),
+          error => this.errorService.handleError(error)
+        );
     });
   }
 
