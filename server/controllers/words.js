@@ -19,7 +19,7 @@ var loadFilterWords = function(db, options, callback) {
     .limit(options.maxwords)
     .sort({'cz.word':1})
     .toArray(function(err, docs) {
-      callback(docs);
+      callback(err, docs);
     });
 }
 
@@ -47,12 +47,12 @@ var fetchAnswer = function(docs, options, callback) {
   }
 
   if (options.answers) {
-    answers.getAnswersInDoc(options.userId, wordIds, function(answers){
+    answers.getAnswersInDoc(options.userId, wordIds, function(err, answers){
       //Map answers to docs
-      callback(docs, answers);
+      callback(err, docs, answers);
     })
   } else {
-    callback(docs);
+    callback(err, docs);
   }
 }
 
@@ -60,29 +60,29 @@ var getAutoListWords = function(db, options, callback) {
   switch (options.autoId) {
     case "1": 
       //get incorrect answers for user;
-      answers.getIncorrectWordIds(options, function(ids){
-        callback(ids);
+      answers.getIncorrectWordIds(options, function(err, ids){
+        callback(err, ids);
       });
     break;
     case "2": 
       //get correct answers for user;
-      answers.getCorrectWordIds(options, function(ids){
-        callback(ids);
+      answers.getCorrectWordIds(options, function(err, ids){
+        callback(err, ids);
       });
     break;
     case "3": 
       //get all already answered for this user
-      answers.getAnsweredWordIds(options, function(ids){
-        callback(ids);
+      answers.getAnsweredWordIds(options, function(err, ids){
+        callback(err, ids);
       });
     break;
     case "4": 
       //get all answers with %<60 for this user
-      answers.getPercentageWordIds(options, function(ids){
-        callback(ids);
+      answers.getPercentageWordIds(options, function(err, ids){
+        callback(err, ids);
       });
     break;
-    default: callback(null);
+    default: callback(null, null);
   }
 }
 
@@ -93,13 +93,13 @@ var getAllNotAnswered = function(db, options, callback) {
       sent = false;
   
   cursor.forEach(function(doc) { 
-    answers.hasAnswer(doc._id, options.userId, function(result){
+    answers.hasAnswer(doc._id, options.userId, function(err, result){
       if (!result) {
         if (list.length < options.maxwords) {
           list.push(doc);
         } else if (!sent) {
           sent = true;
-          callback(list);
+          callback(err, list);
         }
       }
     })
@@ -117,9 +117,9 @@ var getCats = function(db, options, callback) {
       {$project:{_id:0,name:"$_id"}}
     ]).toArray(function(err, docs) {
       if (docs && docs.length > 0) {
-        callback(docs);
+        callback(err, docs);
       } else {
-        callback(null);
+        callback(err, null);
       }
     });
 }
@@ -132,7 +132,7 @@ var saveNewWord = function(db, options, data, callback) {
     db.collection('wordpairs')
       .insert(wordToSave,
         function(err, r) {
-          callback(r);
+          callback(err, r);
         });
   }
 }
@@ -148,7 +148,7 @@ var updateWord = function(db, options, data, callback) {
     {userId: data.userId, _id:mongoId}, 
     {$set: word},
       function(err, r){
-        callback(r);
+        callback(err, r);
       });
 
 }
@@ -205,11 +205,10 @@ module.exports = {
       //Search for words
       if (req.query.listid) {
         //Get word ids from the wordlist first
-        console.log('list', req.query.listid);
-        userLists.getWordIds(options, function(ids){
+        userLists.getWordIds(options, function(err, ids){
           options.ids = ids;
           options.answers = true;
-          loadWords(mongo.DB, options, function(docs, answers){
+          loadWords(mongo.DB, options, function(err, docs, answers){
             res.status(200).send({"words": docs, "answers": answers});
           });
 
@@ -218,28 +217,28 @@ module.exports = {
         //Get words for automated list
         var autoid = parseInt(req.query.autoid);
         if (autoid < 5) {
-          getAutoListWords(mongo.DB, options, function(ids) {
+          getAutoListWords(mongo.DB, options, function(err, ids) {
             options.ids = ids;
               options.answers = true;
-              loadWords(mongo.DB, options, function(docs, answers){
+              loadWords(mongo.DB, options, function(err, docs, answers){
                 res.status(200).send({"words": docs, "answers": answers});
               });
             })
         } else {
           // get autolist with words with no answers for this user
-          getAllNotAnswered(mongo.DB, options, function(docs){
+          getAllNotAnswered(mongo.DB, options, function(err, docs){
             res.status(200).send({"words": docs, "answers": null});
           })
         }
       } else {
         //Get words with filter data
         if (options.isWordFilter){
-          loadFilterWords(mongo.DB, options, function(docs){
+          loadFilterWords(mongo.DB, options, function(err, docs){
             res.status(200).send({"words": docs});
           });
         } else {
           //get words randomized
-          loadWords(mongo.DB, options, function(docs, answers){
+          loadWords(mongo.DB, options, function(err, docs, answers){
             res.status(200).send({"words": docs, "answers": answers});
           });
         }
@@ -248,13 +247,13 @@ module.exports = {
   },
   save: function(req, res) {
     var options = {};
-    saveNewWord(mongo.DB, options, req.body, function(r){
+    saveNewWord(mongo.DB, options, req.body, function(err, r){
       res.status(200).send(r);
     })
   },
   update: function(req, res){
     var options = {};
-    updateWord(mongo.DB, options, req.body, function(r){
+    updateWord(mongo.DB, options, req.body, function(err, r){
       res.status(200).send(r);
     });
   },
@@ -263,7 +262,7 @@ module.exports = {
       query: req.query.search, 
       max: req.query.max ? parseInt(req.query.max, 10) : 20
     };
-    getCats(mongo.DB, options, function(docs){
+    getCats(mongo.DB, options, function(err, docs){
       if (docs){
         res.status(200).send({"cats": docs});
       } else {

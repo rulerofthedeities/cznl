@@ -18,7 +18,7 @@ var upsertAnswer = function(db, options, data, callback) {
       },
       {upsert: true},
       function(err, r){
-        callback(r);
+        callback(err, r);
       }
     )
 }
@@ -30,7 +30,7 @@ var getAnswers = function(db, userId, data, callback) {
       wordId:{$in:data}},
       {_id:1, wordId:1, correct:1, listIds:1})
     .toArray(function(err, docs) {
-      callback(docs);
+      callback(err, docs);
     })
 }
 
@@ -41,7 +41,7 @@ var getWordIds = function(db, filter, callback) {
       wordId:1
     })
     .toArray(function(err, docs) {
-      callback(docs);
+      callback(err, docs);
     })
 }
 
@@ -74,14 +74,14 @@ var getWordIdsAbovePercentage = function(db, filter, callback) {
     {$match:{perc:{$lt:0.6}}},
     {$sort:{perc:1}}
   ], function(err, docs) {
-    callback(docs);
+    callback(err, docs);
   })
 }
 
 var hasAnswerById = function(db, id, userId, callback) {
   db.collection('answers')
     .count({wordId:id,userId:userId}, function(err, count) {
-      callback(count);
+      callback(err, count);
   })
 }
 
@@ -98,7 +98,7 @@ module.exports = {
   load: function(req, res){
     var words = req.body;
     var userId = 'demoUser';
-    getAnswers(mongo.DB, userId, words, function(docs){
+    getAnswers(mongo.DB, userId, words, function(err, docs){
       res.status(200).send({"answers": docs});
     });
   },
@@ -106,13 +106,13 @@ module.exports = {
     var options = {
       userId:'demoUser'
     };
-    upsertAnswer(mongo.DB, options, req.body, function(r){
+    upsertAnswer(mongo.DB, options, req.body, function(err, r){
       res.status(200).send(r);
     });
   },
   getAnswersInDoc: function(userId, words, callback){
-    getAnswers(mongo.DB, userId, words, function(docs){
-      callback(docs);
+    getAnswers(mongo.DB, userId, words, function(err, docs){
+      callback(err, docs);
     });
   },
   getIncorrectWordIds: function(options, callback) {
@@ -120,8 +120,8 @@ module.exports = {
       userId:options.userId, 
       correct:false
     }
-    getWordIds(mongo.DB, filter, function(ids){
-      callback(makeIdArray(ids));
+    getWordIds(mongo.DB, filter, function(err, ids){
+      callback(err, makeIdArray(ids));
     })
   },
   getCorrectWordIds: function(options, callback) {
@@ -129,16 +129,16 @@ module.exports = {
       userId:options.userId, 
       correct:true
     }
-    getWordIds(mongo.DB, filter, function(ids){
-      callback(makeIdArray(ids));
+    getWordIds(mongo.DB, filter, function(err, ids){
+      callback(err, makeIdArray(ids));
     })
   },
   getAnsweredWordIds: function(options, callback) {
     var filter = {
       userId:options.userId
     }
-    getWordIds(mongo.DB, filter, function(ids){
-      callback(makeIdArray(ids));
+    getWordIds(mongo.DB, filter, function(err, ids){
+      callback(err, makeIdArray(ids));
     })
   },
   getPercentageWordIds: function(options, callback) {
@@ -146,8 +146,8 @@ module.exports = {
       userId:options.userId,
       total:{$exists:true}
     }
-    getWordIdsAbovePercentage(mongo.DB, filter, function(ids){
-      callback(makeIdArray(ids));
+    getWordIdsAbovePercentage(mongo.DB, filter, function(err, ids){
+      callback(err, makeIdArray(ids));
     })
   },
   getPercentageWordCount: function(options, callback) {
@@ -155,13 +155,13 @@ module.exports = {
       userId:options.userId,
       total:{$exists:true}
     }
-    getWordIdsAbovePercentage(mongo.DB, filter, function(ids){
-      callback(ids.length);
+    getWordIdsAbovePercentage(mongo.DB, filter, function(err, ids){
+      callback(err, ids.length);
     })
   },
   hasAnswer: function(id, userId, callback) {
-    hasAnswerById(mongo.DB, id, userId, function(count){
-      callback(count > 0);
+    hasAnswerById(mongo.DB, id, userId, function(err, count){
+      callback(err, count > 0);
     });
   }
 }

@@ -1,6 +1,7 @@
 var mongo = require('mongodb'),
     answers = require("./answers"),
-    async = require('async');
+    async = require('async'),
+    response = require('../response');
 
 var loadAutoLists = function(db, options, callback) {
   var lists = [];
@@ -25,7 +26,7 @@ var loadAutoLists = function(db, options, callback) {
     db.collection(tpe.collection)
       .count(tpe.filter, function(err, count) {
         lists.push({name:tpe.name, id: tpe.id, count:count});
-        callback();
+        callback(err);
       });
   }
 
@@ -39,26 +40,26 @@ var loadAutoLists = function(db, options, callback) {
               id:5, 
               count:allCount - doneCount
             });
-            callback();
+            callback(err);
           })
       });
   }
 
   var loadAutoListLowPercentage = function(callback) {
-    answers.getPercentageWordCount({userId:options.userId}, function(count){
+    answers.getPercentageWordCount({userId:options.userId}, function(err, count){
       lists.push({
-              name:'Woorden met lage score (<60%)', 
-              id:4, 
-              count:count
-            });
-            callback();
+        name:'Woorden met lage score (<60%)', 
+        id:4, 
+        count:count
+      });
+      callback(err);
     })
   }
 
-  async.eachSeries(listTpes, loadAutoList, function (err) {
+  async.eachSeries(listTpes, loadAutoList, function(err) {
     loadAutoListLowPercentage(function(err){
       loadAutoListNotLearned(function(err){
-        callback(lists, err);
+        callback(err, lists);
       })
     })
   });
@@ -67,19 +68,10 @@ var loadAutoLists = function(db, options, callback) {
 module.exports = {
   load: function(req, res) {
     var listTpe = req.params.listTpe ? req.params.listTpe : 'user';
-    var options = {
-      userId:'demoUser'
-    };
-    loadAutoLists(mongo.DB, options, function(listData, err){
-      if (err) {
-        return res.status(500).json({
-          title: 'Error loading auto list',
-          error: err
-        });
-      }
-      res.status(200).json({
-        message: 'Success',
-        lists: listData
+    var options = {userId:'demoUser'};
+    loadAutoLists(mongo.DB, options, function(err, listData) {
+      response.handleError(err, res, 500, 'Error loading auto lists', function(){
+        response.handleSuccess(res, listData, 200, 'Auto lists loaded', 'lists');
       });
     })
   }
