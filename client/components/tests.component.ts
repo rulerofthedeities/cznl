@@ -4,6 +4,7 @@ import {WordPair} from '../models/word.model';
 import {Filter as FilterModel} from '../models/filters.model';
 import {WordService} from '../services/words.service';
 import {RestartService} from '../services/restart.service';
+import {ErrorService} from '../services/error.service';
 import {Subscription}   from 'rxjs/Subscription';
 import {shuffle} from '../utils/utils';
 
@@ -76,6 +77,7 @@ export class Tests implements OnDestroy {
 
   constructor(
     private wordService: WordService,
+    private errorService: ErrorService,
     restartService: RestartService) {
     this.subscription = restartService.restartFilter$.subscribe(
       start => {
@@ -89,29 +91,38 @@ export class Tests implements OnDestroy {
 
   getWordsFromFilter(filter: FilterModel) {
     this.wordService.getWordsFromFilter(filter, this.maxWords)
-      .then(words => {
-        this.cards = words;
-        this.exerciseTpe = filter.test;
-        this.started = true;
-      });
+      .then(
+        words => {
+          this.cards = words;
+          this.exerciseTpe = filter.test;
+          this.started = true;
+        },
+        error => this.errorService.handleError(error)
+      );
   }
 
   getWordsFromUserList(data: any) {
     this.wordService.getWordsFromWordList(data.selected._id, this.maxWords)
-      .then(words => {
-        this.cards = words;
-        this.exerciseTpe = data.exerciseTpe;
-        this.started = true;
-      });
+      .then(
+        words => {
+          this.cards = words;
+          this.exerciseTpe = data.exerciseTpe;
+          this.started = true;
+        },
+        error => this.errorService.handleError(error)
+      );
   }
 
   getWordsFromAutoList(data: any) {
     this.wordService.getWordsFromAutoList(data.selected.id, this.maxWords)
-      .then(words => {
-        this.cards = words;
-        this.exerciseTpe = data.exerciseTpe;
-        this.started = true;
-      });
+      .then(
+        words => {
+          this.cards = words;
+          this.exerciseTpe = data.exerciseTpe;
+          this.started = true;
+        },
+        error => this.errorService.handleError(error)
+      );
   }
 
 

@@ -1,6 +1,7 @@
 var mongo = require('mongodb'),
     answers = require("./answers"),
-    userLists = require("./userlists");
+    userLists = require("./userlists"),
+    response = require('../response');
 
 var countWords = function(db, options, callback) {
   var filter = buildFilter(options);
@@ -131,8 +132,8 @@ var saveNewWord = function(db, options, data, callback) {
 
     db.collection('wordpairs')
       .insert(wordToSave,
-        function(err, r) {
-          callback(err, r);
+        function(err, result) {
+          callback(err, result);
         });
   }
 }
@@ -147,8 +148,8 @@ var updateWord = function(db, options, data, callback) {
     .update(
     {userId: data.userId, _id:mongoId}, 
     {$set: word},
-      function(err, r){
-        callback(err, r);
+      function(err, result){
+        callback(err, result);
       });
 
 }
@@ -209,7 +210,9 @@ module.exports = {
           options.ids = ids;
           options.answers = true;
           loadWords(mongo.DB, options, function(err, docs, answers){
-            res.status(200).send({"words": docs, "answers": answers});
+            response.handleError(err, res, 500, 'Error fetching words', function(){
+              response.handleSuccess(res, {"words": docs, "answers": answers}, 200, 'Fetched words');
+            });
           });
 
         }) 
@@ -221,25 +224,33 @@ module.exports = {
             options.ids = ids;
               options.answers = true;
               loadWords(mongo.DB, options, function(err, docs, answers){
-                res.status(200).send({"words": docs, "answers": answers});
+                response.handleError(err, res, 500, 'Error fetching words', function(){
+                  response.handleSuccess(res, {"words": docs, "answers": answers}, 200, 'Fetched words');
+                });
               });
             })
         } else {
           // get autolist with words with no answers for this user
           getAllNotAnswered(mongo.DB, options, function(err, docs){
-            res.status(200).send({"words": docs, "answers": null});
+            response.handleError(err, res, 500, 'Error fetching not answered words', function(){
+              response.handleSuccess(res, {"words": docs, "answers": null}, 200, 'Fetched answered words');
+            });
           })
         }
       } else {
         //Get words with filter data
         if (options.isWordFilter){
           loadFilterWords(mongo.DB, options, function(err, docs){
-            res.status(200).send({"words": docs});
+            response.handleError(err, res, 500, 'Error filtering words', function(){
+              response.handleSuccess(res, docs, 200, 'Filtered words', 'words');
+            });
           });
         } else {
           //get words randomized
           loadWords(mongo.DB, options, function(err, docs, answers){
-            res.status(200).send({"words": docs, "answers": answers});
+            response.handleError(err, res, 500, 'Error retrieving words', function(){
+              response.handleSuccess(res, {"words": docs, "answers": answers}, 200, 'Loaded words');
+            });
           });
         }
       }
@@ -247,14 +258,18 @@ module.exports = {
   },
   save: function(req, res) {
     var options = {};
-    saveNewWord(mongo.DB, options, req.body, function(err, r){
-      res.status(200).send(r);
+    saveNewWord(mongo.DB, options, req.body, function(err, result){
+      response.handleError(err, res, 500, 'Error saving word', function(){
+        response.handleSuccess(res, result, 200, 'Saved word');
+      });
     })
   },
   update: function(req, res){
     var options = {};
-    updateWord(mongo.DB, options, req.body, function(err, r){
-      res.status(200).send(r);
+    updateWord(mongo.DB, options, req.body, function(err, result){
+      response.handleError(err, res, 500, 'Error updating word', function(){
+        response.handleSuccess(res, result, 200, 'Updated word');
+      });
     });
   },
   cats: function(req, res){
@@ -263,11 +278,13 @@ module.exports = {
       max: req.query.max ? parseInt(req.query.max, 10) : 20
     };
     getCats(mongo.DB, options, function(err, docs){
-      if (docs){
-        res.status(200).send({"cats": docs});
-      } else {
-        res.status(204).send();
-      }
+      response.handleError(err, res, 500, 'Error fetching categories', function(){
+        if (docs){
+          response.handleSuccess(res, docs, 200, 'Retrieved categories', 'cats');
+        } else {
+          response.handleSuccess(res, null, 204, 'No categories found');
+        }
+      });
     });
   }
 }

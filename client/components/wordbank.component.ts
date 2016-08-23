@@ -1,5 +1,6 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {WordService} from '../services/words.service';
+import {ErrorService} from '../services/error.service';
 import {FilterWord} from '../models/filters.model';
 import {WordPair} from '../models/word.model';
 import {Subscription} from 'rxjs/Subscription';
@@ -55,7 +56,8 @@ export class WordBank implements OnInit, OnDestroy {
   totalWords: number;
 
   constructor(
-    private wordService: WordService) {}
+    private wordService: WordService,
+    private errorService: ErrorService) {}
 
   ngOnInit() {
     //A new word is being created
@@ -93,9 +95,10 @@ export class WordBank implements OnInit, OnDestroy {
 
   getWords(filter: FilterWord) {
     this.wordService.getFilterWords(filter, this.maxWords)
-      .then(words => {
-        this.words = words;
-      });
+      .then(
+        words => {this.words = words;},
+        error => this.errorService.handleError(error)
+      );
     this.wordService.getCount(null, filter)
       .then(total => {
         this.totalWords = total;

@@ -34,8 +34,8 @@ export class WordService {
     return this.http.get(url)
       .toPromise()
       .then(response => {
-          let words = response.json().words;
-          let answers = response.json().answers;
+          let words = response.json().obj.words;
+          let answers = response.json().obj.answers;
           return this.processWords(words, answers);
         })
       .catch(this.handleError);
@@ -78,7 +78,7 @@ export class WordService {
     return this.http
       .post('/api/words', JSON.stringify(data), {headers: headers})
       .toPromise()
-      .then(() => data)
+      .then(response => response.json())
       .catch(this.handleError);
   }
 
@@ -92,8 +92,87 @@ export class WordService {
     return this.http
       .put('/api/words', JSON.stringify(data), {headers: headers})
       .toPromise()
-      .then(() => data)
+      .then(response => response.json())
       .catch(this.handleError);
+  }
+
+  getAnswers(wordIds:string[]) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    let options = new RequestOptions({
+        method: RequestMethod.Post,
+        url: '/api/answers',
+        headers: headers,
+        body: JSON.stringify(wordIds)
+    });
+
+    return this.http.request(new Request(options))
+      .toPromise()
+      .then(response => response.json().answers)
+      .catch(this.handleError);
+  }
+
+  saveAnswer(userId: string, wordId: string, correct: boolean) {
+    let headers = new Headers(),
+        answer = {userId: userId, wordId: wordId, correct: correct};
+    headers.append('Content-Type', 'application/json');
+    return this.http
+      .put('/api/answer', JSON.stringify(answer), {headers: headers})
+      .toPromise()
+      .then(() => answer)
+      .catch(this.handleError);
+  }
+
+  searchCategories(search: string) {
+    return this.http.get('/api/cats?search=' + search)
+      .toPromise()
+      .then(response => {return response.status === 200 ? response.json().cats: null;})
+      .catch(this.handleError);
+  }
+
+  processWords(words, answers) {
+    const answersAssoc: { [id: string]: boolean; } = { };
+    if (answers) {
+      answers.forEach(function(answer) {
+        answersAssoc[answer.wordId] = answer;
+      });
+    }
+
+    if (words) {
+      words.forEach(word => {
+        //Add answers data to word object
+        if (answersAssoc[word._id]) {
+          word.answer = answersAssoc[word._id];
+          delete word.answer.wordId;
+        }
+        word.tpe = word.tpe;
+        word.cz.article = this.getCardArticle(word.cz.genus);
+      });
+    }
+
+    return words;
+  }
+
+  newWord() {
+    this.newWordSource.next(true);
+  }
+
+  editWord(word:WordPair) {
+    this.editWordSource.next(word);
+  }
+
+  getCardArticle(genus: string) {
+    let article: string;
+    switch (genus) {
+      case 'Ma':
+      case 'Mi': article = 'ten'; break;
+      case 'F': article = 'ta'; break;
+      case 'N': article = 'to'; break;
+      default: article = '';
+    }
+
+    return article;
   }
 
   cleanWord(word: WordPair): WordPair {
@@ -148,85 +227,6 @@ export class WordService {
     wordPair.nl = wordNl;
 
     return wordPair;
-  }
-
-  getAnswers(wordIds:string[]) {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-
-    let options = new RequestOptions({
-        method: RequestMethod.Post,
-        url: '/api/answers',
-        headers: headers,
-        body: JSON.stringify(wordIds)
-    });
-
-    return this.http.request(new Request(options))
-      .toPromise()
-      .then(response => response.json().answers)
-      .catch(this.handleError);
-  }
-
-  saveAnswer(userId: string, wordId: string, correct: boolean) {
-    let headers = new Headers(),
-        answer = {userId: userId, wordId: wordId, correct: correct};
-    headers.append('Content-Type', 'application/json');
-    return this.http
-      .put('/api/answer', JSON.stringify(answer), {headers: headers})
-      .toPromise()
-      .then(() => answer)
-      .catch(this.handleError);
-  }
-
-  searchCategories(search: string) {
-    return this.http.get('/api/cats?search=' + search)
-      .toPromise()
-      .then(response => {return response.status === 200 ? response.json(): null;})
-      .catch(this.handleError);
-  }
-
-  processWords(words, answers) {
-    const answersAssoc: { [id: string]: boolean; } = { };
-    if (answers) {
-      answers.forEach(function(answer) {
-        answersAssoc[answer.wordId] = answer;
-      });
-    }
-
-    if (words) {
-      words.forEach(word => {
-        //Add answers data to word object
-        if (answersAssoc[word._id]) {
-          word.answer = answersAssoc[word._id];
-          delete word.answer.wordId;
-        }
-        word.tpe = word.tpe;
-        word.cz.article = this.getCardArticle(word.cz.genus);
-      });
-    }
-
-    return words;
-  }
-
-  newWord() {
-    this.newWordSource.next(true);
-  }
-
-  editWord(word:WordPair) {
-    this.editWordSource.next(word);
-  }
-
-  getCardArticle(genus: string) {
-    let article: string;
-    switch (genus) {
-      case 'Ma':
-      case 'Mi': article = 'ten'; break;
-      case 'F': article = 'ta'; break;
-      case 'N': article = 'to'; break;
-      default: article = '';
-    }
-
-    return article;
   }
 
   private handleError(error: any) {

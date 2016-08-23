@@ -1,6 +1,7 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FilterService} from '../services/filters.service';
 import {WordService} from '../services/words.service';
+import {ErrorService} from '../services/error.service';
 import {ErrorObject} from '../models/word.model';
 import {WordPair} from '../models/word.model';
 import {Subscription} from 'rxjs/Subscription';
@@ -43,6 +44,7 @@ export class EditWord implements OnInit, OnDestroy {
   constructor(
     private filterService: FilterService,
     private wordService: WordService,
+    private errorService: ErrorService,
     private formBuilder: FormBuilder) {}
 
   ngOnInit() {
@@ -85,21 +87,27 @@ export class EditWord implements OnInit, OnDestroy {
   }
 
   _saveWord(form: any): void {
-    this.wordService.addWord(form).then(word => {
-      let wordPair: WordPair = word['word'];
-      this.submitMessage = `Het woord ${wordPair.cz.word}/${wordPair.nl.word} is succesvol opgeslagen.`;
-      this.disableSubmit = true;
-      this.isNew = false;
-    });
+    this.wordService.addWord(form).then(
+      word => {
+        let wordPair: WordPair = word['word'];
+        this.submitMessage = `Het woord ${wordPair.cz.word}/${wordPair.nl.word} is succesvol opgeslagen.`;
+        this.disableSubmit = true;
+        this.isNew = false;
+      },
+      error => this.errorService.handleError(error)
+    );
   }
 
   _updateWord(form: any): void {
-    this.wordService.updateWord(form).then(word => {
-      let wordPair: WordPair = word['word'];
-      this.submitMessage = `Het woord ${wordPair.cz.word}/${wordPair.nl.word} is succesvol aangepast.`;
-      this.disableSubmit = true;
-      this.isNew = false;
-    });
+    this.wordService.updateWord(form).then(
+      word => {
+        let wordPair: WordPair = word['word'];
+        this.submitMessage = `Het woord ${wordPair.cz.word}/${wordPair.nl.word} is succesvol aangepast.`;
+        this.disableSubmit = true;
+        this.isNew = false;
+      },
+      error => this.errorService.handleError(error)
+    );
   }
 
   removeCase(ctrlName: string) {
@@ -165,7 +173,10 @@ export class EditWord implements OnInit, OnDestroy {
   searchCats(cats: string):void {
     if (cats.length > 0) {
       this.wordService.searchCategories(cats)
-        .then(words => {this.cats = words ? words.cats : [];});
+        .then(
+          cats => {this.cats = cats || [];},
+          error => this.errorService.handleError(error)
+        );
     } else {
       this.cats = [];
     }
