@@ -25,8 +25,9 @@ import {Word} from '../../models/word.model';
         </div>
         <div class="clearfix left">
           <div class="text-info">{{cardData.alt}}</div>
-          <div *ngIf="cardData.firstpersonsingular">1e p.: <span class="text-warning">{{cardData.firstpersonsingular}}</span></div>
-          <div *ngIf="cardData.info">info: <span class="text-warning">{{cardData.info}}</span></div>
+          <div *ngIf="cardData.plural">meervoud: <span class="text-primary">{{cardData.plural}}</span></div>
+          <div *ngIf="cardData.firstpersonsingular">1e p.: <span class="text-primary">{{cardData.firstpersonsingular}}</span></div>
+          <div *ngIf="cardData.info">info: <span class="text-primary">{{cardData.info}}</span></div>
         </div>`,
   styleUrls: ['client/components/cards/card.component.css']
 })

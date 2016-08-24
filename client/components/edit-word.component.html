@@ -90,6 +90,21 @@
             </div>
           </div>
 
+          <div class="form-group" *ngIf="isNoun()">
+            <label 
+              for="cz.plural" 
+              class="control-label col-xs-2">
+              Meerv:
+            </label>
+            <div class="col-xs-10">
+              <input 
+                type="text"
+                class="form-control"
+                id="cz.plural"
+                [formControl]="wordForm.controls['cz.plural']">
+            </div>
+          </div>
+
           <div class="form-group" *ngIf="filtersLoaded && canHaveCase()">
             <label 
               for="cz.case" 

@@ -164,7 +164,7 @@ export class WordService {
         wordCz = <Word>{},
         wordCzP = <Word>{}, //Perfective
         wordNl = <Word>{},
-        wordNlP = <Word>{};//Perfective
+        wordNlP = <Word>{}; //Perfective
 
     if (word._id) {wordPair._id = word._id;}
     wordPair.tpe = word.tpe;
@@ -187,6 +187,7 @@ export class WordService {
     if (word['cz.firstpersonsingular']) {wordCz.firstpersonsingular = word['cz.firstpersonsingular'];}
     if (word.tpe === 'noun') {
       wordCz.genus = word['cz.genus'];
+      wordCz.plural = word['cz.plural'];
       wordNl.article = word['nl.article'];
     }
     if (word.tpe === 'prep' || word.tpe === 'verb') {

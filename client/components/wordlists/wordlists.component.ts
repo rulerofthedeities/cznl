@@ -45,7 +45,8 @@ export class WordLists implements OnInit {
 
   constructor(
     private wordlistService: WordlistService,
-    private errorService: ErrorService) {}
+    private errorService: ErrorService
+  ) {}
 
   ngOnInit() {
     this.wordlistService.getWordLists(this.tpe)

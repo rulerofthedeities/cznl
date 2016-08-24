@@ -138,6 +138,7 @@ export class EditWord implements OnInit, OnDestroy {
       'categories': [word ? word.categories : ''],
       'cz.word': [word ? word.cz.word : '', [Validators.required]],
       'cz.genus': [word ? word.cz.genus : ''],
+      'cz.plural': [word ? word.cz.plural : ''],
       'cz.case': [word ? word.cz.case : ''],
       'cz.otherwords': [word ? word.cz.otherwords : ''],
       'cz.hint': [word ? word.cz.hint : ''],

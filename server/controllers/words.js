@@ -151,7 +151,6 @@ var updateWord = function(db, options, data, callback) {
       function(err, result){
         callback(err, result);
       });
-
 }
 
 var buildFilter = function(options) {

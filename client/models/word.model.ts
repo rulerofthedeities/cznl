@@ -8,6 +8,7 @@ export interface Word {
   firstpersonsingular?: string;
   info?: string;
   aspect?:string;
+  plural?:string;
 }
 
 export interface Answer {
