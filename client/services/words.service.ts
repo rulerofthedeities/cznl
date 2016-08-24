@@ -96,9 +96,9 @@ export class WordService {
       .catch(this.handleError);
   }
 
-  saveAnswer(userId: string, wordId: string, correct: boolean) {
+  saveAnswer(userId: string, wordId: string, answerId: string, correct: boolean) {
     let headers = new Headers(),
-        answer = {userId: userId, wordId: wordId, correct: correct};
+        answer = {userId, wordId, answerId, correct};
     headers.append('Content-Type', 'application/json');
     return this.http
       .put('/api/answer', JSON.stringify(answer), {headers: headers})

@@ -5,7 +5,6 @@ var upsertAnswer = function(db, options, data, callback) {
   var mongoAnswerId = new mongo.ObjectID(data.answerId);
   var mongoWordId = new mongo.ObjectID(data.wordId);
   var counterObj = data.correct ? {'total.correct':1} : {'total.incorrect':1};
-
   db.collection('answers')
     .update(
       {_id: mongoAnswerId}, 
@@ -47,7 +46,6 @@ var getWordIds = function(db, filter, callback) {
 }
 
 var getWordIdsAbovePercentage = function(db, filter, callback) {
-
   db.collection('answers').aggregate([
     {$match:filter},
     {$project:{
