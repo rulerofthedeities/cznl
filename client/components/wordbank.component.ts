@@ -99,10 +99,10 @@ export class WordBank implements OnInit, OnDestroy {
         words => {this.words = words;},
         error => this.errorService.handleError(error)
       );
-    this.wordService.getCount(null, filter)
-      .then(total => {
-        this.totalWords = total;
-      });
+    this.wordService.getCount(null, filter).then(
+      total => {this.totalWords = total;},
+      error => this.errorService.handleError(error)
+    );
   }
 
   ngOnDestroy() {

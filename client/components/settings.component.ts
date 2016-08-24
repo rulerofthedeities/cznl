@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Settings} from '../models/settings.model';
 import {SettingsService} from '../services/settings.service';
+import {ErrorService} from '../services/error.service';
 
 @Component({
   templateUrl: 'client/components/settings.component.html'
@@ -13,7 +14,10 @@ export class AppSettings implements OnInit {
   isReady = false;
   isSubmitted = false;
 
-  constructor (private settingsService: SettingsService) {}
+  constructor (
+    private settingsService: SettingsService,
+    private errorService: ErrorService
+  ) {}
 
   ngOnInit() {
     this.isReady = false;
@@ -22,11 +26,13 @@ export class AppSettings implements OnInit {
       {label:'Nederlands -> Tsjechisch', val:'nlcz'},
       {label:'Tsjechisch -> Nederlands', val:'cznl'}
     ];
-    this.settingsService.getAppSettings()
-      .then(settings => {
+    this.settingsService.getAppSettings().then(
+      settings => {
         this.settings = settings.all;
         this.isReady = true;
-      });
+      },
+      error => this.errorService.handleError(error)
+    );
   }
 
   onModified() {
@@ -34,7 +40,10 @@ export class AppSettings implements OnInit {
   }
 
   onSubmit() {
-    this.settingsService.setAppSettings(this.settings);
+    this.settingsService.setAppSettings(this.settings).then(
+      settings => {;},
+      error => this.errorService.handleError(error)
+    );
     this.isSubmitted = true;
   }
 

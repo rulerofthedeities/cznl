@@ -1,5 +1,6 @@
 import {Directive, ElementRef, Input, OnInit} from '@angular/core';
 import {SettingsService} from '../services/settings.service';
+import {ErrorService} from '../services/error.service';
 
 @Directive({
   selector: '[genusColor]'
@@ -11,7 +12,8 @@ export class GenusColor implements OnInit {
 
   constructor(
     private el: ElementRef,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private errorService: ErrorService
   ) {}
 
   ngOnInit() {
@@ -39,7 +41,8 @@ export class GenusColor implements OnInit {
         if (settings.all.showColors) {
           this._showGenusColors();
         }
-      }
+      },
+      error => this.errorService.handleError(error)
     );
   }
 }

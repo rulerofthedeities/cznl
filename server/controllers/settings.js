@@ -1,4 +1,5 @@
-var mongo = require('mongodb');
+var mongo = require('mongodb'),
+    response = require('../response');
 
 var loadSettings = function(db, options, callback) {
   var proj = {};
@@ -19,7 +20,7 @@ var loadSettings = function(db, options, callback) {
     .sort({dt:-1})
     .limit(1)
     .toArray(function(err, docs) {
-      callback(docs[0]);
+      callback(err, docs[0]);
     })
 }
 
@@ -47,8 +48,8 @@ var updateSettings = function(db, data, options, callback) {
       {userId: options.userId}, 
       {$set: set},
       {upsert:true},
-      function(err, r){
-        callback(r);
+      function(err, result){
+        callback(err, result);
       }
     )
 }
@@ -59,8 +60,10 @@ module.exports = {
       tpe:req.query.tpe, 
       userId:'demoUser'
     };
-    loadSettings(mongo.DB, options, function(doc){
-      res.status(200).send({"settings": doc});
+    loadSettings(mongo.DB, options, function(err, doc) {
+      response.handleError(err, res, 500, 'Error loading settings', function(){
+        response.handleSuccess(res, doc, 200, 'Loaded settings', 'settings');
+      });
     });
   },
   update: function(req, res){
@@ -68,8 +71,10 @@ module.exports = {
       tpe:req.query.tpe, 
       userId:'demoUser'
     };
-    updateSettings(mongo.DB, req.body, options, function(r){
-      res.status(200).send(r);
+    updateSettings(mongo.DB, req.body, options, function(err, result) {
+      response.handleError(err, res, 500, 'Error updating settings', function(){
+        response.handleSuccess(res, result, 200, 'Updated settings');
+      });
     });
   }
 }

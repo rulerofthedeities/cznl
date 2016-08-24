@@ -8,7 +8,7 @@ var countWords = function(db, options, callback) {
 
   db.collection('wordpairs')
     .count(filter, function(err, count) {
-      callback(count);
+      callback(err, count);
   })
 }
 
@@ -199,8 +199,10 @@ module.exports = {
     }; 
     if (req.query.cnt == '1') {
       //Count # of words
-      countWords(mongo.DB, options, function(count){
-        res.status(200).send({"total": count});
+      countWords(mongo.DB, options, function(err, count){
+        response.handleError(err, res, 500, 'Error counting words', function(){
+          response.handleSuccess(res, count, 200, 'Counted words', 'total');
+        });
       });
     } else {
       //Search for words

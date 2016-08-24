@@ -96,17 +96,6 @@ var makeIdArray = function(ids) {
 }
 
 module.exports = {
-  /*
-  load: function(req, res){
-    var words = req.body;
-    var userId = 'demoUser';
-    getAnswers(mongo.DB, userId, words, function(err, docs){
-      response.handleError(err, res, 500, 'Error retrieving answers', function(){
-        response.handleSuccess(res, docs, 200, 'Retrieved answers', 'answers');
-      });
-    });
-  },
-  */
   update: function(req, res){
     var options = {userId:'demoUser'};
     upsertAnswer(mongo.DB, options, req.body, function(err, result){

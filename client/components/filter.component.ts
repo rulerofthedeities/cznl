@@ -2,6 +2,7 @@ import {Component, Output, Input, EventEmitter, OnInit} from '@angular/core';
 import {FilterService} from '../services/filters.service';
 import {SettingsService} from '../services/settings.service';
 import {WordService} from '../services/words.service';
+import {ErrorService} from '../services/error.service';
 import {Filter as FilterModel} from '../models/filters.model';
 
 @Component({
@@ -80,7 +81,9 @@ export class Filter implements OnInit {
   constructor(
     private filterService: FilterService,
     private settingsService: SettingsService,
-    private wordService: WordService) {}
+    private wordService: WordService,
+    private errorService: ErrorService
+  ) {}
 
   ngOnInit() {
     this.getFilterOptions();
@@ -89,7 +92,10 @@ export class Filter implements OnInit {
   start(testTpe: string, level: string, wordTpe: string, cat: string) {
     if (this.totalWords < 1) {return;}
     let filter:FilterModel = this.getFilter(testTpe, level, wordTpe, cat);
-    this.settingsService.setFilterSettings(filter);
+    this.settingsService.setFilterSettings(filter).then(
+      settings => {;},
+      error => this.errorService.handleError(error)
+    );
     this.selectedFilter.emit(filter);
   }
 
@@ -102,8 +108,10 @@ export class Filter implements OnInit {
   }
 
   getCount(filter: FilterModel) {
-    this.wordService.getCount(filter)
-      .then(total => {this.totalWords = total;});
+    this.wordService.getCount(filter).then(
+      total => {this.totalWords = total;},
+      error => this.errorService.handleError(error)
+    );
   }
 
   getFilter(testTpe: string, level: string, wordTpe: string, cat: string) {
@@ -125,11 +133,9 @@ export class Filter implements OnInit {
         this.filterService.getFilterOptions().then(
           filters => {
             this.filters = filters;
-            //this.filters.levels.unshift({label:'Alle niveaus', val:-1});
-            //this.filters.tpes.unshift({label:'Alle Woordsoorten', val:'all'});
-            //this.filters.cats.unshift({label:'Alle categorieën', val:'all'});
             this.filtersLoaded = true;
-          }
+          },
+          error => this.errorService.handleError(error)
         );
       }
     );

@@ -3,6 +3,7 @@ import {WordPair, Word} from '../models/word.model';
 import {AllSettings} from '../models/settings.model';
 import {RestartService} from '../services/restart.service';
 import {SettingsService} from '../services/settings.service';
+import {ErrorService} from '../services/error.service';
 
 @Component({
   selector: 'review',
@@ -32,7 +33,8 @@ export class Review implements OnInit {
 
   constructor (
     private restartService: RestartService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private errorService: ErrorService
   ) {}
 
   ngOnInit() {
@@ -44,7 +46,8 @@ export class Review implements OnInit {
       settings => {
         this.settings = settings.all;
         this.ready = true;
-      }
+      },
+      error => this.errorService.handleError(error)
     );
   }
 

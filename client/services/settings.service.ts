@@ -40,7 +40,6 @@ export class SettingsService {
       .toPromise()
       .then(() => newFilter)
       .catch(this.handleError);
-
   }
 
   private handleError(error: any) {

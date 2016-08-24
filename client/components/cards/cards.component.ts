@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {SettingsService} from '../../services/settings.service';
+import {ErrorService} from '../../services/error.service';
 import {WordPair} from '../../models/word.model';
 import {shuffle} from '../../utils/utils';
 import {Subscription}   from 'rxjs/Subscription';
@@ -56,7 +57,10 @@ export class Cards implements OnInit {
   subscription: Subscription;
   settings: Object;
 
-  constructor(private settingsService: SettingsService) {}
+  constructor(
+    private settingsService: SettingsService,
+    private errorService: ErrorService
+  ) {}
 
   ngOnInit() {
     this.reset();
@@ -64,12 +68,14 @@ export class Cards implements OnInit {
   }
 
   getSettings() {
-    this.settingsService.getAppSettings()
-      .then(settings => {
+    this.settingsService.getAppSettings().then(
+      settings => {
         this.maxCards = Math.min(settings.all.maxWords, this.cards.length);
         this.settings = settings.all;
         this.getNextCard();
-      });
+      },
+      error => this.errorService.handleError(error)
+    );
   }
 
   getNextCard() {

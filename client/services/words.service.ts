@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Http, RequestOptions, Headers, Request, RequestMethod} from '@angular/http';
+import {Http, Headers} from '@angular/http';
 import {Filter, FilterWord} from '../models/filters.model';
 import 'rxjs/add/operator/toPromise';
 import {Subject} from 'rxjs/Subject';
@@ -95,25 +95,6 @@ export class WordService {
       .then(() => data)
       .catch(this.handleError);
   }
-
-/*
-  getAnswers(wordIds:string[]) {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-
-    let options = new RequestOptions({
-        method: RequestMethod.Post,
-        url: '/api/answers',
-        headers: headers,
-        body: JSON.stringify(wordIds)
-    });
-
-    return this.http.request(new Request(options))
-      .toPromise()
-      .then(response => response.json().answers)
-      .catch(this.handleError);
-  }
-*/
 
   saveAnswer(userId: string, wordId: string, correct: boolean) {
     let headers = new Headers(),
