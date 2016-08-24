@@ -131,9 +131,9 @@ var saveNewWord = function(db, options, data, callback) {
     wordToSave.userId = data.userId;
 
     db.collection('wordpairs')
-      .insert(wordToSave,
+      .insertOne(wordToSave,
         function(err, result) {
-          callback(err, result);
+          callback(err, result.ops[0]);
         });
   }
 }
@@ -145,7 +145,7 @@ var updateWord = function(db, options, data, callback) {
   delete word._id;
   
   db.collection('wordpairs')
-    .update(
+    .updateOne(
     {userId: data.userId, _id:mongoId}, 
     {$set: word},
       function(err, result){

@@ -78,7 +78,7 @@ export class WordService {
     return this.http
       .post('/api/words', JSON.stringify(data), {headers: headers})
       .toPromise()
-      .then(response => response.json())
+      .then(() => data)
       .catch(this.handleError);
   }
 
@@ -92,10 +92,11 @@ export class WordService {
     return this.http
       .put('/api/words', JSON.stringify(data), {headers: headers})
       .toPromise()
-      .then(response => response.json())
+      .then(() => data)
       .catch(this.handleError);
   }
 
+/*
   getAnswers(wordIds:string[]) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -112,6 +113,7 @@ export class WordService {
       .then(response => response.json().answers)
       .catch(this.handleError);
   }
+*/
 
   saveAnswer(userId: string, wordId: string, correct: boolean) {
     let headers = new Headers(),

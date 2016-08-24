@@ -1,4 +1,5 @@
-var mongo = require('mongodb');
+var mongo = require('mongodb'),
+    response = require('../response');
 
 var upsertAnswer = function(db, options, data, callback) {
   var mongoAnswerId = new mongo.ObjectID(data.answerId);
@@ -17,8 +18,8 @@ var upsertAnswer = function(db, options, data, callback) {
         $inc:counterObj
       },
       {upsert: true},
-      function(err, r){
-        callback(err, r);
+      function(err, result){
+        callback(err, result);
       }
     )
 }
@@ -95,20 +96,25 @@ var makeIdArray = function(ids) {
 }
 
 module.exports = {
+  /*
   load: function(req, res){
     var words = req.body;
     var userId = 'demoUser';
     getAnswers(mongo.DB, userId, words, function(err, docs){
-      res.status(200).send({"answers": docs});
+      response.handleError(err, res, 500, 'Error retrieving answers', function(){
+        response.handleSuccess(res, docs, 200, 'Retrieved answers', 'answers');
+      });
     });
   },
+  */
   update: function(req, res){
-    var options = {
-      userId:'demoUser'
-    };
-    upsertAnswer(mongo.DB, options, req.body, function(err, r){
-      res.status(200).send(r);
+    var options = {userId:'demoUser'};
+    upsertAnswer(mongo.DB, options, req.body, function(err, result){
+      response.handleError(err, res, 500, 'Error upserting answer', function(){
+        response.handleSuccess(res, result, 200, 'Upserted answer');
+      });
     });
+
   },
   getAnswersInDoc: function(userId, words, callback){
     getAnswers(mongo.DB, userId, words, function(err, docs){

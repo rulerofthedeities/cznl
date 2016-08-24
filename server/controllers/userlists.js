@@ -59,7 +59,6 @@ var getWordIds = function(db, filter, callback) {
 
 module.exports = {
   load: function(req, res) {
-    console.log('loading lists');
     var options = {userId: 'demoUser'};
     loadUserLists(mongo.DB, options, function(err, lists){
       lists.forEach(function(list) {list.count = list.wordIds ? list.wordIds.length : 0;});
