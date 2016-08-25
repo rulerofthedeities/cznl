@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 import {HttpModule} from '@angular/http';
 
 import {routing} from './routes';
@@ -51,8 +50,7 @@ import {ErrorService} from './services/error.service';
     SettingsService,
     FilterService,
     RestartService,
-    ErrorService,
-    {provide: LocationStrategy, useClass: HashLocationStrategy}
+    ErrorService
   ],
   declarations: [
     AppComponent,
