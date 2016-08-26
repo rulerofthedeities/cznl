@@ -6,7 +6,11 @@ exports.connect = function(callback){
   if (mongo.DB){
     return callback();
   }
-  mongoClient.connect(url, function(err, db) {
+  var options = {
+    server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } },
+    replset: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } }
+  };
+  mongoClient.connect(url, options, function(err, db) {
     if (err){
       console.log("Error connecting to mongodb");
       process.exit(1);
