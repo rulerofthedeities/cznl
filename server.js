@@ -38,7 +38,7 @@ app.use(function (req, res, next) {
 });
 
 //start server
-db.connect(function(){
+db.connect(function() {
   app.listen(app.get('port'), function() { 
     console.log('Server up: http://localhost:' + app.get('port'));
   });

@@ -176,8 +176,8 @@ export class WordService {
       wordPair.categories = cats;
     }
 
-    wordCz.word = word['cz.word'];
-    wordNl.word = word['nl.word'];
+    wordCz.word = word['cz.word'].trim();
+    wordNl.word = word['nl.word'].trim();
     if (word['cz.otherwords']) {wordCz.otherwords = word['cz.otherwords'];}
     if (word['cz.hint']) {wordCz.hint = word['cz.hint'];}
     if (word['cz.info']) {wordCz.info = word['cz.info'];}
@@ -187,14 +187,14 @@ export class WordService {
     if (word['cz.firstpersonsingular']) {wordCz.firstpersonsingular = word['cz.firstpersonsingular'];}
     if (word.tpe === 'noun') {
       wordCz.genus = word['cz.genus'];
-      wordCz.plural = word['cz.plural'];
       wordNl.article = word['nl.article'];
+      if (word['cz.plural']) {wordCz.plural = word['cz.plural'];}
     }
     if (word.tpe === 'prep' || word.tpe === 'verb') {
       wordCz.case = word['cz.case'];
     }
     if (word.tpe === 'verb') {
-      if (word['czP.word']) {wordCzP.word = word['czP.word'];}
+      if (word['czP.word']) {wordCzP.word = word['czP.word'].trim();}
       if (word['czP.case']) {wordCzP.case = word['czP.case'];}
       if (word['czP.otherwords']) {wordCzP.otherwords = word['czP.otherwords'];}
       if (word['czP.hint']) {wordCzP.hint = word['czP.hint'];}
