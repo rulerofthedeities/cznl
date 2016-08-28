@@ -13,6 +13,7 @@ module.exports.initialize = function(app, router) {
   });
   
   router.get('/words', words.load);
+  router.get('/words/check', words.check);
   router.get('/settings', settings.load);
   router.get('/lists/user', userlists.load);
   router.get('/lists/auto', autolists.load);

@@ -114,6 +114,13 @@ export class WordService {
       .catch(this.handleError);
   }
 
+  checkIfWordExists(search: string) {
+    return this.http.get('/api/words/check?search=' + search)
+      .toPromise()
+      .then((isFound) => isFound.json())
+      .catch(this.handleError);
+  }
+
   processWords(words, answers) {
     const answersAssoc: { [id: string]: boolean; } = { };
     if (answers) {

@@ -12,6 +12,13 @@ var countWords = function(db, options, callback) {
   })
 }
 
+var findWord = function(db, options, callback) {
+  db.collection('wordpairs')
+    .count({'cz.word':options.q}, function(err, count) {
+      callback(err, count > 0);
+  })
+}
+
 var loadFilterWords = function(db, options, callback) {
   var filter = buildFilter(options);
 
@@ -181,6 +188,15 @@ var buildFilter = function(options) {
 }
 
 module.exports = {
+  check: function(req, res) {
+    var options = {q:req.query.search};
+    console.log('searching for', options.q);
+    findWord(mongo.DB, options, function(err, isFound){
+      response.handleError(err, res, 500, 'Error searching for word', function(){
+        response.handleSuccess(res, isFound, 200, 'Found word');
+      });
+    });
+  },
   load: function(req, res) {
     var options = {
       userId:'demoUser',

@@ -51,10 +51,15 @@
                   type="text"
                   class="form-control"
                   id="cz.word"
-                  [formControl]="wordForm.controls['cz.word']">
+                  [formControl]="wordForm.controls['cz.word']"
+                  [ngClass]="{'warning':wordAlreadyExists}"
+                  (change)="onChange()">
               </strong>
               <div *ngIf="isError('cz.word', 'required')"
                 class="text-danger">Het Tsjechische woord ontbreekt.
+              </div>
+              <div *ngIf="wordAlreadyExists"
+                class="text-warning">Dit woord bestaat reeds.
               </div>
             </div>
           </div>

@@ -11,6 +11,10 @@ import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
   selector: 'edit-word',
   templateUrl:'/client/components/edit-word.component.html',
   styles:[`
+    input.ng-dirty.warning {
+      border: 1px dotted orange;
+      border-left: 5px solid orange;
+    }
     input.ng-dirty.ng-invalid {
       border: 1px dotted red;
       border-left: 5px solid red;
@@ -40,6 +44,7 @@ export class EditWord implements OnInit, OnDestroy {
   isNew = true;
   subscription: Subscription;
   cats: string[];
+  wordAlreadyExists = false;
 
   constructor(
     private filterService: FilterService,
@@ -84,6 +89,15 @@ export class EditWord implements OnInit, OnDestroy {
     } else {
       this._updateWord(form);
     }
+  }
+
+  onChange() {
+    console.log('checking if exists:',this.wordForm.controls['cz.word'].value);
+    this.wordAlreadyExists = false;
+    this.wordService.checkIfWordExists(this.wordForm.controls['cz.word'].value).then(
+      itExists => this.wordAlreadyExists = itExists.obj,
+      error => this.errorService.handleError(error)
+    );
   }
 
   _saveWord(form: any): void {
