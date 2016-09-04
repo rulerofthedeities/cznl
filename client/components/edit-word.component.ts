@@ -38,19 +38,20 @@ import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
 export class EditWord implements OnInit, OnDestroy {
   wordForm: FormGroup;
   filters: Object;
-  filtersLoaded = false;
-  submitMessage: string;
-  disableSubmit = false;
-  isNew = true;
   subscription: Subscription;
+  submitMessage: string;
   cats: string[];
+  isNew = true;
+  filtersLoaded = false;
+  disableSubmit = false;
   wordAlreadyExists = false;
 
   constructor(
     private filterService: FilterService,
     private wordService: WordService,
     private errorService: ErrorService,
-    private formBuilder: FormBuilder) {}
+    private formBuilder: FormBuilder
+  ) {}
 
   ngOnInit() {
     this._getFilterOptions();
@@ -92,12 +93,13 @@ export class EditWord implements OnInit, OnDestroy {
   }
 
   onChange() {
-    console.log('checking if exists:',this.wordForm.controls['cz.word'].value);
     this.wordAlreadyExists = false;
-    this.wordService.checkIfWordExists(this.wordForm.controls['cz.word'].value).then(
-      itExists => this.wordAlreadyExists = itExists.obj,
-      error => this.errorService.handleError(error)
-    );
+    if (this.isNew) {
+      this.wordService.checkIfWordExists(this.wordForm.controls['cz.word'].value).then(
+        itExists => this.wordAlreadyExists = itExists.obj,
+        error => this.errorService.handleError(error)
+      );
+    }
   }
 
   _saveWord(form: any): void {
@@ -138,6 +140,7 @@ export class EditWord implements OnInit, OnDestroy {
   resetForm() {
     //Create new word
     this.isNew = true;
+    this.wordAlreadyExists = false;
     this._buildForm();
     this.submitMessage = '';
     this.disableSubmit = false;

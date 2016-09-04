@@ -190,7 +190,6 @@ var buildFilter = function(options) {
 module.exports = {
   check: function(req, res) {
     var options = {q:req.query.search};
-    console.log('searching for', options.q);
     findWord(mongo.DB, options, function(err, isFound){
       response.handleError(err, res, 500, 'Error searching for word', function(){
         response.handleSuccess(res, isFound, 200, 'Found word');

@@ -1,4 +1,4 @@
-import {Component, Input, ViewChild, OnInit} from '@angular/core';
+import {Component, Input, ViewChild, OnChanges} from '@angular/core';
 import {ShowLists} from './show-lists.component';
 import {WordPair} from '../../models/word.model';
 import {WordList} from '../../models/list.model';
@@ -21,16 +21,17 @@ import {ErrorService} from '../../services/error.service';
   styleUrls:['client/components/wordlists/word-list.css']
 })
 
-export class AddToList implements OnInit {
+export class AddToList implements OnChanges {
   @Input() word: WordPair;
   @ViewChild(ShowLists) lists: ShowLists;
   isInList = false;
 
   constructor(
     private wordlistService: WordlistService,
-    private errorService: ErrorService) {}
+    private errorService: ErrorService
+  ) {}
 
-  ngOnInit() {
+  ngOnChanges() {
     this.wordlistService.getWordLists('user')
       .then(
         lists => {
