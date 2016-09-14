@@ -1,7 +1,7 @@
-<key pressed
-  key="Escape" 
-  (keyPressed)="hideLists()">
-</key>
+<span pressed
+  [keyPressed]="'Escape'" 
+  (onKeyPressed)="hideLists()">
+</span>
 <div 
   *ngIf="isVisible" 
   class="modal fade show in" 

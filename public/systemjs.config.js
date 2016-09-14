@@ -5,7 +5,6 @@ var isPublic = typeof window != "undefined";
     var map = {
         'app':                    'client', // 'dist',
         '@angular':               (isPublic) ? 'node/@angular' : 'node_modules/@angular',
-        '@angular/router':        (isPublic) ? 'node/@angular/router' : 'node_modules/@angular/router',
         'rxjs':                   (isPublic) ? 'node/rxjs' : 'node_modules/rxjs'
     };
     // packages tells the System loader how to load when no filename and/or no extension
@@ -18,11 +17,10 @@ var isPublic = typeof window != "undefined";
         'forms',
         'compiler',
         'core',
+        'router',
         'http',
         'platform-browser',
-        'platform-browser-dynamic',
-        'router-deprecated',
-        'upgrade',
+        'platform-browser-dynamic'
     ];
     // Individual files (~300 requests):
     function packIndex(pkgName) {

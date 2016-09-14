@@ -127,7 +127,8 @@ export class EditWord implements OnInit, OnDestroy {
   }
 
   removeCase(ctrlName: string) {
-    (<FormControl>this.wordForm.controls[ctrlName]).updateValue('');
+    this.wordForm.patchValue({ctrlName: ''});
+
   }
 
   editForm(word) {
@@ -205,7 +206,7 @@ export class EditWord implements OnInit, OnDestroy {
     cat[0] = this.wordForm.controls['categories'].value;
     cat[1] = newCat;
     cat = cat.filter(c => !!c);
-    (<FormControl>this.wordForm.controls['categories']).updateValue(cat.join(','));
+    this.wordForm.patchValue({categories: cat.join(',')});
   }
 
   //Check validations that are dependent on other fields
