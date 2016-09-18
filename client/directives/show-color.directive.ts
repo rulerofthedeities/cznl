@@ -24,15 +24,16 @@ export class GenusColor implements OnInit {
 
   _showGenusColors() {
     let color: string;
-
-    switch(this.genus.toLowerCase()) {
-      case 'f': color = 'red'; break;
-      case 'mi': color = 'darkBlue'; break;
-      case 'ma': color = 'dodgerBlue'; break;
-      case 'n': color = 'green'; break;
-      default: color = 'black';
+    if (this.genus) {
+      switch(this.genus.toLowerCase()) {
+        case 'f': color = 'red'; break;
+        case 'mi': color = 'darkBlue'; break;
+        case 'ma': color = 'dodgerBlue'; break;
+        case 'n': color = 'green'; break;
+        default: color = 'black';
+      }
+      this.el.nativeElement.style.color = color;
     }
-    this.el.nativeElement.style.color = color;
   }
 
   _getSettings() {

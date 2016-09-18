@@ -16,7 +16,13 @@ import {ErrorService} from '../../services/error.service';
         (click)="turnCard()"
         class="question text-center">
         <div class="wordwrapper center-block">
-            <h2 class="word">{{cardData.word}}</h2>
+          <h2 class="word">
+            <span genusColor
+            [genus]="cardData.genus" 
+            [tpe]="card.tpe">
+              {{cardData.word}}
+            </span>
+          </h2>
         </div>
         <em 
           getFilterValue 
