@@ -1,11 +1,11 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, EventEmitter, Output} from '@angular/core';
 import {FilterService} from '../services/filters.service';
 import {WordService} from '../services/words.service';
 import {ErrorService} from '../services/error.service';
 import {ErrorObject} from '../models/word.model';
 import {WordPair} from '../models/word.model';
 import {Subscription} from 'rxjs/Subscription';
-import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'edit-word',
@@ -36,6 +36,7 @@ import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
 })
 
 export class EditWord implements OnInit, OnDestroy {
+  @Output() updatedWord = new EventEmitter<WordPair>();
   wordForm: FormGroup;
   filters: Object;
   subscription: Subscription;
@@ -121,6 +122,7 @@ export class EditWord implements OnInit, OnDestroy {
         this.submitMessage = `Het woord ${wordPair.cz.word}/${wordPair.nl.word} is succesvol aangepast.`;
         this.disableSubmit = true;
         this.isNew = false;
+        this.updatedWord.emit(wordPair);
       },
       error => this.errorService.handleError(error)
     );

@@ -36,7 +36,9 @@ import {Subscription} from 'rxjs/Subscription';
       </li>
     </ul>
     <div class="col-xs-10">
-      <edit-word></edit-word>
+      <edit-word
+        (updatedWord)="onWordUpdated($event)">
+      </edit-word>
     </div>
     <div class="clearfix"></div>
   `,
@@ -91,6 +93,12 @@ export class WordBank implements OnInit, OnDestroy {
 
   deselectWord() {
     this.selected = null;
+  }
+
+  onWordUpdated(word) {
+    if (this.editing) {
+      this.words[this.editing] = word;
+    }
   }
 
   getWords(filter: FilterWord) {
