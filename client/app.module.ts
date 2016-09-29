@@ -24,17 +24,24 @@ import {CardItemAnswer} from './components/cards/card-item-answer.component';
 import {CardScore} from './components/cards/card-score.component';
 import {InfoMessage} from './components/common/info-message.component';
 import {ErrorMessage} from './components/common/error-message.component';
+import {FieldMessages} from './components/common/field-messages.component';
+import {AuthMenu} from './components/auth/auth-menu.component';
+import {SignUp} from './components/auth/sign-up.component';
+import {SignIn} from './components/auth/sign-in.component';
+import {LogOut} from './components/auth/log-out.component';
 
 import {GetFilterValue} from './directives/get-filter-value.directive';
 import {GetKeyPress} from './directives/get-key-pressed.directive';
 import {GenusColor} from './directives/show-color.directive';
 
+import {AuthService} from './services/auth.service';
 import {WordService} from './services/words.service';
 import {WordlistService} from './services/wordlists.service';
 import {SettingsService} from './services/settings.service';
 import {FilterService} from './services/filters.service';
 import {RestartService} from './services/restart.service';
 import {ErrorService} from './services/error.service';
+import {ValidationService} from './services/validation.service';
 
 @NgModule({
   imports: [
@@ -50,7 +57,9 @@ import {ErrorService} from './services/error.service';
     SettingsService,
     FilterService,
     RestartService,
-    ErrorService
+    ErrorService,
+    AuthService,
+    ValidationService
   ],
   declarations: [
     AppComponent,
@@ -72,10 +81,15 @@ import {ErrorService} from './services/error.service';
     CardScore,
     InfoMessage,
     ErrorMessage,
+    FieldMessages,
     GetFilterValue,
     GetKeyPress,
-    GenusColor
+    GenusColor,
+    AuthMenu,
+    SignIn,
+    SignUp,
+    LogOut
   ],
-  bootstrap: [ AppComponent ]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

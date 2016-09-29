@@ -96,6 +96,7 @@ export class WordBank implements OnInit, OnDestroy {
   }
 
   onWordUpdated(word) {
+    console.log('updated word', word, this.editing);
     if (this.editing) {
       this.words[this.editing] = word;
     }
