@@ -9,7 +9,7 @@ export class AuthService {
   constructor (private http: Http) {}
 
   getToken(): string {
-    return localStorage.getItem('km-osdt.token') ? '?token=' + localStorage.getItem('km-osdt.token') : '';
+    return localStorage.getItem('km-cznl.token') ? '?token=' + localStorage.getItem('km-cznl.token') : '';
   }
 
   signup(user: User) {
@@ -33,17 +33,17 @@ export class AuthService {
   }
 
   isLoggedIn() {
-    return localStorage.getItem('km-osdt.token') !== null;
+    return localStorage.getItem('km-cznl.token') !== null;
   }
 
   getUserName() {
-    return localStorage.getItem('km-osdt.userName');
+    return localStorage.getItem('km-cznl.userName');
   }
 
   storeUserData(data: UserLocal) {
-    localStorage.setItem('km-osdt.token', data.token);
-    localStorage.setItem('km-osdt.userId', data.userId);
-    localStorage.setItem('km-osdt.userName', data.userName);
+    localStorage.setItem('km-cznl.token', data.token);
+    localStorage.setItem('km-cznl.userId', data.userId);
+    localStorage.setItem('km-cznl.userName', data.userName);
   }
 
 }

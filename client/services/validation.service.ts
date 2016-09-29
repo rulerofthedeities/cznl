@@ -80,23 +80,6 @@ export class ValidationService {
         .catch(error => Observable.throw(error.json()));
     };
   }
-
-  static checkUniqueRecipient(http: Http, authService: AuthService, recipientId: string) {
-    return function(control: AbstractControl) {
-      const token = authService.getToken(),
-            name = '&name=' + control.value,
-            recipient = recipientId ? '&id=' + recipientId : '';
-      return http.get('/api/recipients/check' + token + name + recipient)
-        .map(response => {
-          if (response.json().obj === true) {
-            return {'recipientTaken': true};
-          } else {
-            return null;
-          }
-        })
-        .catch(error => Observable.throw(error.json()));
-    };
-  }
 }
 
 

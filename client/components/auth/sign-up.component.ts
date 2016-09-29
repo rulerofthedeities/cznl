@@ -152,7 +152,7 @@ export class SignUp implements OnInit {
           this.authService.signin(user).subscribe(
             data => {
               this.authService.storeUserData(data);
-              this.router.navigateByUrl('/recipients');
+              this.router.navigateByUrl('/');
             },
             error => this.errorService.handleError(error)
           );

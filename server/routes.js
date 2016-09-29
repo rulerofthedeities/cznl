@@ -1,4 +1,5 @@
 var path = require("path"),
+    users = require("./controllers/users"),
     words = require("./controllers/words"),
     settings = require("./controllers/settings"),
     answers = require("./controllers/answers"),
@@ -11,6 +12,10 @@ module.exports.initialize = function(app, router) {
   router.get('/', function(request, response){
     response.sendFile(home);
   });
+
+  router.get('/user/check', users.check);
+  router.post('/user/signin', users.signin);
+  router.post('/user/signup', users.signup);
   
   router.get('/words', words.load);
   router.get('/words/check', words.check);

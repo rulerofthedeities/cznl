@@ -1,10 +1,12 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
 import {Subscription}   from 'rxjs/Subscription';
+import {AuthService} from '../services/auth.service';
 
 @Component({
   selector: 'menu',
   template: `
+    <div class="small text-right user">{{getUserName()}}</div>
     <nav>
       <ul class="nav nav-pills">
         <li 
@@ -36,7 +38,10 @@ export class Menu implements OnInit, OnDestroy {
   url: string;
   routes: Object[];
 
-  constructor(private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.routes = [
@@ -45,6 +50,19 @@ export class Menu implements OnInit, OnDestroy {
       {path:'/settings', label:'Instellingen', glyph:'cog'}
     ];
     this.subscription = this.router.events.subscribe(event => this.url = event.url);
+  }
+
+  isLoggedIn() {
+    return this.authService.isLoggedIn();
+  }
+
+  onLogout() {
+    this.authService.logout();
+    this.router.navigate(['/auth/signin']);
+  }
+
+  getUserName() {
+    return this.authService.getUserName();
   }
 
   ngOnDestroy() {
