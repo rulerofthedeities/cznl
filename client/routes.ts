@@ -5,7 +5,6 @@ import {WordBank} from './components/wordbank.component';
 import {AppSettings} from './components/settings.component';
 import {SignUp} from './components/auth/sign-up.component';
 import {SignIn} from './components/auth/sign-in.component';
-import {LogOut} from './components/auth/log-out.component';
 import {AuthMenu} from './components/auth/auth-menu.component';
 
 const routes: Routes = [
@@ -25,8 +24,7 @@ const routes: Routes = [
         component: AuthMenu
       },
       {path: 'signup', component: SignUp},
-      {path: 'signin', component: SignIn},
-      {path: 'logout', component: LogOut}
+      {path: 'signin', component: SignIn}
     ]
   }
 ];

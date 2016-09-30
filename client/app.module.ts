@@ -28,7 +28,6 @@ import {FieldMessages} from './components/common/field-messages.component';
 import {AuthMenu} from './components/auth/auth-menu.component';
 import {SignUp} from './components/auth/sign-up.component';
 import {SignIn} from './components/auth/sign-in.component';
-import {LogOut} from './components/auth/log-out.component';
 
 import {GetFilterValue} from './directives/get-filter-value.directive';
 import {GetKeyPress} from './directives/get-key-pressed.directive';
@@ -87,8 +86,7 @@ import {ValidationService} from './services/validation.service';
     GenusColor,
     AuthMenu,
     SignIn,
-    SignUp,
-    LogOut
+    SignUp
   ],
   bootstrap: [AppComponent]
 })

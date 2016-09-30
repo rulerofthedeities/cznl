@@ -7,11 +7,11 @@ import {AuthService} from '../services/auth.service';
   selector: 'menu',
   template: `
     <div class="small text-right user">{{getUserName()}}</div>
-    <nav>
-      <ul class="nav nav-pills">
+    <nav role="navigation" class="navbar navbar-inverse">
+      <ul class="nav navbar-nav">
         <li 
           *ngFor="let route of routes"
-          [ngClass]="{'active':url===route.path}">
+          routerLinkActive="active">
           <a [routerLink]="[route.path]">
             <span 
               class="glyphicon glyphicon-{{route.glyph}}" 
@@ -21,9 +21,22 @@ import {AuthService} from '../services/auth.service';
           </a>
         </li>
       </ul>
+      <ul class="nav navbar-nav navbar-right loginout">
+        <li *ngIf="!isLoggedIn()" routerLinkActive="active">
+          <a routerLink="auth" class="item">Login</a>
+        </li>
+        <li *ngIf="isLoggedIn()" routerLinkActive="active">
+          <a (click)="onLogout()" class="item">Logout</a>
+        </li>
+      </ul>
     </nav>
   `,
   styles:[`
+    .loginout {cursor: pointer;}
+    .user {
+      font-style: italic;
+      color:DarkGrey
+    }
     .nav li a {
       line-height: 50px;
       height: 50px;

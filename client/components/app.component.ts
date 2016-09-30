@@ -4,13 +4,9 @@ import {Component} from '@angular/core';
   selector: 'cz',
   template: `
     <div class="container">
-      <div class="panel-top">
-        <menu></menu>
-      </div>
-      <div class="panel-main">
-        <router-outlet></router-outlet>
-        <error-msg></error-msg>
-      </div>
+      <menu></menu>
+      <router-outlet></router-outlet>
+      <error-msg></error-msg>
     </div>`,
     styles: [`
       .panel-top {
