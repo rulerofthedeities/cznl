@@ -134,7 +134,7 @@ export class Filter implements OnInit {
         if (settings) {
           this.selected = settings.filter;
         } else {
-          this.selected = {level:0, cats:'', tpe:'all'};
+          this.selected = {level:-1, cats:'all', tpe:'all'};
         }
         this.getCount(this.selected);
         this.filterService.getFilterOptions().then(

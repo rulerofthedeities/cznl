@@ -83,11 +83,11 @@ module.exports = {
       })
     }
   },
-  getUserName: function(req, res) {
-    var userId = req.decoded.user._id;
-    mongo.DB.collection('users').findById(userId, function (err, user) {
-      response.handleError(err, res, 500, 'Error fetching user name', function(){
-        response.handleSuccess(res, user.userName, 200, 'Fetched user name');
+  getAccess: function(req, res) {
+    var userId = mongo.ObjectID(req.decoded.user._id);
+    mongo.DB.collection('users').findOne({_id:userId}, function (err, user) {
+      response.handleError(err, res, 500, 'Error fetching user access', function(){
+        response.handleSuccess(res, user.access, 200, 'Fetched user access');
       });
     });
   }

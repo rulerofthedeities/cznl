@@ -33,6 +33,8 @@ import {GetKeyPress} from './directives/get-key-pressed.directive';
 import {GenusColor} from './directives/show-color.directive';
 import {Protected} from './directives/protected.directive';
 
+import {LevelNamePipe} from './pipes/level-name.pipe';
+
 import {AuthService} from './services/auth.service';
 import {WordService} from './services/words.service';
 import {WordlistService} from './services/wordlists.service';
@@ -86,6 +88,7 @@ import {ValidationService} from './services/validation.service';
     GetKeyPress,
     GenusColor,
     Protected,
+    LevelNamePipe,
     AuthMenu,
     SignIn,
     SignUp

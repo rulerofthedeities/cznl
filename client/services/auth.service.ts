@@ -46,4 +46,16 @@ export class AuthService {
     localStorage.setItem('km-cznl.userName', data.userName);
   }
 
+  getAccessLevel() {
+    const token = this.getToken();
+    return this.http.get('/api/user/access' + token)
+      .toPromise()
+      .then (response => response.json().obj)
+      .catch(this.handleError);
+  }
+
+  private handleError(error: any) {
+    console.error('An error occurred', error);
+    return Promise.reject(error.message || error);
+  }
 }

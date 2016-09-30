@@ -198,7 +198,6 @@ module.exports = {
     });
   },
   load: function(req, res) {
-    console.log(req.query);
     var options = {
       userId:mongo.ObjectID(req.decoded.user._id),
       listId:req.query.listid ? mongo.ObjectID(req.query.listid) : null,

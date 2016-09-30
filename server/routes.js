@@ -28,6 +28,8 @@ module.exports.initialize = function(app, router) {
     });
   });
 
+  router.get('/user/access', users.getAccess);
+
   router.get('/words', words.load);
   router.get('/words/check', words.check);
   router.get('/settings', settings.load);
