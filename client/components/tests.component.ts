@@ -80,7 +80,8 @@ export class Tests implements OnInit, OnDestroy {
     private wordService: WordService,
     private errorService: ErrorService,
     private settingsService: SettingsService,
-    restartService: RestartService) {
+    restartService: RestartService
+  ) {
     this.subscription = restartService.restartFilter$.subscribe(
       start => {
         this.restart();
@@ -89,7 +90,11 @@ export class Tests implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.settingsService.getAppSettings().then(
-      settings => {this.maxWords = settings.all.maxWords;},
+      settings => {
+        if (settings) {
+          this.maxWords = settings.all.maxWords;
+        }
+      },
       error => this.errorService.handleError(error)
     );
   }

@@ -1,14 +1,19 @@
 import {Injectable} from '@angular/core';
+import {AuthService} from './auth.service';
 import {Http} from '@angular/http';
 import {LEVELS, TPES, GENUS, CASES} from '../data/filters';
 
 @Injectable()
 export class FilterService {
 
-  constructor(private http: Http) { }
+  constructor(
+    private authService: AuthService,
+    private http: Http
+  ) {}
 
   getFilterOptions() {
-    return this.http.get('/api/cats?search=&max=200')
+    const token = this.authService.getToken();
+    return this.http.get('/api/cats' + token + '&search=&max=200')
       .toPromise()
       .then(response => {
         let cats = response.status === 200 ? response.json().cats: [];

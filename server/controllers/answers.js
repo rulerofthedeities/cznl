@@ -95,7 +95,7 @@ var makeIdArray = function(ids) {
 
 module.exports = {
   update: function(req, res){
-    var options = {userId:'demoUser'};
+    var options = {userId:mongo.ObjectID(req.decoded.user._id)};
     upsertAnswer(mongo.DB, options, req.body, function(err, result){
       response.handleError(err, res, 500, 'Error upserting answer', function(){
         response.handleSuccess(res, result, 200, 'Upserted answer');

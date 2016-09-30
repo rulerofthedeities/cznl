@@ -121,15 +121,18 @@ export class Filter implements OnInit {
       'cats': cat,
       'test': testTpe
     };
-
     return  filter;
   }
 
   getFilterOptions() {
     this.settingsService.getFilterSettings().then(
       settings => {
-        this.selected = settings.filter;
-        this.getCount(settings.filter);
+        if (settings) {
+          this.selected = settings.filter;
+        } else {
+          this.selected = {level:0, cats:'', tpe:'all'};
+        }
+        this.getCount(this.selected);
         this.filterService.getFilterOptions().then(
           filters => {
             this.filters = filters;

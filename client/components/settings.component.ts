@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Settings} from '../models/settings.model';
+import {AllSettings} from '../models/settings.model';
 import {SettingsService} from '../services/settings.service';
 import {ErrorService} from '../services/error.service';
 
@@ -10,7 +10,7 @@ import {ErrorService} from '../services/error.service';
 export class AppSettings implements OnInit {
   testLength: number[];
   directions: Object[];
-  settings: Settings;
+  settings: AllSettings;
   isReady = false;
   isSubmitted = false;
 
@@ -28,7 +28,16 @@ export class AppSettings implements OnInit {
     ];
     this.settingsService.getAppSettings().then(
       settings => {
-        this.settings = settings.all;
+        if (settings) {
+          this.settings = settings.all;
+        } else {
+          this.settings = {
+            maxWords: 25,
+            lanDir: 'nlcz',
+            showPronoun: false,
+            showColors: true
+          };
+        }
         this.isReady = true;
       },
       error => this.errorService.handleError(error)

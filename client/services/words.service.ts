@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {AuthService} from './auth.service';
 import {Http, Headers} from '@angular/http';
 import {Filter, FilterWord} from '../models/filters.model';
 import 'rxjs/add/operator/toPromise';
@@ -13,20 +14,26 @@ export class WordService {
   editWordSource$ = this.editWordSource.asObservable();
   newWordSource$ = this.newWordSource.asObservable();
 
-  constructor(private http: Http) { }
+  constructor(
+    private authService: AuthService,
+    private http: Http
+  ) {}
 
   getWordsFromFilter(filter: Filter, maxWords: number) {
-    let url = '/api/words?a=1&l=' + filter.level + '&t=' + filter.tpe + '&c=' + filter.cats + '&m=' + maxWords;
+    const token = this.authService.getToken();
+    const url = '/api/words' + token + '&a=1&l=' + filter.level + '&t=' + filter.tpe + '&c=' + filter.cats + '&m=' + maxWords;
     return this._getWordsAndAnswers(url);
   }
 
   getWordsFromWordList(_id:string, maxWords: number) {
-    let url = '/api/words?listid=' + _id + '&m=' + maxWords;
+    const token = this.authService.getToken();
+    let url = '/api/words' + token + '&listid=' + _id + '&m=' + maxWords;
     return this._getWordsAndAnswers(url);
   }
 
   getWordsFromAutoList(id:string, maxWords: number) {
-    let url = '/api/words?autoid=' + id + '&m=' + maxWords;
+    const token = this.authService.getToken();
+    let url = '/api/words' + token + '&autoid=' + id + '&m=' + maxWords;
     return this._getWordsAndAnswers(url);
   }
 
@@ -43,7 +50,8 @@ export class WordService {
 
   getFilterWords(filter: FilterWord, maxWords: number) {
     //Filter the list of words with regex on specific word
-    let url = '/api/words?a=0&wf=1&w=' + filter.word + '&m=' + maxWords;
+    const token = this.authService.getToken();
+    let url = '/api/words' + token + '&a=0&wf=1&w=' + filter.word + '&m=' + maxWords;
     url+= filter.start ? '&s=1' : '';
     return this.http.get(url)
       .toPromise()
@@ -52,7 +60,8 @@ export class WordService {
   }
 
   getCount(filter:Filter, wordFilter?:FilterWord) {
-    let url = '/api/words?cnt=1';
+    const token = this.authService.getToken();
+    let url = '/api/words' + token + '&cnt=1';
     if (wordFilter) {
       url+= '&wf=1';
       url+= '&w=' + wordFilter.word;
@@ -70,13 +79,14 @@ export class WordService {
     let headers = new Headers(),
         data: Object,
         wordPair: WordPair;
+    const token = this.authService.getToken();
 
     wordPair = this.cleanWord(word);
     data = {userId:'demoUser', word:wordPair};
     headers.append('Content-Type', 'application/json');
 
     return this.http
-      .post('/api/words', JSON.stringify(data), {headers: headers})
+      .post('/api/words' + token, JSON.stringify(data), {headers: headers})
       .toPromise()
       .then(() => data)
       .catch(this.handleError);
@@ -85,37 +95,41 @@ export class WordService {
   updateWord(word:WordPair) {
     let headers = new Headers(),
         data: Object;
+    const token = this.authService.getToken();
 
     word = this.cleanWord(word);
     data = {userId:'demoUser', word:word};
     headers.append('Content-Type', 'application/json');
     return this.http
-      .put('/api/words', JSON.stringify(data), {headers: headers})
+      .put('/api/words' + token, JSON.stringify(data), {headers: headers})
       .toPromise()
       .then(() => data)
       .catch(this.handleError);
   }
 
   saveAnswer(userId: string, wordId: string, answerId: string, correct: boolean) {
-    let headers = new Headers(),
-        answer = {userId, wordId, answerId, correct};
+    let headers = new Headers();
+    const token = this.authService.getToken(),
+          answer = {userId, wordId, answerId, correct};
     headers.append('Content-Type', 'application/json');
     return this.http
-      .put('/api/answer', JSON.stringify(answer), {headers: headers})
+      .put('/api/answer' + token, JSON.stringify(answer), {headers: headers})
       .toPromise()
       .then(() => answer)
       .catch(this.handleError);
   }
 
   searchCategories(search: string) {
-    return this.http.get('/api/cats?search=' + search)
+    const token = this.authService.getToken();
+    return this.http.get('/api/cats' + token + '&search=' + search)
       .toPromise()
       .then(response => {return response.status === 200 ? response.json().cats: null;})
       .catch(this.handleError);
   }
 
   checkIfWordExists(search: string) {
-    return this.http.get('/api/words/check?search=' + search)
+    const token = this.authService.getToken();
+    return this.http.get('/api/words/check' + token + '&search=' + search)
       .toPromise()
       .then((isFound) => isFound.json())
       .catch(this.handleError);

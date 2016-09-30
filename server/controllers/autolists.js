@@ -68,7 +68,7 @@ var loadAutoLists = function(db, options, callback) {
 module.exports = {
   load: function(req, res) {
     var listTpe = req.params.listTpe ? req.params.listTpe : 'user';
-    var options = {userId:'demoUser'};
+    var options = {userId:mongo.ObjectID(req.decoded.user._id)};
     loadAutoLists(mongo.DB, options, function(err, listData) {
       response.handleError(err, res, 500, 'Error loading auto lists', function(){
         response.handleSuccess(res, listData, 200, 'Auto lists loaded', 'lists');

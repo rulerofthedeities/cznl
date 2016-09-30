@@ -59,7 +59,7 @@ var getWordIds = function(db, filter, callback) {
 
 module.exports = {
   load: function(req, res) {
-    var options = {userId: 'demoUser'};
+    var options = {userId:mongo.ObjectID(req.decoded.user._id)};
     loadUserLists(mongo.DB, options, function(err, lists){
       lists.forEach(function(list) {list.count = list.wordIds ? list.wordIds.length : 0;});
       response.handleError(err, res, 500, 'Error retrieving list', function(){
@@ -68,7 +68,7 @@ module.exports = {
     });
   },
   save: function(req, res) {
-    var options = {userId: 'demoUser'};
+    var options = {userId:mongo.ObjectID(req.decoded.user._id)};
     saveNewList(mongo.DB, req.body, options, function(err, result){
       response.handleError(err, res, 500, 'Error saving list', function(){
         response.handleSuccess(res, result, 200, 'Saved list');
@@ -76,7 +76,7 @@ module.exports = {
     })
   },
   updateList: function(req, res) {
-    var options = {userId:'demoUser'};
+    var options = {userId:mongo.ObjectID(req.decoded.user._id)};
     updateUserList(mongo.DB, req.body, options, function(err, result){
       response.handleError(err, res, 500, 'Error updating list', function(){
         response.handleSuccess(res, result, 200, 'Updated list');
@@ -84,7 +84,7 @@ module.exports = {
     });
   },
   updateName: function(req, res) {
-    var options = {userId:'demoUser'};
+    var options = {userId:mongo.ObjectID(req.decoded.user._id)};
     updateListName(mongo.DB, req.body, options, function(err, result){
       response.handleError(err, res, 500, 'Error updating list name', function(){
         response.handleSuccess(res, result, 200, 'Updated list name');

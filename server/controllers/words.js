@@ -1,4 +1,5 @@
 var mongo = require('mongodb'),
+    jwt = require('jsonwebtoken'),
     answers = require("./answers"),
     userLists = require("./userlists"),
     response = require('../response');
@@ -198,9 +199,9 @@ module.exports = {
   },
   load: function(req, res) {
     var options = {
-      userId:'demoUser',
-      listId:req.query.listid,
-      autoId:req.query.autoid,
+      userId:mongo.ObjectID(req.decoded.user._id),
+      listId:req.query.listid ? mongo.ObjectID(req.query.listid) : null,
+      autoId:req.query.autoid ? mongo.ObjectID(req.query.autoid) : null,
       level:parseInt(req.query.l), 
       answers:req.query.a === "1" ? true: false, 
       tpe:req.query.t, 
@@ -209,7 +210,8 @@ module.exports = {
       isWordFilter:req.query.wf === "1" ? true: false,
       start:req.query.s === "1" ? true: false, 
       maxwords:req.query.m ? parseInt(req.query.m) : 0,
-      iscnt: req.query.cnt
+      iscnt: req.query.cnt,
+      ids: []
     }; 
     if (req.query.cnt == '1') {
       //Count # of words

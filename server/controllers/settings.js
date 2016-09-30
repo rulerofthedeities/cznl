@@ -58,7 +58,7 @@ module.exports = {
   load: function(req, res) {
     var options = {
       tpe:req.query.tpe, 
-      userId:'demoUser'
+      userId:mongo.ObjectID(req.decoded.user._id)
     };
     loadSettings(mongo.DB, options, function(err, doc) {
       response.handleError(err, res, 500, 'Error loading settings', function(){
@@ -69,7 +69,7 @@ module.exports = {
   update: function(req, res){
     var options = {
       tpe:req.query.tpe, 
-      userId:'demoUser'
+      userId:mongo.ObjectID(req.decoded.user._id)
     };
     updateSettings(mongo.DB, req.body, options, function(err, result) {
       response.handleError(err, res, 500, 'Error updating settings', function(){

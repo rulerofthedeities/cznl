@@ -4,6 +4,7 @@ export interface AllSettings {
     maxWords: number;
     lanDir: string;
     showPronoun: boolean;
+    showColors: boolean;
 }
 
 export interface Settings {

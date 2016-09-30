@@ -6,6 +6,9 @@ import {WordList} from '../../models/list.model';
 @Component({
   selector: 'word-lists',
   template: `
+    <div *ngIf="ready && lists.length < 1">
+      Geen {{tpe==="user" ? "persoonlijke" : ""}} woordenlijst gevonden
+    </div>
     <ul class="list-group" *ngIf="ready">
       <li 
         *ngFor="let list of lists; let i = index;"

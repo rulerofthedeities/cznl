@@ -1,42 +1,50 @@
 import {Injectable} from '@angular/core';
-import {Settings} from '../models/settings.model';
+import {AuthService} from './auth.service';
+import {AllSettings} from '../models/settings.model';
 import {Filter} from '../models/filters.model';
 import {Http, Headers} from '@angular/http';
 
 @Injectable()
 export class SettingsService {
 
-  constructor(private http: Http) {}
+  constructor(
+    private authService: AuthService,
+    private http: Http
+  ) {}
 
   getAppSettings() {
-    return this.http.get('/api/settings?tpe=all')
+    const token = this.authService.getToken();
+    return this.http.get('/api/settings' + token + '&tpe=all')
       .toPromise()
       .then (response => response.json().settings)
       .catch(this.handleError);
   }
 
-  setAppSettings(newSettings: Settings) {
-    let headers = new Headers();
+  setAppSettings(newSettings: AllSettings) {
+    const token = this.authService.getToken();
+    const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return this.http
-      .put('/api/settings?tpe=all', JSON.stringify(newSettings), {headers: headers})
+      .put('/api/settings' + token + '&tpe=all', JSON.stringify(newSettings), {headers: headers})
       .toPromise()
       .then(() => newSettings)
       .catch(this.handleError);
   }
 
   getFilterSettings() {
-    return this.http.get('/api/settings?tpe=filter')
+    const token = this.authService.getToken();
+    return this.http.get('/api/settings' + token + '&tpe=filter')
       .toPromise()
       .then (response => response.json().settings)
       .catch(this.handleError);
   }
 
   setFilterSettings(newFilter: Filter) {
-    let headers = new Headers();
+    const token = this.authService.getToken();
+    const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return this.http
-      .put('/api/settings?tpe=filter', JSON.stringify(newFilter), {headers: headers})
+      .put('/api/settings' + token + '&tpe=filter', JSON.stringify(newFilter), {headers: headers})
       .toPromise()
       .then(() => newFilter)
       .catch(this.handleError);
