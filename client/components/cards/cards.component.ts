@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {SettingsService} from '../../services/settings.service';
 import {ErrorService} from '../../services/error.service';
+import {UtilsService} from '../../services/utils.service';
 import {WordPair} from '../../models/word.model';
-import {shuffle} from '../../utils/utils';
 import {Subscription}   from 'rxjs/Subscription';
 
 @Component({
@@ -59,6 +59,7 @@ export class Cards implements OnInit {
 
   constructor(
     private settingsService: SettingsService,
+    private utilsService: UtilsService,
     private errorService: ErrorService
   ) {}
 
@@ -102,7 +103,7 @@ export class Cards implements OnInit {
 
   onRestart(isRestart: boolean) {
     this.reset();
-    shuffle(this.cards);
+    this.utilsService.shuffle(this.cards);
     this.getNextCard();
   }
 

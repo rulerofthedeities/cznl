@@ -198,10 +198,11 @@ module.exports = {
     });
   },
   load: function(req, res) {
+    console.log(req.query);
     var options = {
       userId:mongo.ObjectID(req.decoded.user._id),
       listId:req.query.listid ? mongo.ObjectID(req.query.listid) : null,
-      autoId:req.query.autoid ? mongo.ObjectID(req.query.autoid) : null,
+      autoId:req.query.autoid,
       level:parseInt(req.query.l), 
       answers:req.query.a === "1" ? true: false, 
       tpe:req.query.t, 
@@ -210,8 +211,7 @@ module.exports = {
       isWordFilter:req.query.wf === "1" ? true: false,
       start:req.query.s === "1" ? true: false, 
       maxwords:req.query.m ? parseInt(req.query.m) : 0,
-      iscnt: req.query.cnt,
-      ids: []
+      iscnt: req.query.cnt
     }; 
     if (req.query.cnt == '1') {
       //Count # of words

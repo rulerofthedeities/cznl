@@ -1,62 +1,64 @@
-<form 
-  class="settings" 
-  *ngIf="isReady" 
-  (ngSubmit)="onSubmit()" 
-  #settingsForm="ngForm">
+<section protected>
+  <form 
+    class="settings" 
+    *ngIf="isReady" 
+    (ngSubmit)="onSubmit()" 
+    #settingsForm="ngForm">
 
-    <div class="row form-group col-md-6 col-md-offset-3">
-      <label for="maxWords">Aantal woorden per test:</label>
-      <select 
-        class="form-control" 
-        name="maxWords"
-        [(ngModel)]="settings.maxWords" 
-        (change)="onModified()">
-        <option *ngFor="let l of testLength" [value]="l">
-          {{l}}
-        </option>
-      </select>
-    </div>
+      <div class="row form-group col-md-6 col-md-offset-3">
+        <label for="maxWords">Aantal woorden per test:</label>
+        <select 
+          class="form-control" 
+          name="maxWords"
+          [(ngModel)]="settings.maxWords" 
+          (change)="onModified()">
+          <option *ngFor="let l of testLength" [value]="l">
+            {{l}}
+          </option>
+        </select>
+      </div>
 
-    <div class="row form-group col-md-6 col-md-offset-3">
-      <label for="landir">Taalrichting:</label>
-      <select 
-        class="form-control"
-        name="landir"
-        [(ngModel)]="settings.lanDir"
-        (change)="onModified()">
-        <option *ngFor="let d of directions" [value]="d.val">
-          {{d.label}}
-        </option>
-      </select>
-    </div>
+      <div class="row form-group col-md-6 col-md-offset-3">
+        <label for="landir">Taalrichting:</label>
+        <select 
+          class="form-control"
+          name="landir"
+          [(ngModel)]="settings.lanDir"
+          (change)="onModified()">
+          <option *ngFor="let d of directions" [value]="d.val">
+            {{d.label}}
+          </option>
+        </select>
+      </div>
 
-    <div class="row form-group col-md-6 col-md-offset-3">
-      <input 
-        type="checkbox" 
-        name="showPronoun"
-        (change)="onModified()"
-        [(ngModel)]="settings.showPronoun">
-        Toon aanwijzend voornaamwoord
-    </div>
+      <div class="row form-group col-md-6 col-md-offset-3">
+        <input 
+          type="checkbox" 
+          name="showPronoun"
+          (change)="onModified()"
+          [(ngModel)]="settings.showPronoun">
+          Toon aanwijzend voornaamwoord
+      </div>
 
-    <div class="row form-group col-md-6 col-md-offset-3">
-      <input 
-        type="checkbox" 
-        name="showColors"
-        (change)="onModified()"
-        [(ngModel)]="settings.showColors">
-        Toon kleuren voor de genus
-    </div>
+      <div class="row form-group col-md-6 col-md-offset-3">
+        <input 
+          type="checkbox" 
+          name="showColors"
+          (change)="onModified()"
+          [(ngModel)]="settings.showColors">
+          Toon kleuren voor de genus
+      </div>
 
-    <button 
-      type="submit" 
-      class="btn btn-success col-md-offset-3" 
-      [disabled]="isSubmitted || !settingsForm.form.valid">
-      Opslaan
-    </button>
+      <button 
+        type="submit" 
+        class="btn btn-success col-md-offset-3" 
+        [disabled]="isSubmitted || !settingsForm.form.valid">
+        Opslaan
+      </button>
 
-</form>
+  </form>
 
-<div [hidden]="!isSubmitted">
-  <info-msg>De nieuwe instellingen zijn opgeslagen</info-msg>
-</div>
+  <div [hidden]="!isSubmitted">
+    <info-msg>De nieuwe instellingen zijn opgeslagen</info-msg>
+  </div>
+</section>

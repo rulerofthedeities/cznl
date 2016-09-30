@@ -4,9 +4,9 @@ import {Router} from '@angular/router';
 import {AuthService} from '../services/auth.service';
 
 @Directive({
-    selector: '[protected]'
+  selector: '[protected]'
 })
-export class ProtectedDirective implements OnInit {
+export class Protected implements OnInit {
 
   constructor(
     private authService:AuthService,

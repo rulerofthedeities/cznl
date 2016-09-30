@@ -1,6 +1,7 @@
 import {Component, OnInit, OnDestroy, EventEmitter, Output} from '@angular/core';
 import {FilterService} from '../services/filters.service';
 import {WordService} from '../services/words.service';
+import {AuthService} from '../services/auth.service';
 import {ErrorService} from '../services/error.service';
 import {ErrorObject} from '../models/word.model';
 import {WordPair} from '../models/word.model';
@@ -51,17 +52,20 @@ export class EditWord implements OnInit, OnDestroy {
     private filterService: FilterService,
     private wordService: WordService,
     private errorService: ErrorService,
+    private authService: AuthService,
     private formBuilder: FormBuilder
   ) {}
 
   ngOnInit() {
-    this._getFilterOptions();
-    this._buildForm();
-    this.subscription = this.wordService.editWordSource$.subscribe(
-      word => {
-        this.editForm(word);
-      }
-    );
+    if (this.authService.isLoggedIn()) {
+      this._getFilterOptions();
+    }
+      this._buildForm();
+      this.subscription = this.wordService.editWordSource$.subscribe(
+        word => {
+          this.editForm(word);
+        }
+      );
   }
 
   isNoun() {
@@ -236,7 +240,9 @@ export class EditWord implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
 }

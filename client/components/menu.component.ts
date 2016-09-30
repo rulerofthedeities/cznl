@@ -12,7 +12,7 @@ import {AuthService} from '../services/auth.service';
         <li 
           *ngFor="let route of routes"
           routerLinkActive="active">
-          <a [routerLink]="[route.path]">
+          <a [routerLink]="[route.path]" *ngIf="!route.protected || isLoggedIn()">
             <span 
               class="glyphicon glyphicon-{{route.glyph}}" 
               aria-hidden="true">
@@ -58,9 +58,9 @@ export class Menu implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.routes = [
-      {path:'/tests', label:'Oefeningen', glyph:'list-alt'},
-      {path:'/words', label:'Woorden', glyph:'plus'},
-      {path:'/settings', label:'Instellingen', glyph:'cog'}
+      {path:'/tests', label:'Oefeningen', glyph:'list-alt', protected: false},
+      {path:'/words', label:'Woorden', glyph:'plus', protected: true},
+      {path:'/settings', label:'Instellingen', glyph:'cog', protected: false}
     ];
     this.subscription = this.router.events.subscribe(event => this.url = event.url);
   }

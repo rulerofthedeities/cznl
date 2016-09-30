@@ -2,6 +2,7 @@ import {Component, Output, Input, EventEmitter, OnInit} from '@angular/core';
 import {FilterService} from '../services/filters.service';
 import {SettingsService} from '../services/settings.service';
 import {WordService} from '../services/words.service';
+import {AuthService} from '../services/auth.service';
 import {ErrorService} from '../services/error.service';
 import {Filter as FilterModel} from '../models/filters.model';
 
@@ -81,12 +82,15 @@ export class Filter implements OnInit {
   constructor(
     private filterService: FilterService,
     private settingsService: SettingsService,
+    private authService: AuthService,
     private wordService: WordService,
     private errorService: ErrorService
   ) {}
 
   ngOnInit() {
-    this.getFilterOptions();
+    if (this.authService.isLoggedIn()) {
+      this.getFilterOptions();
+    }
   }
 
   start(testTpe: string, level: string, wordTpe: string, cat: string) {

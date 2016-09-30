@@ -6,7 +6,6 @@ import {HttpModule} from '@angular/http';
 import {routing} from './routes';
 
 import {AppComponent} from './components/app.component';
-import {Dashboard} from './components/dashboard.component';
 import {WordBank} from './components/wordbank.component';
 import {AppSettings} from './components/settings.component';
 import {Menu} from './components/menu.component';
@@ -32,6 +31,7 @@ import {SignIn} from './components/auth/sign-in.component';
 import {GetFilterValue} from './directives/get-filter-value.directive';
 import {GetKeyPress} from './directives/get-key-pressed.directive';
 import {GenusColor} from './directives/show-color.directive';
+import {Protected} from './directives/protected.directive';
 
 import {AuthService} from './services/auth.service';
 import {WordService} from './services/words.service';
@@ -40,6 +40,7 @@ import {SettingsService} from './services/settings.service';
 import {FilterService} from './services/filters.service';
 import {RestartService} from './services/restart.service';
 import {ErrorService} from './services/error.service';
+import {UtilsService} from './services/utils.service';
 import {ValidationService} from './services/validation.service';
 
 @NgModule({
@@ -58,13 +59,13 @@ import {ValidationService} from './services/validation.service';
     RestartService,
     ErrorService,
     AuthService,
+    UtilsService,
     ValidationService
   ],
   declarations: [
     AppComponent,
     AppSettings,
     Menu,
-    Dashboard,
     WordBank,
     Tests,
     Filter,
@@ -84,6 +85,7 @@ import {ValidationService} from './services/validation.service';
     GetFilterValue,
     GetKeyPress,
     GenusColor,
+    Protected,
     AuthMenu,
     SignIn,
     SignUp

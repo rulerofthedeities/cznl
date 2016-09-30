@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AllSettings} from '../models/settings.model';
 import {SettingsService} from '../services/settings.service';
+import {AuthService} from '../services/auth.service';
 import {ErrorService} from '../services/error.service';
 
 @Component({
@@ -15,6 +16,7 @@ export class AppSettings implements OnInit {
   isSubmitted = false;
 
   constructor (
+    private authService: AuthService,
     private settingsService: SettingsService,
     private errorService: ErrorService
   ) {}
@@ -26,22 +28,24 @@ export class AppSettings implements OnInit {
       {label:'Nederlands -> Tsjechisch', val:'nlcz'},
       {label:'Tsjechisch -> Nederlands', val:'cznl'}
     ];
-    this.settingsService.getAppSettings().then(
-      settings => {
-        if (settings) {
-          this.settings = settings.all;
-        } else {
-          this.settings = {
-            maxWords: 25,
-            lanDir: 'nlcz',
-            showPronoun: false,
-            showColors: true
-          };
-        }
-        this.isReady = true;
-      },
-      error => this.errorService.handleError(error)
-    );
+    if (this.authService.isLoggedIn()) {
+      this.settingsService.getAppSettings().then(
+        settings => {
+          if (settings) {
+            this.settings = settings.all;
+          } else {
+            this.settings = {
+              maxWords: 25,
+              lanDir: 'nlcz',
+              showPronoun: false,
+              showColors: true
+            };
+          }
+          this.isReady = true;
+        },
+        error => this.errorService.handleError(error)
+      );
+    }
   }
 
   onModified() {
