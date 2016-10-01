@@ -1,4 +1,5 @@
-import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnChanges,
+  trigger, style, transition, animate, keyframes} from '@angular/core';
 import {WordPair, Word} from '../../models/word.model';
 import {AllSettings} from '../../models/settings.model';
 import {WordService} from '../../services/words.service';
@@ -7,7 +8,8 @@ import {ErrorService} from '../../services/error.service';
 @Component({
   selector: 'card-item',
   template: `
-    <div class="card center-block">
+    <div class="card center-block"
+      [@cardState]="state">
       <add-to-list [word]="card"></add-to-list>
 
 <!-- Question -->
@@ -62,8 +64,21 @@ import {ErrorService} from '../../services/error.service';
             Fout
           </div>
         </div>
-    </div>`,
-  styleUrls: ['client/components/cards/card.component.css']
+    </div>
+    `,
+  styleUrls: ['client/components/cards/card.component.css'],
+  animations: [
+    trigger('cardState', [
+      transition('question => answer', animate(300, keyframes([
+        style({color:'#fff', transform: 'scaleX(0)'}),
+        style({transform: 'scaleX(1)'})
+      ]))),
+      transition('answer => question', animate(500, keyframes([
+        style({borderColor: '#999', color: '#ddd', transform: 'rotate(300deg)'}),
+        style({borderColor: '#fff', color: '#fff', transform: 'translateX(400%)'})
+      ])))
+    ])
+  ]
 })
 
 export class CardItem implements OnChanges {
@@ -73,6 +88,8 @@ export class CardItem implements OnChanges {
   isQuestion = true;
   cardData: Word;
   cardDataPf: Word;
+  state = 'question';
+  showAnswer = false;
 
   constructor(
     private wordService: WordService,
@@ -85,6 +102,7 @@ export class CardItem implements OnChanges {
 
   turnCard() {
     this.isQuestion = !this.isQuestion;
+    this.state = this.isQuestion ? 'question' : 'answer';
     this.getCardData();
   }
 
@@ -115,6 +133,6 @@ export class CardItem implements OnChanges {
         }
       }
     }
-  }
+}
 
 }
