@@ -147,7 +147,7 @@ export class Tests implements OnInit, OnDestroy {
   }
 
   onStartTest(event: boolean) {
-    this.utilsService.shuffle(this.cards);
+    this.cards = this.utilsService.shuffle(this.cards);
     this.exerciseTpe = 'test';
   }
 

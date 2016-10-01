@@ -103,7 +103,7 @@ export class Cards implements OnInit {
 
   onRestart(isRestart: boolean) {
     this.reset();
-    this.utilsService.shuffle(this.cards);
+    this.cards = this.utilsService.shuffle(this.cards);
     this.getNextCard();
   }
 
