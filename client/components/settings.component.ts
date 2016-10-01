@@ -28,24 +28,22 @@ export class AppSettings implements OnInit {
       {label:'Nederlands -> Tsjechisch', val:'nlcz'},
       {label:'Tsjechisch -> Nederlands', val:'cznl'}
     ];
-    if (this.authService.isLoggedIn()) {
-      this.settingsService.getAppSettings().then(
-        settings => {
-          if (settings) {
-            this.settings = settings.all;
-          } else {
-            this.settings = {
-              maxWords: 25,
-              lanDir: 'nlcz',
-              showPronoun: false,
-              showColors: true
-            };
-          }
-          this.isReady = true;
-        },
-        error => this.errorService.handleError(error)
-      );
-    }
+    this.settingsService.getAppSettings().then(
+      settings => {
+        if (settings) {
+          this.settings = settings.all;
+        } else {
+          this.settings = {
+            maxWords: 25,
+            lanDir: 'nlcz',
+            showPronoun: false,
+            showColors: true
+          };
+        }
+        this.isReady = true;
+      },
+      error => this.errorService.handleError(error)
+    );
   }
 
   onModified() {

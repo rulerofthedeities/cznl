@@ -7,7 +7,7 @@ import {Subscription} from 'rxjs/Subscription';
 
 @Component({
   template: `
-    <section protected>
+    <section>
       <div class="form-inline">
         <div class="form-group">
           <label for="wordFilter" class="sr-only">Filter woord:</label>

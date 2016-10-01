@@ -31,11 +31,11 @@ import {SignIn} from './components/auth/sign-in.component';
 import {GetFilterValue} from './directives/get-filter-value.directive';
 import {GetKeyPress} from './directives/get-key-pressed.directive';
 import {GenusColor} from './directives/show-color.directive';
-import {Protected} from './directives/protected.directive';
 
 import {LevelNamePipe} from './pipes/level-name.pipe';
 
 import {AuthService} from './services/auth.service';
+import {AuthGuard} from './services/auth-guard.service';
 import {WordService} from './services/words.service';
 import {WordlistService} from './services/wordlists.service';
 import {SettingsService} from './services/settings.service';
@@ -62,7 +62,8 @@ import {ValidationService} from './services/validation.service';
     ErrorService,
     AuthService,
     UtilsService,
-    ValidationService
+    ValidationService,
+    AuthGuard
   ],
   declarations: [
     AppComponent,
@@ -87,7 +88,6 @@ import {ValidationService} from './services/validation.service';
     GetFilterValue,
     GetKeyPress,
     GenusColor,
-    Protected,
     LevelNamePipe,
     AuthMenu,
     SignIn,

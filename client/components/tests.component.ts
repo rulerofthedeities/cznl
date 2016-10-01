@@ -12,7 +12,7 @@ import {Subscription}   from 'rxjs/Subscription';
 
 @Component({
   template:`
-  <section protected>
+  <section>
     <div class="row">
       <div *ngIf="!started" class="col-xs-4">
         <ul class="btn-group-vertical btn-group-lg">
@@ -94,16 +94,14 @@ export class Tests implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (this.authService.isLoggedIn()) {
-      this.settingsService.getAppSettings().then(
-        settings => {
-          if (settings) {
-            this.maxWords = settings.all.maxWords;
-          }
-        },
-        error => this.errorService.handleError(error)
-      );
-    }
+    this.settingsService.getAppSettings().then(
+      settings => {
+        if (settings) {
+          this.maxWords = settings.all.maxWords;
+        }
+      },
+      error => this.errorService.handleError(error)
+    );
   }
 
   selectListType(tpe: string) {

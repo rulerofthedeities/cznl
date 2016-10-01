@@ -9,6 +9,7 @@ import {Access} from '../models/access.model';
   selector: 'menu',
   template: `
     <div class="small text-right user" 
+      *ngIf="isLoggedIn()"
       (click)="getAccess()">
       <span class="fa" [ngClass]="{'fa-chevron-right':!showAccess, 'fa-chevron-down':showAccess}"></span>
       {{getUserName()}}

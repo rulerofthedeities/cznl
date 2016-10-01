@@ -57,15 +57,13 @@ export class EditWord implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    if (this.authService.isLoggedIn()) {
-      this._getFilterOptions();
-    }
-      this._buildForm();
-      this.subscription = this.wordService.editWordSource$.subscribe(
-        word => {
-          this.editForm(word);
-        }
-      );
+    this._getFilterOptions();
+    this._buildForm();
+    this.subscription = this.wordService.editWordSource$.subscribe(
+      word => {
+        this.editForm(word);
+      }
+    );
   }
 
   isNoun() {
