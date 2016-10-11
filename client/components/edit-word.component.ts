@@ -70,8 +70,17 @@ export class EditWord implements OnInit, OnDestroy {
     return this.wordForm.controls['tpe'].value === 'noun';
   }
 
-  isVerb() {
-    return this.wordForm.controls['tpe'].value === 'verb';
+  isVerb(perfectOnly: boolean = false): boolean {
+    const isVerb = this.wordForm.controls['tpe'].value === 'verb';
+    const isImperfective = this.wordForm.controls['perfective'].value !== true;
+    let isVerbReturn = isVerb;
+
+    if (perfectOnly) {
+      //The verb only has a perfective aspect
+      isVerbReturn = isVerbReturn && isImperfective;
+    }
+
+    return isVerbReturn;
   }
 
   canHaveCase() {
@@ -157,6 +166,7 @@ export class EditWord implements OnInit, OnDestroy {
       '_id': [word ? word._id : ''],
       'tpe': [word ? word.tpe : '', [Validators.required]],
       'level': [word ? word.level : '', [Validators.required]],
+      'perfective': [word ? word.perfective : ''],
       'categories': [word ? word.categories : ''],
       'cz.word': [word ? word.cz.word : '', [Validators.required]],
       'cz.genus': [word ? word.cz.genus : ''],

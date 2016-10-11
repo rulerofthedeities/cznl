@@ -4,7 +4,7 @@ import {Component} from '@angular/core';
   selector: 'cz',
   template: `
     <div class="container">
-      <menu></menu>
+      <menu-bar></menu-bar>
       <router-outlet></router-outlet>
       <error-msg></error-msg>
     </div>`,

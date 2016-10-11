@@ -78,7 +78,7 @@ export class Review implements OnInit {
     this.translation.word = tgtword.word;
     this.translation.genus = this.settings.lanDir === 'cznl' ? '' : tgtword.genus;
     this.translation.case = tgtword.case;
-    this.translation.aspect = word.tpe === 'verb' ? 'impf' : '';
+    this.translation.aspect = word.tpe === 'verb' ? (word.perfective ? 'pf' : 'impf') : '';
     this.translation.firstpersonsingular = word.tpe === 'verb' ? tgtword.firstpersonsingular : '';
     if (this.settings.showPronoun) {
       this.translation.article = tgtword.article;

@@ -82,11 +82,11 @@ export class WordService {
     const token = this.authService.getToken();
 
     wordPair = this.cleanWord(word);
-    data = {userId:'demoUser', word:wordPair};
+    data = {word:wordPair};
     headers.append('Content-Type', 'application/json');
 
     return this.http
-      .post('/api/words' + token, JSON.stringify(data), {headers: headers})
+      .post('/api/words' + token, JSON.stringify(data), {headers})
       .toPromise()
       .then(() => data)
       .catch(this.handleError);
@@ -98,10 +98,10 @@ export class WordService {
     const token = this.authService.getToken();
 
     word = this.cleanWord(word);
-    data = {userId:'demoUser', word:word};
+    data = {word:word};
     headers.append('Content-Type', 'application/json');
     return this.http
-      .put('/api/words' + token, JSON.stringify(data), {headers: headers})
+      .put('/api/words' + token, JSON.stringify(data), {headers})
       .toPromise()
       .then(() => data)
       .catch(this.handleError);
@@ -113,7 +113,7 @@ export class WordService {
           answer = {userId, wordId, answerId, correct};
     headers.append('Content-Type', 'application/json');
     return this.http
-      .put('/api/answer' + token, JSON.stringify(answer), {headers: headers})
+      .put('/api/answer' + token, JSON.stringify(answer), {headers})
       .toPromise()
       .then(() => answer)
       .catch(this.handleError);
@@ -189,6 +189,7 @@ export class WordService {
 
     if (word._id) {wordPair._id = word._id;}
     wordPair.tpe = word.tpe;
+    wordPair.perfective = word.tpe === 'verb' ? word.perfective : false;
 
     wordPair.level = parseInt(word.level, 10);
     if (word.categories && word.categories.length > 0) {

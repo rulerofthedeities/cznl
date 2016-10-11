@@ -30,6 +30,15 @@
         </div>
     </div>
   </div>
+  <div class="row" *ngIf="isVerb()">
+    <div class="form-group col-xs-12">
+      <input 
+        type="checkbox" 
+        name="showPronoun"
+        [formControl]="wordForm.controls['perfective']">
+        Enkel Perfectief
+    </div>
+  </div>
 
 <!-- CZ -->
 
@@ -38,7 +47,7 @@
       <div class="panel panel-default">
         <div class="panel-heading"><h3>Tsjechisch</h3></div>
         <div class="panel-body">
-          <h4 *ngIf="isVerb()">Imperfectief Aspect</h4>
+          <h4 *ngIf="isVerb()">{{isVerb(true) ? "Imperfectief" : "Perfectief"}} Aspect</h4>
           <div class="form-group">
             <label 
               for="cz.word" 
@@ -173,7 +182,7 @@
         
         <!-- Perfective -->
 
-        <div class="panel-body" *ngIf="isVerb()">
+        <div class="panel-body" *ngIf="isVerb(true)">
           <h4>Perfectief Aspect</h4>
 
           <div class="form-group">
@@ -275,7 +284,7 @@
       <div class="panel panel-default">
         <div class="panel-heading"><h3>Nederlands</h3></div>
         <div class="panel-body">
-          <h4 *ngIf="isVerb()">Imperfectief Aspect</h4>
+          <h4 *ngIf="isVerb()">{{isVerb(true) ? "Imperfectief" : "Perfectief"}} Aspect</h4>
 
           <div class="form-group">
             <label for="nl.word" class="control-label col-xs-2">
@@ -361,7 +370,7 @@
         
         <!-- Perfective -->
 
-        <div class="panel-body" *ngIf="isVerb()">
+        <div class="panel-body" *ngIf="isVerb(true)">
           <h4>Perfectief Aspect</h4>
 
           <div class="form-group">

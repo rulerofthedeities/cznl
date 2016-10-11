@@ -135,7 +135,7 @@ var getCats = function(db, options, callback) {
 var saveNewWord = function(db, options, data, callback) {
   if (data && data.word) {
     var wordToSave = data.word;
-    wordToSave.userId = data.userId;
+    wordToSave.userId = options.userId;
 
     db.collection('wordpairs')
       .insertOne(wordToSave,
@@ -153,7 +153,7 @@ var updateWord = function(db, options, data, callback) {
   
   db.collection('wordpairs')
     .updateOne(
-    {userId: data.userId, _id:mongoId}, 
+    {userId: options.userId, _id:mongoId}, 
     {$set: word},
       function(err, result){
         callback(err, result);

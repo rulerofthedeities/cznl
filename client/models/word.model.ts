@@ -27,6 +27,7 @@ export interface WordPair {
   tpe: string;
   level: any;
   categories: string[];
+  perfective?: boolean;
 }
 
 export interface ErrorObject {

@@ -8,40 +8,45 @@ import {Subscription} from 'rxjs/Subscription';
 @Component({
   template: `
     <section>
-      <div class="form-inline">
-        <div class="form-group">
-          <label for="wordFilter" class="sr-only">Filter woord:</label>
-          <input #wordFilter
-            type="text"
-            id="wordFilter"
-            placeholder="Filter woord"
-            class="form-control">
+      <div class="row">
+        <div class="form-inline col-xs-12">
+          <div class="form-group">
+            <label for="wordFilter" class="sr-only">Filter woord:</label>
+            <input #wordFilter
+              type="text"
+              id="wordFilter"
+              placeholder="Filter woord"
+              class="form-control">
+          </div>
+          <div class="checkbox">
+            <label><input type="checkbox" value='1' #startcb>Vanaf begin</label>
+          </div>
+          <button class="btn btn-success"
+            (click)="searchWords(wordFilter.value, startcb.checked)">
+          Toon woorden
+          </button>
+          <div class="text-muted">Aantal woorden: <strong>{{totalWords}}</strong></div>
         </div>
-        <div class="checkbox">
-          <label><input type="checkbox" value='1' #startcb>Vanaf begin</label>
+      </div>
+
+      <div class="row">
+        <ul class="list-group col-xs-2 scroll"
+            on-mouseout="deselectWord()">
+          <li *ngFor="let word of words; let i = index" 
+              class="list-group-item"
+              (click)="editWord(word, i)"
+              on-mouseover="selectWord(i)"
+              [ngClass]="{'over': i === selected && i!==editing,'active': i === editing}">
+            {{i + 1}}. {{word.cz.word}}
+          </li>
+        </ul>
+        <div class="col-xs-10">
+          <edit-word
+            (updatedWord)="onWordUpdated($event)">
+          </edit-word>
         </div>
-        <button class="btn btn-success"
-          (click)="searchWords(wordFilter.value, startcb.checked)">
-        Toon woorden
-        </button>
-      <div class="text-muted">Aantal woorden: <strong>{{totalWords}}</strong></div>
+        <div class="clearfix"></div>
       </div>
-      <ul class="list-group col-xs-2 scroll"
-          on-mouseout="deselectWord()">
-        <li *ngFor="let word of words; let i = index" 
-            class="list-group-item"
-            (click)="editWord(word, i)"
-            on-mouseover="selectWord(i)"
-            [ngClass]="{'over': i === selected && i!==editing,'active': i === editing}">
-          {{i + 1}}. {{word.cz.word}}
-        </li>
-      </ul>
-      <div class="col-xs-10">
-        <edit-word
-          (updatedWord)="onWordUpdated($event)">
-        </edit-word>
-      </div>
-      <div class="clearfix"></div>
     </section>
   `,
   styles: [`

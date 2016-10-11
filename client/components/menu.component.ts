@@ -6,17 +6,18 @@ import {ErrorService} from '../services/error.service';
 import {Access} from '../models/access.model';
 
 @Component({
-  selector: 'menu',
+  selector: 'menu-bar',
   template: `
+  <div class="row">
     <div class="small text-right user" 
       *ngIf="isLoggedIn()"
       (click)="getAccess()">
       <span class="fa" [ngClass]="{'fa-chevron-right':!showAccess, 'fa-chevron-down':showAccess}"></span>
       {{getUserName()}}
       <div *ngIf="showAccess" id="accesswrapper">
-        <ul>
-          <li>level: {{access?.level | levelName}}</li>
-          <li>roles: {{access?.roles?.length > 0 ? access?.roles.join(', ') : 'no roles'}}</li>
+        <ul class="list-unstyled">
+          <li><strong>level</strong>: {{access?.level | levelName}}</li>
+          <li><strong>roles</strong>: {{access?.roles?.length > 0 ? access?.roles.join(', ') : 'no roles'}}</li>
         </ul>
       </div>
     </div>
@@ -43,6 +44,7 @@ import {Access} from '../models/access.model';
         </li>
       </ul>
     </nav>
+  </div>
   `,
   styles:[`
     .loginout {cursor: pointer;}

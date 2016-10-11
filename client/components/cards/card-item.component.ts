@@ -133,6 +133,5 @@ export class CardItem implements OnChanges {
         }
       }
     }
-}
-
+  }
 }
