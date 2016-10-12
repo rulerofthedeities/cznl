@@ -30,8 +30,8 @@ var findUser = function(db, req, res, callback) {
       if (result !== true) {
         callback({error:'Invalid password'}, doc, 401, 'Could not sign you in');
       } else {
-        var token = jwt.sign({user: doc}, 'secret', {expiresIn: 86400});
-        callback(null, {message: 'Success', token: token, userId: doc._id, userName:doc.userName});
+        var token = jwt.sign({user: doc}, process.env.JWT_TOKEN_SECRET, {expiresIn: 86400});
+        callback(null, {message: 'Success', token: token});
       }
     });
   })

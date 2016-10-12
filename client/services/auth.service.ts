@@ -2,20 +2,22 @@ import {Injectable} from '@angular/core';
 import {Http, Headers} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/Rx';
-import {User, UserLocal} from '../models/user.model';
+import {User, UserLocal, UserAccess} from '../models/user.model';
 
 @Injectable()
 export class AuthService {
+  private accessLocal: UserAccess = null;
+
   constructor (private http: Http) {}
 
   getToken(): string {
-    return localStorage.getItem('km-cznl.token') ? '?token=' + localStorage.getItem('km-cznl.token') : '';
+    return localStorage.getItem('km-osdt.token');
   }
 
   signup(user: User) {
     const body = JSON.stringify(user);
     const headers = new Headers({'Content-Type': 'application/json'});
-    return this.http.post('/api/user/signup', body, {headers: headers})
+    return this.http.post('/api/user/signup', body, {headers})
       .map(response => response.json().obj)
       .catch(error => Observable.throw(error.json()));
   }
@@ -23,7 +25,7 @@ export class AuthService {
   signin(user: User) {
     const body = JSON.stringify(user);
     const headers = new Headers({'Content-Type': 'application/json'});
-    return this.http.post('/api/user/signin', body, {headers: headers})
+    return this.http.post('/api/user/signin', body, {headers})
       .map(response => response.json().obj)
       .catch(error => Observable.throw(error.json()));
   }
@@ -40,22 +42,28 @@ export class AuthService {
     return localStorage.getItem('km-cznl.userName');
   }
 
+  setUserAccess(data: UserAccess) {
+    this.accessLocal = data;
+  }
+
+  getUserAccess() {
+    return this.accessLocal;
+  }
+
   storeUserData(data: UserLocal) {
     localStorage.setItem('km-cznl.token', data.token);
     localStorage.setItem('km-cznl.userId', data.userId);
     localStorage.setItem('km-cznl.userName', data.userName);
   }
 
-  getAccessLevel() {
+  fetchUserAccess() {
     const token = this.getToken();
-    return this.http.get('/api/user/access' + token)
-      .toPromise()
-      .then (response => response.json().obj)
-      .catch(this.handleError);
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + token);
+    return this.http.get('/api/user/access', {headers, body: ''})
+      .map(response => response.json().obj)
+      .catch(error => Observable.throw(error));
   }
 
-  private handleError(error: any) {
-    console.error('An error occurred', error);
-    return Promise.reject(error.message || error);
-  }
 }

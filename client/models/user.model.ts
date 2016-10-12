@@ -12,3 +12,9 @@ export interface UserLocal {
   userId: string;
   userName: string;
 }
+
+export interface UserAccess  {
+  level: number;
+  roles: string[];
+}
+

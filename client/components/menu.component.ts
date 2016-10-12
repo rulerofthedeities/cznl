@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Subscription}   from 'rxjs/Subscription';
 import {AuthService} from '../services/auth.service';
@@ -11,7 +11,7 @@ import {Access} from '../models/access.model';
   <div class="row">
     <div class="small text-right user" 
       *ngIf="isLoggedIn()"
-      (click)="getAccess()">
+      (click)="getUserAccess()">
       <span class="fa" [ngClass]="{'fa-chevron-right':!showAccess, 'fa-chevron-down':showAccess}"></span>
       {{getUserName()}}
       <div *ngIf="showAccess" id="accesswrapper">
@@ -80,7 +80,7 @@ import {Access} from '../models/access.model';
   `]
 })
 
-export class Menu implements OnInit, OnDestroy {
+export class Menu implements OnInit {
   subscription: Subscription;
   url: string;
   routes: Object[];
@@ -99,7 +99,6 @@ export class Menu implements OnInit, OnDestroy {
       {path:'/words', label:'Woorden', glyph:'plus', protected: true},
       {path:'/settings', label:'Instellingen', glyph:'cog', protected: false}
     ];
-    this.subscription = this.router.events.subscribe(event => this.url = event.url);
   }
 
   isLoggedIn() {
@@ -115,24 +114,19 @@ export class Menu implements OnInit, OnDestroy {
     return this.authService.getUserName();
   }
 
-  getAccess() {
+  getUserAccess() {
     this.showAccess = !this.showAccess;
     if (this.showAccess) {
-      this.authService.getAccessLevel().then(
-        access => {
-          if (access) {
-            this.access = new Access(access.level, access.roles);
-          }
-        },
-        error => this.errorService.handleError(error)
-      );
-    }
-  }
-
-  ngOnDestroy() {
-    // prevent memory leak when component is destroyed
-    if (this.subscription) {
-      this.subscription.unsubscribe();
+      this.access = this.authService.getUserAccess();
+      if (!this.access) {
+        this.authService.fetchUserAccess().subscribe(
+          access => {
+            this.authService.setUserAccess(access);
+            this.access = access;
+          },
+          error => this.errorService.handleError(error)
+        );
+      }
     }
   }
 }

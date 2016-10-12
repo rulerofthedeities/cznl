@@ -5,7 +5,10 @@ var isPublic = typeof window != "undefined";
   var map = {
     'app':                    'client', // 'dist',
     '@angular':               (isPublic) ? 'node/@angular' : 'node_modules/@angular',
-    'rxjs':                   (isPublic) ? 'node/rxjs' : 'node_modules/rxjs'
+    'rxjs':                   (isPublic) ? 'node/rxjs' : 'node_modules/rxjs',
+    'angular2-jwt':           (isPublic) ? 'node/angular2-jwt/angular2-jwt.js' : 'node_modules/angular2-jwt/angular2-jwt.js',
+    'js-base64':              (isPublic) ? 'node/js-base64/base64.js' : 'node_modules/js-base64/base64.js',
+    'buffer':                 '@empty' //jwt buffer
   };
   // packages tells the System loader how to load when no filename and/or no extension
   var packages = {
