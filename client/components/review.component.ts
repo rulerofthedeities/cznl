@@ -42,7 +42,7 @@ export class Review implements OnInit {
       if (!word.answer) {
         word.answer = {_id: null};
     }});
-    this.settingsService.getAppSettings().then(
+    this.settingsService.getAppSettings().subscribe(
       settings => {
         this.settings = settings.all;
         this.ready = true;

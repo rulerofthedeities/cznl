@@ -5,6 +5,7 @@ var express = require('express'),
     compression = require('compression'),
     path = require('path'),
     bodyParser = require('body-parser'),
+    bearerToken  = require('express-bearer-token'),
     routes = require('./server/routes'),
     db = require('./server/db');
 
@@ -12,12 +13,16 @@ var express = require('express'),
 app.set('port', process.env.PORT || 4000);
 app.set('env', process.env.NODE_ENV || 'development');
 
+//Check if required config vars are present
+if (!process.env.JWT_TOKEN_SECRET) { console.log('WARNING: no config var JWT_TOKEN_SECRET set!!');}
+
 // view engine setup
 app.set('views', path.join(__dirname, 'server/views'));
 app.set('view engine', 'hbs');
 
 //middleware
 app.use(compression());
+app.use(bearerToken());
 
 if (app.get('env') == 'development') {
   console.log('Server running in development mode');

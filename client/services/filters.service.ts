@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {AuthService} from './auth.service';
-import {Http} from '@angular/http';
+import {Http, Headers} from '@angular/http';
 import {LEVELS, TPES, GENUS, CASES} from '../data/filters';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class FilterService {
@@ -13,9 +14,12 @@ export class FilterService {
 
   getFilterOptions() {
     const token = this.authService.getToken();
-    return this.http.get('/api/cats' + token + '&search=&max=200')
-      .toPromise()
-      .then(response => {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + token);
+    return this.http
+      .get('/api/cats?search=&max=200', {headers})
+      .map(response => {
         let cats = response.status === 200 ? response.json().cats: [];
         return {
         'levels': LEVELS,
@@ -24,12 +28,6 @@ export class FilterService {
         'cases': CASES,
         'cats': cats};
       })
-      .catch(this.handleError);
+      .catch(error => Observable.throw(error));
   }
-
-  private handleError(error: any) {
-    console.error('An error occurred', error);
-    return Promise.reject(error.message || error);
-  }
-
 }

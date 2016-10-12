@@ -96,7 +96,7 @@ export class Filter implements OnInit {
   start(testTpe: string, level: string, wordTpe: string, cat: string) {
     if (this.totalWords < 1) {return;}
     let filter:FilterModel = this.getFilter(testTpe, level, wordTpe, cat);
-    this.settingsService.setFilterSettings(filter).then(
+    this.settingsService.setFilterSettings(filter).subscribe(
       settings => {;},
       error => this.errorService.handleError(error)
     );
@@ -112,7 +112,7 @@ export class Filter implements OnInit {
   }
 
   getCount(filter: FilterModel) {
-    this.wordService.getCount(filter).then(
+    this.wordService.getCount(filter).subscribe(
       total => {this.totalWords = total;},
       error => this.errorService.handleError(error)
     );
@@ -129,7 +129,7 @@ export class Filter implements OnInit {
   }
 
   getFilterOptions() {
-    this.settingsService.getFilterSettings().then(
+    this.settingsService.getFilterSettings().subscribe(
       settings => {
         if (settings) {
           this.selected = settings.filter;
@@ -137,7 +137,7 @@ export class Filter implements OnInit {
           this.selected = {level:-1, cats:'all', tpe:'all'};
         }
         this.getCount(this.selected);
-        this.filterService.getFilterOptions().then(
+        this.filterService.getFilterOptions().subscribe(
           filters => {
             this.filters = filters;
             this.filtersLoaded = true;

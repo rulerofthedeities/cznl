@@ -43,16 +43,15 @@ export class ShowLists {
   }
 
   updateUserLists(word: WordPair) {
-    this.wordlistService.getWordLists('user')
-      .then(
-        lists => {
-          this.userLists = lists;
-          this._checkIfWordInLists();
-          this.creatingNewList = false;
-          this.changesMade = false;
-          this.isVisible = true;
-        },
-        error => this.errorService.handleError(error));
+    this.wordlistService.getWordLists('user').subscribe(
+      lists => {
+        this.userLists = lists;
+        this._checkIfWordInLists();
+        this.creatingNewList = false;
+        this.changesMade = false;
+        this.isVisible = true;
+      },
+      error => this.errorService.handleError(error));
   }
 
   editListName(list: WordList, i: number) {
@@ -119,24 +118,22 @@ export class ShowLists {
   }
 
   _saveNewList(list: WordList, cnt: number, callback) {
-    this.wordlistService.saveList(list)
-      .then(
-        result  => {
-          list._id = result.obj.insertedIds[0];
-          callback();
-        },
-        error => this.errorService.handleError(error)
-      );
+    this.wordlistService.saveList(list).subscribe(
+      result  => {
+        list._id = result.obj.insertedIds[0];
+        callback();
+      },
+      error => this.errorService.handleError(error)
+    );
   }
 
   _saveEditedLists() {
     //Save edited lists (name changed)
     this.listsEdited.forEach(i => {
-      this.wordlistService.updateListName(this.userLists[i])
-        .then(
-          list  => {;},
-          error => this.errorService.handleError(error)
-        );
+      this.wordlistService.updateListName(this.userLists[i]).subscribe(
+        list  => {;},
+        error => this.errorService.handleError(error)
+      );
     });
   }
 
@@ -145,8 +142,7 @@ export class ShowLists {
     this.listsToggled.forEach(i => {
       //add list , list ID, word ID
       this.wordlistService
-        .updateWordList(this.isWordInList[i], this.userLists[i]._id, this.word._id)
-        .then(
+        .updateWordList(this.isWordInList[i], this.userLists[i]._id, this.word._id).subscribe(
           update => this.userlistChanged.emit(update),
           error => this.errorService.handleError(error)
         );

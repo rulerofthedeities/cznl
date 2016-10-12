@@ -28,7 +28,7 @@ export class GetFilterValue implements OnInit {
   }
 
   _getFilterOptions() {
-    this.filterService.getFilterOptions().then(
+    this.filterService.getFilterOptions().subscribe(
       filters => {
         this.filters = filters;
         this.el.nativeElement.innerText = this._getValue();

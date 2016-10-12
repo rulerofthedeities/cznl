@@ -94,7 +94,7 @@ export class Tests implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.settingsService.getAppSettings().then(
+    this.settingsService.getAppSettings().subscribe(
       settings => {
         if (settings) {
           this.maxWords = settings.all.maxWords;
@@ -109,7 +109,7 @@ export class Tests implements OnInit, OnDestroy {
   }
 
   getWordsFromFilter(filter: FilterModel) {
-    this.wordService.getWordsFromFilter(filter, this.maxWords).then(
+    this.wordService.getWordsFromFilter(filter, this.maxWords).subscribe(
       words => {
         this.cards = words;
         this.exerciseTpe = filter.test;
@@ -120,7 +120,7 @@ export class Tests implements OnInit, OnDestroy {
   }
 
   getWordsFromUserList(data: any) {
-    this.wordService.getWordsFromWordList(data.selected._id, this.maxWords).then(
+    this.wordService.getWordsFromWordList(data.selected._id, this.maxWords).subscribe(
       words => {
         this.cards = words;
         this.exerciseTpe = data.exerciseTpe;
@@ -131,7 +131,7 @@ export class Tests implements OnInit, OnDestroy {
   }
 
   getWordsFromAutoList(data: any) {
-    this.wordService.getWordsFromAutoList(data.selected.id, this.maxWords).then(
+    this.wordService.getWordsFromAutoList(data.selected.id, this.maxWords).subscribe(
       words => {
         this.cards = words;
         this.exerciseTpe = data.exerciseTpe;

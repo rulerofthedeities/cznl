@@ -28,7 +28,7 @@ export class AppSettings implements OnInit {
       {label:'Nederlands -> Tsjechisch', val:'nlcz'},
       {label:'Tsjechisch -> Nederlands', val:'cznl'}
     ];
-    this.settingsService.getAppSettings().then(
+    this.settingsService.getAppSettings().subscribe(
       settings => {
         if (settings) {
           this.settings = settings.all;
@@ -51,7 +51,7 @@ export class AppSettings implements OnInit {
   }
 
   onSubmit() {
-    this.settingsService.setAppSettings(this.settings).then(
+    this.settingsService.setAppSettings(this.settings).subscribe(
       settings => {;},
       error => this.errorService.handleError(error)
     );

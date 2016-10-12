@@ -37,7 +37,7 @@ export class GenusColor implements OnInit {
   }
 
   _getSettings() {
-    this.settingsService.getAppSettings().then(
+    this.settingsService.getAppSettings().subscribe(
       settings => {
         if (settings.all.showColors) {
           this._showGenusColors();

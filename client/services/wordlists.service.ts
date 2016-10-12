@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {AuthService} from './auth.service';
 import {Http, Headers} from '@angular/http';
 import {WordList} from '../models/list.model';
-import 'rxjs/add/operator/toPromise';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class WordlistService {
@@ -13,10 +13,13 @@ export class WordlistService {
 
   getWordLists(listTpe: string) {
     const token = this.authService.getToken();
-    return this.http.get('/api/lists/' + listTpe + token)
-      .toPromise()
-      .then(response => response.json().lists)
-      .catch(this.handleError);
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + token);
+    return this.http
+      .get('/api/lists/' + listTpe, {headers})
+      .map(response => response.json().lists)
+      .catch(error => Observable.throw(error));
   }
 
   updateWordList(isInList: boolean, userListId: string, wordId: string) {
@@ -24,37 +27,32 @@ export class WordlistService {
           token = this.authService.getToken();
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + token);
     return this.http
-      .put('/api/lists/words' + token, JSON.stringify(listUpdate), {headers: headers})
-      .toPromise()
-      .then(() => listUpdate)
-      .catch(this.handleError);
+      .put('/api/lists/words' + token, JSON.stringify(listUpdate), {headers})
+      .map(response => listUpdate)
+      .catch(error => Observable.throw(error));
   }
 
   saveList(list: WordList) {
     let headers = new Headers();
     const token = this.authService.getToken();
     headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + token);
     return this.http
-      .post('/api/lists/add' + token, JSON.stringify(list), {headers: headers})
-      .toPromise()
-      .then(response => response.json())
-      .catch(this.handleError);
+      .post('/api/lists/add' + token, JSON.stringify(list), {headers})
+      .map(response => response.json().obj)
+      .catch(error => Observable.throw(error));
   }
 
   updateListName(list: WordList) {
     let headers = new Headers();
     const token = this.authService.getToken();
     headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + token);
     return this.http
-      .put('/api/lists/edit' + token, JSON.stringify(list), {headers: headers})
-      .toPromise()
-      .then(() => list)
-      .catch(this.handleError);
-  }
-
-  private handleError(error: any) {
-    console.error('An error occurred', error);
-    return Promise.reject(error.message || error);
+      .put('/api/lists/edit' + token, JSON.stringify(list), {headers})
+      .map(response => list)
+      .catch(error => Observable.throw(error));
   }
 }

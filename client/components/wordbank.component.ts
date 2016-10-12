@@ -109,12 +109,11 @@ export class WordBank implements OnInit, OnDestroy {
   }
 
   getWords(filter: FilterWord) {
-    this.wordService.getFilterWords(filter, this.maxWords)
-      .then(
-        words => {this.words = words;},
-        error => this.errorService.handleError(error)
-      );
-    this.wordService.getCount(null, filter).then(
+    this.wordService.getFilterWords(filter, this.maxWords).subscribe(
+      words => {this.words = words;},
+      error => this.errorService.handleError(error)
+    );
+    this.wordService.getCount(null, filter).subscribe(
       total => {this.totalWords = total;},
       error => this.errorService.handleError(error)
     );

@@ -20,7 +20,7 @@ module.exports.initialize = function(app, router) {
   router.post('/user/signup', users.signup);
   
   router.use('/', function(req, res, next) {
-    jwt.verify(req.query.token, 'secret', function(err, decoded) {
+    jwt.verify(req.token, process.env.JWT_TOKEN_SECRET, function(err, decoded) {
       response.handleError(err, res, 401, 'Authentication failed', function(){
         req.decoded = decoded;
         next();

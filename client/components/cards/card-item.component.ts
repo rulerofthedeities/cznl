@@ -109,7 +109,7 @@ export class CardItem implements OnChanges {
   answerCard(correct: boolean) {
     this.cardAnswered.emit(correct);
     this.turnCard();
-    this.wordService.saveAnswer('demoUser', this.card._id, this.card.answer._id, correct).then(
+    this.wordService.saveAnswer('demoUser', this.card._id, this.card.answer._id, correct).subscribe(
         answer => {;},
         error => this.errorService.handleError(error)
       );

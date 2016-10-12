@@ -11,7 +11,7 @@ export class AuthService {
   constructor (private http: Http) {}
 
   getToken(): string {
-    return localStorage.getItem('km-osdt.token');
+    return localStorage.getItem('km-cznl.token');
   }
 
   signup(user: User) {

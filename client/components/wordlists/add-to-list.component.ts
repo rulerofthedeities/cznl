@@ -32,13 +32,12 @@ export class AddToList implements OnChanges {
   ) {}
 
   ngOnChanges() {
-    this.wordlistService.getWordLists('user')
-      .then(
-        lists => {
-          this.isInList = this._checkIfInUserlist(lists);
-        },
-        error => this.errorService.handleError(error)
-      );
+    this.wordlistService.getWordLists('user').subscribe(
+      lists => {
+        this.isInList = this._checkIfInUserlist(lists);
+      },
+      error => this.errorService.handleError(error)
+    );
   }
 
   showModalLists() {

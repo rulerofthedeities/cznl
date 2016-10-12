@@ -62,7 +62,7 @@ module.exports = {
     };
     loadSettings(mongo.DB, options, function(err, doc) {
       response.handleError(err, res, 500, 'Error loading settings', function(){
-        response.handleSuccess(res, doc, 200, 'Loaded settings', 'settings');
+        response.handleSuccess(res, doc, 200, 'Loaded settings');
       });
     });
   },

@@ -69,7 +69,7 @@ export class Cards implements OnInit {
   }
 
   getSettings() {
-    this.settingsService.getAppSettings().then(
+    this.settingsService.getAppSettings().subscribe(
       settings => {
         this.maxCards = Math.min(settings.all.maxWords, this.cards.length);
         this.settings = settings.all;

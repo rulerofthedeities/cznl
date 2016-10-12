@@ -52,14 +52,13 @@ export class WordLists implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.wordlistService.getWordLists(this.tpe)
-      .then(
-        lists => {
-          this.lists = lists;
-          this.ready = true;
-        },
-        error => this.errorService.handleError(error)
-      );
+    this.wordlistService.getWordLists(this.tpe).subscribe(
+      lists => {
+        this.lists = lists;
+        this.ready = true;
+      },
+      error => this.errorService.handleError(error)
+    );
   }
 
   selectList(i: number) {
