@@ -28,6 +28,12 @@ module.exports.initialize = function(app, router) {
     });
   });
 
+  router.use('/user/refresh', function(req, res, next) {
+    req.expiresIn = app.get('token_expiration');
+    next();
+  });
+
+  router.patch('/user/refresh', users.refreshToken);
   router.get('/user/access', users.getAccess);
 
   router.get('/words', words.load);

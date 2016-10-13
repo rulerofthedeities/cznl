@@ -1,6 +1,5 @@
 import {Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
 import {Http} from '@angular/http';
 import {AuthService } from '../../services/auth.service';
 import {ErrorService} from '../../services/error.service';
@@ -128,7 +127,6 @@ export class SignUp implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private errorService: ErrorService,
-    private router: Router,
     private http: Http
   ) {}
 
@@ -150,10 +148,7 @@ export class SignUp implements OnInit {
       this.authService.signup(user).subscribe(
         data => {
           this.authService.signin(user).subscribe(
-            data => {
-              this.authService.storeUserData(data);
-              this.router.navigateByUrl('/');
-            },
+            data => this.authService.signedIn(data),
             error => this.errorService.handleError(error)
           );
         },

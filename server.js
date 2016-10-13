@@ -12,9 +12,12 @@ var express = require('express'),
 //config
 app.set('port', process.env.PORT || 4000);
 app.set('env', process.env.NODE_ENV || 'development');
+app.set('token_expiration', 604800);// Token expires after 7 days
 
 //Check if required config vars are present
-if (!process.env.JWT_TOKEN_SECRET) { console.log('WARNING: no config var JWT_TOKEN_SECRET set!!');}
+if (!process.env.JWT_TOKEN_SECRET) {
+  console.log('WARNING: no config var JWT_TOKEN_SECRET set!!');
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'server/views'));

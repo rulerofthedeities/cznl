@@ -1,9 +1,7 @@
 import {Component, OnInit } from '@angular/core';
-import {Router} from '@angular/router';
-import {JwtHelper} from 'angular2-jwt';
 import {AuthService} from '../../services/auth.service';
 import {ErrorService} from '../../services/error.service';
-import {User, UserLocal, UserAccess} from '../../models/user.model';
+import {User} from '../../models/user.model';
 
 @Component({
   template: `
@@ -98,11 +96,9 @@ import {User, UserLocal, UserAccess} from '../../models/user.model';
 
 export class SignIn implements OnInit {
   user: User;
-  jwtHelper: JwtHelper= new JwtHelper();
 
   constructor(
     private authService: AuthService,
-    private router: Router,
     private errorService: ErrorService
   ) {}
 
@@ -111,25 +107,9 @@ export class SignIn implements OnInit {
   }
 
   onSubmit(user: User) {
-    let userData: UserLocal;
-    let userAccess: UserAccess = {level: 1, roles: []};
     this.authService.signin(user)
       .subscribe(
-        data => {
-          let decoded = this.jwtHelper.decodeToken(data.token);
-          userData = {
-            token: data.token,
-            userId: decoded.user._id,
-            userName: decoded.user.userName
-          };
-          userAccess = {
-            level: decoded.user.access.level,
-            roles: decoded.user.access.roles
-          };
-          this.authService.storeUserData(userData);
-          this.authService.setUserAccess(userAccess);
-          this.router.navigateByUrl('/');
-        },
+        data => this.authService.signedIn(data),
         error => this.errorService.handleError(error)
       );
   }

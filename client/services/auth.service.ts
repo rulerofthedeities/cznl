@@ -1,14 +1,21 @@
 import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
 import {Http, Headers} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
+import {tokenNotExpired} from 'angular2-jwt';
+import {JwtHelper} from 'angular2-jwt';
 import 'rxjs/Rx';
 import {User, UserLocal, UserAccess} from '../models/user.model';
 
 @Injectable()
 export class AuthService {
   private accessLocal: UserAccess = null;
+  private jwtHelper: JwtHelper = new JwtHelper();
 
-  constructor (private http: Http) {}
+  constructor (
+    private http: Http,
+    private router: Router
+  ) {}
 
   getToken(): string {
     return localStorage.getItem('km-cznl.token');
@@ -30,12 +37,30 @@ export class AuthService {
       .catch(error => Observable.throw(error.json()));
   }
 
+  signedIn(data: any) {
+    let userData: UserLocal,
+        userAccess: UserAccess = {level: 1, roles: []},
+        decoded = this.jwtHelper.decodeToken(data.token);
+    userData = {
+      token: data.token,
+      userId: decoded.user._id,
+      userName: decoded.user.userName
+    };
+    userAccess = {
+      level: decoded.user.access.level,
+      roles: decoded.user.access.roles
+    };
+    this.storeUserData(userData);
+    this.setUserAccess(userAccess);
+    this.router.navigateByUrl('/');
+  }
+
   logout() {
     localStorage.clear();
   }
 
   isLoggedIn() {
-    return localStorage.getItem('km-cznl.token') !== null;
+    return tokenNotExpired('km-cznl.token');
   }
 
   getUserName() {
@@ -50,6 +75,24 @@ export class AuthService {
     return this.accessLocal;
   }
 
+  keepTokenFresh() {
+    const token = this.getToken(),
+          decoded = this.jwtHelper.decodeToken(token),
+          initialSecs = decoded.exp - decoded.iat,
+          currentSecs = decoded.exp - Math.floor(Date.now() / 1000);
+
+    console.log('Secs since token created', initialSecs - currentSecs);
+    if (initialSecs - currentSecs > 3600) {
+      //renew token if it is older than an hour
+      this.refreshToken().subscribe(
+        token => {
+          console.log('received new token', token);
+          localStorage.setItem('km-cznl.token', token);
+        }
+      );
+    }
+  }
+
   storeUserData(data: UserLocal) {
     localStorage.setItem('km-cznl.token', data.token);
     localStorage.setItem('km-cznl.userId', data.userId);
@@ -61,7 +104,19 @@ export class AuthService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + token);
-    return this.http.get('/api/user/access', {headers, body: ''})
+    return this.http
+      .get('/api/user/access', {headers})
+      .map(response => response.json().obj)
+      .catch(error => Observable.throw(error));
+  }
+
+  refreshToken() {
+    const token = this.getToken();
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + token);
+    return this.http
+      .patch('/api/user/refresh', {}, {headers})
       .map(response => response.json().obj)
       .catch(error => Observable.throw(error));
   }

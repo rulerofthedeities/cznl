@@ -59,7 +59,7 @@ export class WordService {
     url+= filter.start ? '&s=1' : '';
     return this.http
       .get(url, {headers})
-      .map(response => response.json().obj)
+      .map(response => response.json().words)
       .catch(error => Observable.throw(error));
   }
 
@@ -78,7 +78,7 @@ export class WordService {
     }
     return this.http
       .get(url, {headers})
-      .map(response => response.json().obj)
+      .map(response => response.json().total)
       .catch(error => Observable.throw(error));
   }
 
@@ -110,7 +110,7 @@ export class WordService {
     headers.append('Authorization', 'Bearer ' + token);
     return this.http
       .put('/api/words', JSON.stringify(data), {headers})
-      .map(response => response.json().obj)
+      .map(response => word)
       .catch(error => Observable.throw(error));
   }
 
@@ -143,7 +143,7 @@ export class WordService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + token);
     return this.http
-      .get('/api/words/check?search=' + search)
+      .get('/api/words/check?search=' + search, {headers})
       .map(response => response.json().obj)
       .catch(error => Observable.throw(error));
   }
