@@ -56,7 +56,8 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.clear();
+    this.clearStorage();
+    this.router.navigate(['/auth/signin']);
   }
 
   isLoggedIn() {
@@ -82,11 +83,11 @@ export class AuthService {
           currentSecs = decoded.exp - Math.floor(Date.now() / 1000);
 
     console.log('Secs since token created', initialSecs - currentSecs);
-    if (initialSecs - currentSecs > 3600) {
+    if (initialSecs - currentSecs >= 3600) {
       //renew token if it is older than an hour
       this.refreshToken().subscribe(
         token => {
-          console.log('received new token', token);
+          console.log('received new token');
           localStorage.setItem('km-cznl.token', token);
         }
       );
@@ -97,6 +98,12 @@ export class AuthService {
     localStorage.setItem('km-cznl.token', data.token);
     localStorage.setItem('km-cznl.userId', data.userId);
     localStorage.setItem('km-cznl.userName', data.userName);
+  }
+
+  clearStorage() {
+    localStorage.removeItem('km-cznl.token');
+    localStorage.removeItem('km-cznl.userId');
+    localStorage.removeItem('km-cznl.userName');
   }
 
   fetchUserAccess() {

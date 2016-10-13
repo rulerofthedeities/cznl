@@ -30,7 +30,11 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     let timer = Observable.timer(30000, 3600000); //Start after 30 secs, then check every hour
     timer.subscribe(
-      t => {this.authService.keepTokenFresh();}
+      t => {
+        if (this.authService.isLoggedIn()) {
+          this.authService.keepTokenFresh();
+        }
+      }
     );
   }
 }

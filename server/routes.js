@@ -15,6 +15,11 @@ module.exports.initialize = function(app, router) {
     response.sendFile(home);
   });
 
+  router.use(['/user/refresh', '/user/signin'], function(req, res, next) {
+    req.expiresIn = app.get('token_expiration') || 86400;
+    next();
+  });
+
   router.get('/user/check', users.check);
   router.post('/user/signin', users.signin);
   router.post('/user/signup', users.signup);
@@ -28,10 +33,6 @@ module.exports.initialize = function(app, router) {
     });
   });
 
-  router.use('/user/refresh', function(req, res, next) {
-    req.expiresIn = app.get('token_expiration');
-    next();
-  });
 
   router.patch('/user/refresh', users.refreshToken);
   router.get('/user/access', users.getAccess);

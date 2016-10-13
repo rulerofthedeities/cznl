@@ -8,7 +8,7 @@ import {User} from '../../models/user.model';
     <div id="loginbox" style="margin-top:50px;" class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">                    
       <div class="panel panel-primary">
         <div class="panel-heading">
-          <div class="panel-title">Sign In</div>
+          <div class="panel-title">Aanmelden</div>
           <div *ngIf="false" style="float:right; font-size: 80%; position: relative; top:-10px">
             <a href="#">Forgot password?</a>
           </div>
@@ -74,7 +74,7 @@ import {User} from '../../models/user.model';
                   <button type="submit"
                     class="btn btn-success"
                     [disabled]="!f.valid">
-                    Sign In
+                    Aanmelden
                   </button>
                 </div>
             </div>
@@ -82,8 +82,8 @@ import {User} from '../../models/user.model';
             <div class="form-group">
               <div class="col-md-12 control">
                 <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%" >
-                  Don't have an account?
-                    <a routerLink="/auth/signup">Sign Up Here</a>
+                  Heeft u nog geen account?
+                    <a routerLink="/auth/signup">Registreer dan hier</a>
                 </div>
               </div>
             </div>    

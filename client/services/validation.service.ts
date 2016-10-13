@@ -7,26 +7,16 @@ export class ValidationService {
 
   static getValidatorErrorMessage(label: string, validatorName: string, validatorValue?: any) {
     let config = {
-      'required': label + ' is required',
-      'invalidCreditCard': 'Is invalid credit card number',
-      'invalidEmailAddress': 'Invalid email address. Format should be <i>john@doe.com</i>.',
-      'minlength': `${label} must be at least ${validatorValue.requiredLength} characters long.`,
-      'invalidPassword': `Invalid password. Password must be at least ${validatorValue.requiredLength}`
-      + ` characters long, and contain a number.`,
-      'usernameTaken': `This username is not available. Please choose another username.`,
-      'emailTaken': `This email address is not available. Please choose another email.`,
-      'recipientTaken': `This recipient already exists.`
+      'required': label + ' is verplicht',
+      'invalidEmailAddress': 'Incorrect email adres. Het juiste formaat is jan@peeters.com.',
+      'minlength': `${label} moet minstens ${validatorValue.requiredLength} karakters lang zijn.`,
+      'invalidPassword': `Ongeldig wachtwoord. Het wachtwoord moet minstens ${validatorValue.requiredLength}`
+      + ` karakters lang zijn en een nummer bevatten.`,
+      'usernameTaken': `Deze gebruikersnaam is niet beschikbaar. Gelieve een andere gebruikersnaam te kiezen.`,
+      'emailTaken': `Dit email adres is niet beschikbaar. Gelieve een ander email te gebruiken.`
       };
 
     return config[validatorName];
-  }
-
-  static creditCardValidator(control: FormControl): {[key: string]: any} {
-    if (control.value.match(/^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/)) {
-      return null;
-    } else {
-      return {'invalidCreditCard': true};
-    }
   }
 
   static emailValidator(control: FormControl): {[key: string]: any} {

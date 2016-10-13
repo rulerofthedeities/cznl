@@ -9,7 +9,8 @@ var addUser = function(db, req, res, callback) {
     db.collection('users').insert({
       userName: req.body.userName,
       password: hash,
-      email: req.body.email
+      email: req.body.email,
+      access: {level:1, roles: []}
     }, function (err, result) {
       callback(err, result);
     });
@@ -30,6 +31,7 @@ var findUser = function(db, req, res, callback) {
       if (result !== true) {
         callback({error:'Invalid password'}, doc, 401, 'Could not sign you in');
       } else {
+        doc.password = null;
         var token = jwt.sign({user: doc}, process.env.JWT_TOKEN_SECRET, {expiresIn: req.expiresIn});
         callback(null, {message: 'Success', token: token});
       }

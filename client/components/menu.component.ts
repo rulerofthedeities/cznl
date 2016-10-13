@@ -37,10 +37,10 @@ import {Access} from '../models/access.model';
       </ul>
       <ul class="nav navbar-nav navbar-right loginout">
         <li *ngIf="!isLoggedIn()" routerLinkActive="active">
-          <a routerLink="auth" class="item">Login</a>
+          <a routerLink="auth" class="item">Aanmelden</a>
         </li>
         <li *ngIf="isLoggedIn()" routerLinkActive="active">
-          <a (click)="onLogout()" class="item">Logout</a>
+          <a (click)="onLogout()" class="item">Afmelden</a>
         </li>
       </ul>
     </nav>

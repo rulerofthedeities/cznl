@@ -11,9 +11,9 @@ import {User} from '../../models/user.model';
     <div id="signupbox" style="margin-top:50px" class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
       <div class="panel panel-primary">
         <div class="panel-heading">
-          <div class="panel-title">Sign Up</div>
+          <div class="panel-title">Registreren</div>
           <div class="signin">
-            <a routerLink="/auth/signin">Sign In</a>
+            <a routerLink="/auth/signin">Aanmelden</a>
           </div>
         </div>  
         <div class="panel-body bg-info">
@@ -23,19 +23,19 @@ import {User} from '../../models/user.model';
             role="form">
 
             <div class="form-group">
-              <label for="username" class="col-md-3 control-label">User Name</label>
+              <label for="username" class="col-md-3 control-label">Gebruikersnaam</label>
               <div class="col-md-9">
                 <input 
                   type="text" 
                   class="form-control"
                   name="username" 
-                  placeholder="User Name"
+                  placeholder="Uw gebruikersnaam"
                   formControlName="userName" 
                   minlength="5" 
                   maxlength="16">
                 <field-messages 
                   [control]="userForm.controls.userName"
-                  [label]="'User name'">
+                  [label]="'Gebruikersnaam'">
                 </field-messages>
               </div>
             </div>
@@ -48,7 +48,7 @@ import {User} from '../../models/user.model';
                   type="text" 
                   class="form-control" 
                   name="email" 
-                  placeholder="Email Address"
+                  placeholder="Emailadres"
                   formControlName="email">
                 <field-messages 
                   [control]="userForm.controls.email"
@@ -58,35 +58,18 @@ import {User} from '../../models/user.model';
             </div>
 
             <div class="form-group">
-              <label for="password" class="col-md-3 control-label">Password</label>
+              <label for="password" class="col-md-3 control-label">Wachtwoord</label>
               <div class="col-md-9">
                 <input id="password"
                   type="password" 
                   class="form-control" 
                   name="passwd" 
-                  placeholder="Password"
+                  placeholder="Wachtwoord"
                   formControlName="password" >
                 <field-messages 
                   [control]="userForm.controls.password"
-                  [label]="'Password'">
+                  [label]="'Wachtwoord'">
                 </field-messages>
-              </div>
-            </div>
-                
-            <div class="form-group">
-              <label for="confirmPassword" class="col-md-3 control-label">Retype password</label>
-              <div class="col-md-9">
-                <input id="confirmPassword"
-                  type="password" 
-                  class="form-control" 
-                  name="confirmPassword" 
-                  placeholder="Password"
-                  formControlName="confirmPassword" >
-                <field-messages 
-                  [control]="userForm.controls.confirmPassword"
-                  [label]="'Password Confirmation'">
-                </field-messages>
-                <div class="text-danger" *ngIf="userForm.errors?.mismatchingPasswords">The passwords don't match</div>
               </div>
             </div>
 
@@ -96,7 +79,7 @@ import {User} from '../../models/user.model';
                   class="btn btn-success"
                   [disabled]="!userForm.valid"
                   (click)="onSubmitForm(userForm.value)">
-                  <i class="glyphicon glyphicon-hand-right"></i> &nbsp;&nbsp; Sign Up
+                  <i class="glyphicon glyphicon-hand-right"></i> &nbsp;&nbsp; Registreer
                 </button>
               </div>
             </div>
@@ -138,9 +121,8 @@ export class SignUp implements OnInit {
     this.userForm = this.formBuilder.group({
       'userName': ['', Validators.required, ValidationService.checkUniqueUserName(this.http)],
       'email': ['', [Validators.required, ValidationService.emailValidator], ValidationService.checkUniqueEmail(this.http)],
-      'password': ['', [Validators.required, ValidationService.passwordValidator]],
-      'confirmPassword': ['', Validators.required]
-    }, {validator: ValidationService.equalPasswordsValidator});
+      'password': ['', [Validators.required, ValidationService.passwordValidator]]
+    });
   }
 
   onSubmitForm(user: User) {
