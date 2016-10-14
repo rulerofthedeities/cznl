@@ -34,8 +34,6 @@ var isPublic = typeof window != "undefined";
     packages['@angular/'+pkgName] = { main: 'bundles/' + pkgName + '.umd.js', defaultExtension: 'js' };
   }
 
-  packages['@angular/router'] = { main: 'index.js', defaultExtension: 'js' };
-
   // Most environments should use UMD; some (Karma) need the individual index files
   var setPackageConfig = System.packageWithIndex ? packIndex : packUmd;
   // Add package entries for angular packages

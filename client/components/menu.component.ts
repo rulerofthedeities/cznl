@@ -77,6 +77,10 @@ import {Access} from '../models/access.model';
       border-radius: 5px;
       text-align:left;
     }
+    .navbar-inverse .navbar-nav>.active>a {
+      background-color:inherit;
+      margin-right: 6px;
+    }
   `]
 })
 
