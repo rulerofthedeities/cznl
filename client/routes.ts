@@ -8,7 +8,7 @@ import {AuthMenu} from './components/auth/auth-menu.component';
 import {AuthGuard} from './services/auth-guard.service';
 
 const routes: Routes = [
-  {path: '', component: Tests},
+  {path: '', component: Tests, canActivate: [AuthGuard]},
   {path: 'tests', component: Tests, canActivate: [AuthGuard]},
   {path: 'words', component: WordBank, canActivate: [AuthGuard]},
   {path: 'settings', component: AppSettings, canActivate: [AuthGuard]},
