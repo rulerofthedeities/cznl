@@ -108,6 +108,7 @@ export class WordService {
     data = {word:word};
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + token);
+    console.log('updating', data);
     return this.http
       .put('/api/words', JSON.stringify(data), {headers})
       .map(response => word)

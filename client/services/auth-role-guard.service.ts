@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
 import {AuthService} from './auth.service';
 import {Router} from '@angular/router';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class AuthRoleGuard implements CanActivate {
@@ -11,11 +12,16 @@ export class AuthRoleGuard implements CanActivate {
     private router: Router
   ) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    if (state.url === '/words' && !this.authService.hasRole('EditWords')) {
-      return false;
-    } else {
-      return true;
-    }
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean>|boolean {
+    return this.authService.fetchUserAccess().map(
+      access => {
+        this.authService.setUserAccess(access);
+        if (state.url === '/words' && !this.authService.hasRole('EditWords')) {
+          this.router.navigate(['/tests']);
+          return false;
+        } else {
+          return true;
+        }
+      });
   }
 }

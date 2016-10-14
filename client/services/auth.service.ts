@@ -79,9 +79,9 @@ export class AuthService {
   hasRole(role: string) {
     const access: UserAccess = this.getUserAccess();
     let hasRole = false;
-    if (access && access.roles) {
+    if (role && access && access.roles) {
       for (let i = 0; i < access.roles.length; i++) {
-        if (access.roles[i].toLowerCase === role.toLowerCase ) {
+        if (access.roles[i].toLowerCase() === role.toLowerCase()) {
           hasRole = true;
         }
       }

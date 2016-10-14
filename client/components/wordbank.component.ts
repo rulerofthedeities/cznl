@@ -1,6 +1,8 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {WordService} from '../services/words.service';
 import {ErrorService} from '../services/error.service';
+import {AuthService} from '../services/auth.service';
 import {FilterWord} from '../models/filters.model';
 import {WordPair} from '../models/word.model';
 import {Subscription} from 'rxjs/Subscription';
@@ -66,7 +68,10 @@ export class WordBank implements OnInit, OnDestroy {
 
   constructor(
     private wordService: WordService,
-    private errorService: ErrorService) {}
+    private errorService: ErrorService,
+    private authService: AuthService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     //A new word is being created

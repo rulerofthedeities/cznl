@@ -11,7 +11,10 @@ import {AuthRoleGuard} from './services/auth-role-guard.service';
 const routes: Routes = [
   {path: '', component: Tests, canActivate: [AuthGuard]},
   {path: 'tests', component: Tests, canActivate: [AuthGuard]},
-  {path: 'words', component: WordBank, canActivate: [AuthGuard, AuthRoleGuard]},
+  {path: 'words',
+    component: WordBank,
+    canActivate: [AuthGuard, AuthRoleGuard]
+  },
   {path: 'settings', component: AppSettings, canActivate: [AuthGuard]},
   {
     path: 'auth',
