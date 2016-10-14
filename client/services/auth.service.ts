@@ -72,8 +72,21 @@ export class AuthService {
     this.accessLocal = data;
   }
 
-  getUserAccess() {
+  getUserAccess(): UserAccess {
     return this.accessLocal;
+  }
+
+  hasRole(role: string) {
+    const access: UserAccess = this.getUserAccess();
+    let hasRole = false;
+    if (access && access.roles) {
+      for (let i = 0; i < access.roles.length; i++) {
+        if (access.roles[i].toLowerCase === role.toLowerCase ) {
+          hasRole = true;
+        }
+      }
+    }
+    return hasRole;
   }
 
   keepTokenFresh() {

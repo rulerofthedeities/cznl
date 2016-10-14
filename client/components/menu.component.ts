@@ -26,7 +26,7 @@ import {Access} from '../models/access.model';
         <li 
           *ngFor="let route of routes"
           routerLinkActive="active">
-          <a [routerLink]="[route.path]" *ngIf="!route.protected || isLoggedIn()">
+          <a [routerLink]="[route.path]" *ngIf="showMenuItem(route.role)">
             <span 
               class="glyphicon glyphicon-{{route.glyph}}" 
               aria-hidden="true">
@@ -99,9 +99,9 @@ export class Menu implements OnInit {
 
   ngOnInit() {
     this.routes = [
-      {path:'/tests', label:'Oefeningen', glyph:'list-alt', protected: false},
-      {path:'/words', label:'Woorden', glyph:'plus', protected: true},
-      {path:'/settings', label:'Instellingen', glyph:'cog', protected: false}
+      {path:'/tests', label:'Oefeningen', glyph:'list-alt'},
+      {path:'/words', label:'Woorden', glyph:'plus', role: 'EditWords'},
+      {path:'/settings', label:'Instellingen', glyph:'cog'}
     ];
   }
 
@@ -116,6 +116,14 @@ export class Menu implements OnInit {
 
   getUserName() {
     return this.authService.getUserName();
+  }
+
+  showMenuItem(role): boolean {
+    if (!role || this.authService.hasRole(role)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   getUserAccess() {
