@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {AllSettings} from '../models/settings.model';
 import {SettingsService} from '../services/settings.service';
 import {AuthService} from '../services/auth.service';
@@ -18,10 +19,15 @@ export class AppSettings implements OnInit {
   constructor (
     private authService: AuthService,
     private settingsService: SettingsService,
+    private route: ActivatedRoute,
     private errorService: ErrorService
   ) {}
 
   ngOnInit() {
+    //access required for menu
+    if (!this.authService.getUserAccess()) {
+      this.authService.setUserAccess(this.route.snapshot.data['access']);
+    }
     this.isReady = false;
     this.testLength = [10, 25, 50, 100];
     this.directions = [

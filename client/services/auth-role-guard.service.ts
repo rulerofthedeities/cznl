@@ -13,15 +13,17 @@ export class AuthRoleGuard implements CanActivate {
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean>|boolean {
-    return this.authService.fetchUserAccess().map(
-      access => {
-        this.authService.setUserAccess(access);
-        if (state.url === '/words' && !this.authService.hasRole('EditWords')) {
-          this.router.navigate(['/tests']);
-          return false;
-        } else {
-          return true;
-        }
-      });
+    return this.authService.fetchUserAccess()
+      .map(
+        access => {
+          this.authService.setUserAccess(access);
+          if (state.url === '/words' && !this.authService.hasRole('EditWords')) {
+            this.router.navigate(['/tests']);
+            return false;
+          } else {
+            return true;
+          }
+        })
+      .catch(error => Observable.throw(error));
   }
 }

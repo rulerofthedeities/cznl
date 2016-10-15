@@ -7,15 +7,32 @@ import {SignIn} from './components/auth/sign-in.component';
 import {AuthMenu} from './components/auth/auth-menu.component';
 import {AuthGuard} from './services/auth-guard.service';
 import {AuthRoleGuard} from './services/auth-role-guard.service';
+import {AccessResolver} from './resolves/access.resolver';
 
 const routes: Routes = [
-  {path: '', component: Tests, canActivate: [AuthGuard]},
-  {path: 'tests', component: Tests, canActivate: [AuthGuard]},
-  {path: 'words',
+  {
+    path: '',
+    component: Tests,
+    canActivate: [AuthGuard],
+    resolve: {access:AccessResolver}
+  },
+  {
+    path: 'tests',
+    component: Tests,
+    canActivate: [AuthGuard],
+    resolve: {access:AccessResolver}
+  },
+  {
+    path: 'words',
     component: WordBank,
     canActivate: [AuthGuard, AuthRoleGuard]
   },
-  {path: 'settings', component: AppSettings, canActivate: [AuthGuard]},
+  {
+    path: 'settings',
+    component: AppSettings,
+    canActivate: [AuthGuard],
+    resolve: {access:AccessResolver}
+  },
   {
     path: 'auth',
     component: AuthMenu,

@@ -1,4 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {Filter} from './filter.component';
 import {WordPair} from '../models/word.model';
 import {Filter as FilterModel} from '../models/filters.model';
@@ -85,6 +86,7 @@ export class Tests implements OnInit, OnDestroy {
     private errorService: ErrorService,
     private settingsService: SettingsService,
     private utilsService: UtilsService,
+    private route: ActivatedRoute,
     restartService: RestartService
   ) {
     this.subscription = restartService.restartFilter$.subscribe(
@@ -94,6 +96,11 @@ export class Tests implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    //access required for menu
+    if (!this.authService.getUserAccess()) {
+      this.authService.setUserAccess(this.route.snapshot.data['access']);
+    }
+
     this.settingsService.getAppSettings().subscribe(
       settings => {
         if (settings) {

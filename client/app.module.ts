@@ -32,6 +32,8 @@ import {GetFilterValue} from './directives/get-filter-value.directive';
 import {GetKeyPress} from './directives/get-key-pressed.directive';
 import {GenusColor} from './directives/show-color.directive';
 
+import {AccessResolver} from './resolves/access.resolver';
+
 import {LevelNamePipe} from './pipes/level-name.pipe';
 
 import {AuthService} from './services/auth.service';
@@ -65,7 +67,8 @@ import {ValidationService} from './services/validation.service';
     AuthGuard,
     AuthRoleGuard,
     UtilsService,
-    ValidationService
+    ValidationService,
+    AccessResolver
   ],
   declarations: [
     AppComponent,
