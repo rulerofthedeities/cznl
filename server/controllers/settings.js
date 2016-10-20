@@ -25,22 +25,26 @@ var loadSettings = function(db, options, callback) {
 }
 
 var updateSettings = function(db, data, options, callback) {
-  var set = {};
-  
-  switch (options.tpe) {
-    case "all": 
-      set = {all:{
+  var setDt = new Date(),
+      setAll = {
         maxWords:data.maxWords, 
         lanDir:data.lanDir,
         showPronoun:data.showPronoun,
-        showColors:data.showColors}, 
-        dt: new Date()};
+        showColors:data.showColors},
+      setFilter = data.filter;
+  
+  switch (options.tpe) {
+    case "all": 
+      set = {all:setAll, dt:setDt};
       break;
     case "filter":
-      set = {filter:data, dt: new Date()};
+      set = {filter:setFilter, dt:setDt};
+      break;
+    case "new":
+      set = {all:setAll, filter:setFilter, dt:setDt};
       break;
     default:
-      set = {dt:new Date()};
+      set = {dt:setDt};
   }
 
   db.collection('settings')
@@ -76,5 +80,24 @@ module.exports = {
         response.handleSuccess(res, result, 200, 'Updated settings');
       });
     });
+  },
+  create: function(userId) {
+    var options = {
+      tpe:'new', 
+      userId:mongo.ObjectID(userId)
+    };
+    var data = {
+      maxWords: 25, 
+      lanDir:'nlcz',
+      showPronoun:false,
+      showColors:true,
+      filter: {
+        level: -1, 
+        "tpe" : "all", 
+        "cats" : "all", 
+        "test" : "review"
+      }
+    }
+    updateSettings(mongo.DB, data, options, function(err, result) {});
   }
 }

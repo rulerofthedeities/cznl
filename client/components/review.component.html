@@ -20,12 +20,12 @@
         </div>
         <div class="pull-left">
             <div class="word">
-              <span class="genus" *ngIf="word.cz.article && settings.lanDir=='cznl' && settings.showPronoun">
+              <span class="genus" *ngIf="word.cz.article && settings?.lanDir==='cznl' && settings.showPronoun">
               </span>
               <span>
-                {{settings.lanDir==="cznl" ? word.cz.word : word.nl.word}}
+                {{settings?.lanDir==="cznl" ? word.cz.word : word.nl.word}}
               </span>
-              <span class="genus" *ngIf="word.cz.genus && settings.lanDir=='cznl'">
+              <span class="genus" *ngIf="word.cz.genus && settings?.lanDir=='cznl'">
                 ({{word.cz.genus}})
               </span>
             </div>
@@ -57,10 +57,10 @@
             [tpe]="word.tpe">
             {{translation.word}}
           </span>
-          <span class="genus" *ngIf="(translation.genus || translation.aspect) && settings.lanDir=='nlcz'">
+          <span class="genus" *ngIf="(translation.genus || translation.aspect) && settings?.lanDir=='nlcz'">
             ({{translation.genus}}{{translation.aspect}})
           </span>
-          <span class="case" *ngIf="translation.case && settings.lanDir=='nlcz'">
+          <span class="case" *ngIf="translation.case && settings?.lanDir=='nlcz'">
             +<span 
               getFilterValue
               [value]="translation.case"
@@ -77,7 +77,7 @@
           <span>
             {{translationPf.word}}
           </span>
-          <span class="genus" *ngIf="(translationPf.genus || translation.aspect) && settings.lanDir=='nlcz'">
+          <span class="genus" *ngIf="(translationPf.genus || translation.aspect) && settings?.lanDir=='nlcz'">
             ({{translationPf.genus}}{{translationPf.aspect}})
           </span>
           <span class="case" *ngIf="translationPf.case">

@@ -103,7 +103,7 @@ export class Tests implements OnInit, OnDestroy {
 
     this.settingsService.getAppSettings().subscribe(
       settings => {
-        if (settings) {
+        if (settings && settings.all) {
           this.maxWords = settings.all.maxWords;
         }
       },

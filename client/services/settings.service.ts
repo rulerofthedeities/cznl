@@ -52,7 +52,7 @@ export class SettingsService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + token);
     return this.http
-      .put('/api/settings?tpe=filter', JSON.stringify(newFilter), {headers})
+      .put('/api/settings?tpe=filter', JSON.stringify({filter:newFilter}), {headers})
       .map(response => response.json().obj)
       .catch(error => Observable.throw(error));
   }

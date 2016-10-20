@@ -2,6 +2,7 @@ var mongo = require('mongodb'),
     jwt = require('jsonwebtoken'),
     bcrypt = require('bcrypt'),
     response = require('../response'),
+    settings = require('./settings'),
     saltRounds = 10;
 
 var addUser = function(db, req, res, callback) {
@@ -58,6 +59,7 @@ module.exports = {
     addUser(mongo.DB, req, res, function(err, doc) {
       response.handleError(err, res, 500, 'Error creating new user', function(){
         response.handleSuccess(res, doc, 200, 'Created new user');
+        settings.create(doc.insertedIds[0]);
       });
     });
   },
