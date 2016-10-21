@@ -5,10 +5,13 @@ export class ErrorService {
   errorOccurred = new EventEmitter<Error>();
 
   handleError(error: any) {
-    const title = error? error.title : 'Unknown Error';
-    const message = error && error.error ? error.error.message : 'Unknown Message';
-
-    const errorData = new Error(title, message);
-    this.errorOccurred.emit(errorData);
+    console.log('Error:', error);
+    var msg = 'unknown error message';
+    var title = 'error';
+    if (error && error.error) {
+      msg = error.error.error || msg;
+      title = error.title || title;
+    }
+    this.errorOccurred.emit(new Error(title, msg));
   }
 }

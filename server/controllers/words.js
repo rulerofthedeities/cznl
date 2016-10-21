@@ -153,7 +153,7 @@ var updateWord = function(db, options, data, callback) {
   
   db.collection('wordpairs')
     .updateOne(
-    {userId: options.userId, _id:mongoId}, 
+    {_id:mongoId}, 
     {$set: word},
       function(err, result){
         callback(err, result);

@@ -79,6 +79,8 @@ import {User} from '../../models/user.model';
                 </div>
             </div>
 
+            <error-msg></error-msg>
+
             <div class="form-group">
               <div class="col-md-12 control">
                 <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%" >

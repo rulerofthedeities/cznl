@@ -108,7 +108,6 @@ export class WordService {
     data = {word:word};
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + token);
-    console.log('updating', data);
     return this.http
       .put('/api/words', JSON.stringify(data), {headers})
       .map(response => word)
@@ -203,7 +202,6 @@ export class WordService {
 
     if (word._id) {wordPair._id = word._id;}
     wordPair.tpe = word.tpe;
-    wordPair.perfective = word.tpe === 'verb' ? word.perfective : false;
 
     wordPair.level = parseInt(word.level, 10);
     if (word.categories && word.categories.length > 0) {
@@ -230,6 +228,7 @@ export class WordService {
       wordCz.case = word['cz.case'];
     }
     if (word.tpe === 'verb') {
+      wordPair.perfective = word.perfective;
       if (word['czP.word']) {wordCzP.word = word['czP.word'].trim();}
       if (word['czP.case']) {wordCzP.case = word['czP.case'];}
       if (word['czP.otherwords']) {wordCzP.otherwords = word['czP.otherwords'];}

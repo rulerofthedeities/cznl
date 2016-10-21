@@ -30,7 +30,7 @@ var findUser = function(db, req, res, callback) {
     }
     bcrypt.compare(req.body.password, doc.password, function(err, result) {
       if (result !== true) {
-        callback({error:'Invalid password'}, doc, 401, 'Could not sign you in');
+        callback({error:'Fout paswoord'}, doc, 401, 'Aanmelding mislukt');
       } else {
         doc.password = null;
         var token = jwt.sign({user: doc}, process.env.JWT_TOKEN_SECRET, {expiresIn: req.expiresIn});

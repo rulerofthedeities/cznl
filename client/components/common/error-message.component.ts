@@ -5,29 +5,10 @@ import {ErrorService} from '../../services/error.service';
 @Component({
   selector:'error-msg',
   template: `
-  <div class="modal" tabindex="-1" role="dialog" *ngIf="showError">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" aria-label="Close" (click)="onErrorHandled()"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">{{errorData?.title}}</h4>
-        </div>
-        <div class="modal-body">
-          <p class="text-danger text-center">
-            <strong>Error: {{errorData?.message}}</strong>
-          </p>
-        </div>
-        <div class="modal-footer">
-            <button 
-              type="button" 
-              class="btn btn-default" 
-              (click)="onErrorHandled()">
-              Close
-            </button>
-        </div>
-      </div>
-    </div>
-    `
+    <div *ngIf="showError" class="text-danger">
+      <h4 class="modal-title">{{errorData?.title}}</h4>
+      <p>Foutmelding: {{errorData?.message}}</p>
+    </div>`
 })
 
 export class ErrorMessage implements OnInit {
