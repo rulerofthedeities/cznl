@@ -120,7 +120,7 @@ export class ShowLists {
   _saveNewList(list: WordList, cnt: number, callback) {
     this.wordlistService.saveList(list).subscribe(
       result  => {
-        list._id = result.obj.insertedIds[0];
+        list._id = result.insertedIds[0];
         callback();
       },
       error => this.errorService.handleError(error)

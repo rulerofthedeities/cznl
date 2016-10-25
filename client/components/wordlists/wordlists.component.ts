@@ -7,7 +7,10 @@ import {WordList} from '../../models/list.model';
   selector: 'word-lists',
   template: `
     <div *ngIf="ready && lists.length < 1">
-      Geen {{tpe==="user" ? "persoonlijke" : ""}} woordenlijst gevonden
+      Geen {{tpe==="user" ? "persoonlijke" : ""}} woordenlijst gevonden.
+    </div>
+    <div *ngIf="ready && lists.length < 1 && tpe==='user'">
+      Klik op een ster bij een woord om een woordenlijst aan te maken.
     </div>
     <ul class="list-group" *ngIf="ready">
       <li 

@@ -29,7 +29,7 @@ export class WordlistService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + token);
     return this.http
-      .put('/api/lists/words' + token, JSON.stringify(listUpdate), {headers})
+      .put('/api/lists/words', JSON.stringify(listUpdate), {headers})
       .map(response => listUpdate)
       .catch(error => Observable.throw(error));
   }
@@ -40,7 +40,7 @@ export class WordlistService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + token);
     return this.http
-      .post('/api/lists/add' + token, JSON.stringify(list), {headers})
+      .post('/api/lists/add', JSON.stringify(list), {headers})
       .map(response => response.json().obj)
       .catch(error => Observable.throw(error));
   }
@@ -51,7 +51,7 @@ export class WordlistService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + token);
     return this.http
-      .put('/api/lists/edit' + token, JSON.stringify(list), {headers})
+      .put('/api/lists/edit', JSON.stringify(list), {headers})
       .map(response => list)
       .catch(error => Observable.throw(error));
   }
