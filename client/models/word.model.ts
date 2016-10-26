@@ -1,3 +1,8 @@
+export interface Total {
+  correct?: number;
+  incorrect?: number;
+}
+
 export interface Word {
   word: string;
   genus?: string;
@@ -9,12 +14,14 @@ export interface Word {
   info?: string;
   aspect?:string;
   plural?:string;
+  total?:Total;
 }
 
 export interface Answer {
   _id: string;
   wordId?: string;
   correct?: boolean;
+  total?: Total;
 }
 
 export interface WordPair {

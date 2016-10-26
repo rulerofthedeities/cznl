@@ -21,6 +21,7 @@ import {ShowLists} from './components/wordlists/show-lists.component';
 import {CardItem} from './components/cards/card-item.component';
 import {CardItemAnswer} from './components/cards/card-item-answer.component';
 import {CardScore} from './components/cards/card-score.component';
+import {ScoreBar} from './components/cards/score-bar.component';
 import {InfoMessage} from './components/common/info-message.component';
 import {ErrorMessage} from './components/common/error-message.component';
 import {FieldMessages} from './components/common/field-messages.component';
@@ -87,6 +88,7 @@ import {ValidationService} from './services/validation.service';
     CardItem,
     CardItemAnswer,
     CardScore,
+    ScoreBar,
     InfoMessage,
     ErrorMessage,
     FieldMessages,

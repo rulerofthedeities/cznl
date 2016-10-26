@@ -1,6 +1,6 @@
 import {Component, Input, Output, EventEmitter, OnChanges,
   trigger, style, transition, animate, keyframes} from '@angular/core';
-import {WordPair, Word} from '../../models/word.model';
+import {WordPair, Word, Total} from '../../models/word.model';
 import {AllSettings} from '../../models/settings.model';
 import {WordService} from '../../services/words.service';
 import {ErrorService} from '../../services/error.service';
@@ -65,6 +65,9 @@ import {ErrorService} from '../../services/error.service';
           </div>
         </div>
     </div>
+
+<!-- Scorebar -->
+    <score-bar [total]="total"></score-bar>
     `,
   styleUrls: ['client/components/cards/card.component.css'],
   animations: [
@@ -88,6 +91,7 @@ export class CardItem implements OnChanges {
   isQuestion = true;
   cardData: Word;
   cardDataPf: Word;
+  total: Total;
   state = 'question';
   showAnswer = false;
 
@@ -109,7 +113,7 @@ export class CardItem implements OnChanges {
   answerCard(correct: boolean) {
     this.cardAnswered.emit(correct);
     this.turnCard();
-    this.wordService.saveAnswer('demoUser', this.card._id, this.card.answer._id, correct).subscribe(
+    this.wordService.saveAnswer(this.card._id, correct).subscribe(
         answer => {;},
         error => this.errorService.handleError(error)
       );
@@ -133,5 +137,13 @@ export class CardItem implements OnChanges {
         }
       }
     }
+    this.total = this.card.answer && this.card.answer.total ? {
+      correct: this.card.answer.total.correct ? this.card.answer.total.correct : 0,
+      incorrect: this.card.answer.total.incorrect ? this.card.answer.total.incorrect : 0
+    } : {
+      correct:0,
+      incorrect:0
+    };
+    console.log('total', this.card, this.total);
   }
 }

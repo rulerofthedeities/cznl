@@ -114,10 +114,10 @@ export class WordService {
       .catch(error => Observable.throw(error));
   }
 
-  saveAnswer(userId: string, wordId: string, answerId: string, correct: boolean) {
+  saveAnswer(wordId: string, correct: boolean) {
     let headers = new Headers();
     const token = this.authService.getToken(),
-          answer = {userId, wordId, answerId, correct};
+          answer = {wordId, correct};
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + token);
     return this.http
@@ -168,6 +168,7 @@ export class WordService {
       });
     }
 
+    console.log('wordsanswers', words);
     return words;
   }
 
