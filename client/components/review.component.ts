@@ -17,8 +17,8 @@ import {ErrorService} from '../services/error.service';
   .translation .list-group-item{border:0;}
   li .fa {width: 40px;}
   .btn .fa {margin-right:3px;}
-  .no {
-    font-size:20px;margin-top:8px;margin-right:10px;}
+  .no {font-size:20px; margin-top:8px; margin-right:10px;}
+  .scorebarwrapper {margin-left:42px;}
   `]
 })
 
@@ -40,8 +40,9 @@ export class Review implements OnInit {
   ngOnInit() {
     this.words.forEach(word => {
       if (!word.answer) {
-        word.answer = {_id: null};
+        word.answer = {_id: null, total: {correct:0, incorrect:0}};
     }});
+    console.log('words', this.words);
     this.settingsService.getAppSettings().subscribe(
       settings => {
         this.settings = settings.all;

@@ -39,6 +39,9 @@
         </div>
         <add-to-list [word]="word"></add-to-list>
         <div class="clearfix"></div>
+        <div class="scorebarwrapper" [ngStyle]="{width:word.answer.total.correct + word.answer.total.incorrect > 99 ? '200px' : (word.answer.total.correct + word.answer.total.incorrect) * 2 + 2 + 'px'}">
+          <score-bar [total]="word.answer.total"></score-bar>
+        </div>
       </li>
     </ul> 
   </div>  

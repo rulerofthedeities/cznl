@@ -67,7 +67,10 @@ import {ErrorService} from '../../services/error.service';
     </div>
 
 <!-- Scorebar -->
-    <score-bar [total]="total"></score-bar>
+    <div class="scorebarwrapper" 
+      [ngStyle]="{width:total.correct + total.incorrect > 134 ? '270px' : (total.correct + total.incorrect) * 2 + 2 + 'px'}">
+      <score-bar [total]="total"></score-bar>
+    </div>
     `,
   styleUrls: ['client/components/cards/card.component.css'],
   animations: [
@@ -112,6 +115,7 @@ export class CardItem implements OnChanges {
 
   answerCard(correct: boolean) {
     this.cardAnswered.emit(correct);
+    this.updateTotals(correct);
     this.turnCard();
     this.wordService.saveAnswer(this.card._id, correct).subscribe(
         answer => {;},
@@ -144,5 +148,16 @@ export class CardItem implements OnChanges {
       correct:0,
       incorrect:0
     };
+  }
+
+  updateTotals(correct: boolean) {
+    if (!this.card.answer.total) {
+      this.card.answer.total = {correct:0, incorrect:0};
+    }
+    if (correct) {
+      this.card.answer.total.correct++;
+    } else {
+      this.card.answer.total.incorrect++;
+    }
   }
 }

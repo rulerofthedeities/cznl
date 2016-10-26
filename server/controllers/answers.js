@@ -4,7 +4,7 @@ var mongo = require('mongodb'),
 var upsertAnswer = function(db, options, data, callback) {
   //var mongoAnswerId = new mongo.ObjectID(data.answerId);
   var mongoWordId = new mongo.ObjectID(data.wordId);
-  var counterObj = data.correct ? {'total.correct':1} : {'total.incorrect':1};
+  var counterObj = data.correct ? {'total.correct':1, 'total.incorrect':0} : {'total.correct':0, 'total.incorrect':1};
   db.collection('answers')
     .update(
       {wordId: mongoWordId}, 
