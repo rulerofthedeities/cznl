@@ -144,6 +144,5 @@ export class CardItem implements OnChanges {
       correct:0,
       incorrect:0
     };
-    console.log('total', this.card, this.total);
   }
 }

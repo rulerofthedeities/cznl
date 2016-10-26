@@ -168,7 +168,6 @@ export class WordService {
       });
     }
 
-    console.log('wordsanswers', words);
     return words;
   }
 

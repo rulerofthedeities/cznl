@@ -8,12 +8,14 @@ var isPublic = typeof window != "undefined";
     'rxjs':                   (isPublic) ? 'node/rxjs' : 'node_modules/rxjs',
     'angular2-jwt':           (isPublic) ? 'node/angular2-jwt/angular2-jwt.js' : 'node_modules/angular2-jwt/angular2-jwt.js',
     'js-base64':              (isPublic) ? 'node/js-base64/base64.js' : 'node_modules/js-base64/base64.js',
-    'buffer':                 '@empty' //jwt buffer
+    'buffer':                 '@empty', //jwt buffer
+    'ng2-tooltip':            (isPublic) ? 'node/ng2-tooltip' : 'node_modules/ng2-tooltip' 
   };
   // packages tells the System loader how to load when no filename and/or no extension
   var packages = {
     'app':                    { main: 'main.js',  defaultExtension: 'js' },
-    'rxjs':                   { defaultExtension: 'js' }
+    'rxjs':                   { defaultExtension: 'js' },
+    'ng2-tooltip':            { main: 'index.js', defaultExtension: 'js' }
   };
   var ngPackageNames = [
     'common',
