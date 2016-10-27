@@ -42,7 +42,6 @@ export class Review implements OnInit {
       if (!word.answer) {
         word.answer = {_id: null, total: {correct:0, incorrect:0}};
     }});
-    console.log('words', this.words);
     this.settingsService.getAppSettings().subscribe(
       settings => {
         this.settings = settings.all;

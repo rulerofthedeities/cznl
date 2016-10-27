@@ -108,7 +108,7 @@ export class EditWord implements OnInit, OnDestroy {
     this.wordAlreadyExists = false;
     if (this.isNew) {
       this.wordService.checkIfWordExists(this.wordForm.controls['cz.word'].value).subscribe(
-        itExists => this.wordAlreadyExists = itExists.obj,
+        itExists => this.wordAlreadyExists = itExists,
         error => this.errorService.handleError(error)
       );
     }
