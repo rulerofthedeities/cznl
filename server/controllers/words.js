@@ -150,7 +150,6 @@ var updateWord = function(db, options, data, callback) {
   var mongoId = new mongo.ObjectID(word._id);
 
   delete word._id;
-  
   db.collection('wordpairs')
     .updateOne(
     {_id:mongoId}, 

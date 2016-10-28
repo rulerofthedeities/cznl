@@ -120,6 +120,8 @@ export class EditWord implements OnInit, OnDestroy {
         this.submitMessage = `Het woord ${wordPair.cz.word}/${wordPair.nl.word} is succesvol opgeslagen.`;
         this.disableSubmit = true;
         this.isNew = false;
+        this.wordForm.patchValue({_id: wordPair._id});
+
       },
       error => this.errorService.handleError(error)
     );
