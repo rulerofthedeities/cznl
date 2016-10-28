@@ -273,19 +273,29 @@ module.exports = {
   },
   save: function(req, res) {
     var options = {};
-    saveNewWord(mongo.DB, options, req.body, function(err, result){
-      response.handleError(err, res, 500, 'Error saving word', function(){
-        response.handleSuccess(res, result, 200, 'Saved word');
+    var set = new Set(req.decoded.user.access.roles);
+    if (set.has("editWords")) {
+      saveNewWord(mongo.DB, options, req.body, function(err, result){
+        response.handleError(err, res, 500, 'Error saving word', function(){
+          response.handleSuccess(res, result, 200, 'Saved word');
+        });
       });
-    })
+    } else {
+      res.status(403).send('Not authorized to save new word.');
+    }
   },
   update: function(req, res){
     var options = {};
-    updateWord(mongo.DB, options, req.body, function(err, result){
-      response.handleError(err, res, 500, 'Error updating word', function(){
-        response.handleSuccess(res, result, 200, 'Updated word');
+    var set = new Set(req.decoded.user.access.roles);
+    if (set.has("editWords")) {
+      updateWord(mongo.DB, options, req.body, function(err, result){
+        response.handleError(err, res, 500, 'Error updating word', function(){
+          response.handleSuccess(res, result, 200, 'Updated word');
+        });
       });
-    });
+    } else {
+      res.status(403).send('Not authorized to update word.');
+    }
   },
   cats: function(req, res){
     var options = {
