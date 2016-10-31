@@ -1,6 +1,6 @@
 var mongo = require('mongodb'),
   mongoClient = mongo.MongoClient,
-  url = process.env.MONGOLAB_URI || "mongodb://localhost:27017/km-cznl";
+  url = process.env.MONGODB_URI || "mongodb://localhost:27017/km-cznl";
 
 exports.connect = function(callback){
   if (mongo.DB){
