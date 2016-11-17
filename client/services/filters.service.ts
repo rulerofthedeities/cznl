@@ -18,7 +18,7 @@ export class FilterService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + token);
     return this.http
-      .get('/api/cats?search=&max=200', {headers})
+      .get('/api/cats?search=&max=250', {headers})
       .map(response => {
         let cats = response.status === 200 ? response.json().cats: [];
         return {

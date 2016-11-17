@@ -27,16 +27,17 @@ var findUser = function(db, req, res, callback) {
     }
     if (!doc) {
       callback({error:'no user'}, doc, 500, 'User could not be found')
+    } else {
+      bcrypt.compare(req.body.password, doc.password, function(err, result) {
+        if (result !== true) {
+          callback({error:'Fout paswoord'}, doc, 401, 'Aanmelding mislukt');
+        } else {
+          doc.password = null;
+          var token = jwt.sign({user: doc}, process.env.JWT_TOKEN_SECRET, {expiresIn: req.expiresIn});
+          callback(null, {message: 'Success', token: token});
+        }
+      });
     }
-    bcrypt.compare(req.body.password, doc.password, function(err, result) {
-      if (result !== true) {
-        callback({error:'Fout paswoord'}, doc, 401, 'Aanmelding mislukt');
-      } else {
-        doc.password = null;
-        var token = jwt.sign({user: doc}, process.env.JWT_TOKEN_SECRET, {expiresIn: req.expiresIn});
-        callback(null, {message: 'Success', token: token});
-      }
-    });
   })
 };
 

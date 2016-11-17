@@ -40,7 +40,7 @@ import {Filter as FilterModel} from '../models/filters.model';
           <option value="all" [selected]="'all'==selected.cats">Alle categorieën</option>
           <option 
             *ngFor="let cat of filters.cats" [value]="cat.name" [selected]="cat.name==selected.cats">
-            {{cat.name}}
+            {{cat.name}} {{cat.name===cats.value ? '' : '(' + cat.total + ')'}}
           </option>
         </select>
       </li>
@@ -147,5 +147,4 @@ export class Filter implements OnInit {
       }
     );
   }
-
 }

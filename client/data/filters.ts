@@ -13,6 +13,7 @@ export const TPES:FilterOption[] = [
   {label:'Werkwoord', val: 'verb'},
   {label:'Voegwoord', val: 'conj'},
   {label:'Voorzetsel', val: 'prep'},
+  {label:'Tussenwerpsel', val: 'interj'},
   {label:'Voornaamwoord', val: 'pronoun'},
   {label:'Eigennaam', val: 'propernoun'},
   {label:'Telwoord', val: 'numeral'},

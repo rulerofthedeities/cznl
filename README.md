@@ -3,9 +3,9 @@ Dutch-Czech vocabulary tester
 
 ## Demo
 
-https://cznl.herokuapp.com/
- email: demo1@test.com
- password: 123456
+https://cznl.herokuapp.com/  
+ email: demo1@test.com  
+ password: 123456  
 
 ## Screenshots
 

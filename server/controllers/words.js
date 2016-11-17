@@ -119,10 +119,10 @@ var getCats = function(db, options, callback) {
     .aggregate([
       {$unwind: "$categories" },
       {$match:{categories: {$regex:options.query, $options:"i"}}},
-      {$group:{_id:"$categories"}},
+      {$group:{_id:"$categories", total:{$sum:1}}},
       {$sort:{_id: 1}},
       {$limit:options.max},
-      {$project:{_id:0,name:"$_id"}}
+      {$project:{_id:0,name:"$_id", total:1}}
     ]).toArray(function(err, docs) {
       if (docs && docs.length > 0) {
         callback(err, docs);
