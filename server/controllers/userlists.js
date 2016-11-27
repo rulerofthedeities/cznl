@@ -99,5 +99,5 @@ module.exports = {
     getWordIds(mongo.DB, filter, function(err, ids){
       callback(err, ids[0].wordIds);
     })
-  },
+  }
 }

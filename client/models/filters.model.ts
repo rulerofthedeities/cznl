@@ -8,6 +8,11 @@ export interface FilterWord {
   start: boolean;
 }
 
+export interface Cat {
+  name: string;
+  total: number;
+}
+
 export interface Filter {
   level: number;
   cats: string;

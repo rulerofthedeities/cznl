@@ -38,7 +38,8 @@ var loadWords = function(db, options, callback) {
   db.collection('wordpairs')
     .aggregate([
       {$match:filter},
-      {$sample:{size:options.maxwords}}
+      {$sample:{size:options.maxwords}},
+      {$limit:options.maxwords}
     ])
     .toArray(function(err, docs) {
       fetchAnswer(docs, options, callback);

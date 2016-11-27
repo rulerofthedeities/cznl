@@ -1,7 +1,7 @@
 {
   "name": "CZ-NL",
   "description": "Czech-Dutch vocabulary tests",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scripts": {
     "start": "tsc && concurrently \"npm run watch:ts\" \"nodemon server.js --ignore public/\" ",
     "build:bw": "browserify public/assets/js/browserify_libs.js -o public/assets/js/libs.js",

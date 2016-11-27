@@ -100,6 +100,7 @@ export class Filter implements OnInit {
       settings => {;},
       error => this.errorService.handleError(error)
     );
+    filter.cats = filter.cats.toLowerCase();
     this.selectedFilter.emit(filter);
   }
 

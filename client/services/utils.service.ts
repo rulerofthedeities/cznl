@@ -3,7 +3,6 @@ export class UtilsService {
   shuffle<T>(array: T[]): T[] {
     // if it's 1 or 0 items, just return
     if (array.length <= 1) return array;
-
     // For each index in array
     for (let i = 0; i < array.length; i++) {
       // choose a random not-yet-placed item to place there
@@ -21,3 +20,4 @@ export class UtilsService {
     return Math.floor(Math.random() * (ceiling - floor + 1)) + floor;
   }
 }
+

@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
     "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": false,
@@ -8,5 +11,8 @@
     "experimentalDecorators": true,
     "removeComments": false,
     "noImplicitAny": false
-  }
+  },
+  "exclude": [
+    "node_modules"
+  ]
 }

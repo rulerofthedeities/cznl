@@ -17366,7 +17366,7 @@ $__System.registerDynamic("1c", ["3", "b", "16", "19", "1b"], true, function ($_
         };
         Menu = __decorate([core_1.Component({
             selector: 'menu-bar',
-            template: "\n  <div class=\"row\">\n    <div class=\"small text-right user\" \n      *ngIf=\"isLoggedIn()\"\n      (click)=\"getUserAccess()\">\n      <span class=\"fa\" [ngClass]=\"{'fa-chevron-right':!showAccess, 'fa-chevron-down':showAccess}\"></span>\n      {{getUserName()}}\n      <div *ngIf=\"showAccess\" id=\"accesswrapper\">\n        <ul class=\"list-unstyled\">\n          <li><strong>level</strong>: {{access?.level | levelName}}</li>\n          <li><strong>roles</strong>: {{access?.roles?.length > 0 ? access?.roles.join(', ') : 'no roles'}}</li>\n        </ul>\n      </div>\n    </div>\n    <nav role=\"navigation\" class=\"navbar navbar-inverse\">\n      <ul class=\"nav navbar-nav\">\n        <li \n          *ngFor=\"let route of routes\"\n          routerLinkActive=\"active\">\n          <a [routerLink]=\"[route.path]\" *ngIf=\"showMenuItem(route.role)\">\n            <span \n              class=\"glyphicon glyphicon-{{route.glyph}}\" \n              aria-hidden=\"true\">\n            </span>\n            {{route.label}}\n          </a>\n        </li>\n      </ul>\n      <ul class=\"nav navbar-nav navbar-right loginout\">\n        <li *ngIf=\"!isLoggedIn()\" routerLinkActive=\"active\">\n          <a routerLink=\"auth\" class=\"item\"><span class=\"fa fa-unlock\"></span> Aanmelden</a>\n        </li>\n        <li *ngIf=\"isLoggedIn()\" routerLinkActive=\"active\">\n          <a (click)=\"onLogout()\" class=\"item\"><span class=\"fa fa-lock\"></span> Afmelden</a>\n        </li>\n      </ul>\n    </nav>\n  </div>\n  ",
+            template: "\n  <div class=\"row\">\n    <div class=\"small text-right user\" \n      *ngIf=\"isLoggedIn()\"\n      (click)=\"getUserAccess()\">\n      <span class=\"fa\" [ngClass]=\"{'fa-chevron-right':!showAccess, 'fa-chevron-down':showAccess}\"></span>\n      {{getUserName()}}\n      <div *ngIf=\"showAccess\" id=\"accesswrapper\">\n        <ul class=\"list-unstyled\">\n          <li><strong>level</strong>: {{access?.level | levelName}}</li>\n          <li><strong>roles</strong>: {{access?.roles?.length > 0 ? access?.roles.join(', ') : 'no roles'}}</li>\n        </ul>\n      </div>\n    </div>\n    <nav role=\"navigation\" class=\"navbar navbar-inverse\">\n      <ul class=\"nav navbar-nav\">\n        <li \n          *ngFor=\"let route of routes\"\n          routerLinkActive=\"active\">\n          <a [routerLink]=\"route.path\" *ngIf=\"showMenuItem(route.role)\">\n            <span \n              class=\"glyphicon glyphicon-{{route.glyph}}\" \n              aria-hidden=\"true\">\n            </span>\n            {{route.label}}\n          </a>\n        </li>\n      </ul>\n      <ul class=\"nav navbar-nav navbar-right loginout\">\n        <li *ngIf=\"!isLoggedIn()\" routerLinkActive=\"active\">\n          <a routerLink=\"auth\" class=\"item\"><span class=\"fa fa-unlock\"></span> Aanmelden</a>\n        </li>\n        <li *ngIf=\"isLoggedIn()\" routerLinkActive=\"active\">\n          <a (click)=\"onLogout()\" class=\"item\"><span class=\"fa fa-lock\"></span> Afmelden</a>\n        </li>\n      </ul>\n    </nav>\n  </div>\n  ",
             styles: ["\n    .loginout {cursor: pointer;}\n    .user {\n      font-style: italic;\n      color:DarkGrey;\n      cursor: pointer;\n    }\n    .nav li a {\n      line-height: 50px;\n      height: 50px;\n      font-size: 1.5em;\n      padding-top: 0;\n    }\n    #accesswrapper {\n      color:white;\n      z-index:3;\n      position: absolute;\n      width:120px;\n      display: inline;\n    }\n    #accesswrapper > ul {\n      background-color:white;\n      border: 1px solid black;\n      color:black;\n      position: relative;\n      left:-120px;\n      top:16px;\n      padding:6px;\n      border-radius: 5px;\n      text-align:left;\n    }\n    .navbar-inverse .navbar-nav>.active>a {\n      background-color:inherit;\n      margin-right: 6px;\n    }\n  "]
         }), __metadata('design:paramtypes', [auth_service_1.AuthService, error_service_1.ErrorService, router_1.Router])], Menu);
         return Menu;
@@ -17532,6 +17532,7 @@ $__System.registerDynamic("1f", ["3", "20", "1a", "18", "16", "19"], true, funct
             }, function (error) {
                 return _this.errorService.handleError(error);
             });
+            filter.cats = filter.cats.toLowerCase();
             this.selectedFilter.emit(filter);
         };
         Filter.prototype.onChangeFilter = function (level, wordTpe, cat) {
@@ -17579,7 +17580,7 @@ $__System.registerDynamic("1f", ["3", "20", "1a", "18", "16", "19"], true, funct
         __decorate([core_1.Output(), __metadata('design:type', Object)], Filter.prototype, "selectedFilter", void 0);
         Filter = __decorate([core_1.Component({
             selector: 'filter',
-            template: "\n  <div *ngIf=\"filtersLoaded\" class=\"filter\">\n    <ul class=\"list-unstyled\">\n      <li>\n        <select #level \n          class=\"form-control input-lg\"\n          (change)=\"onChangeFilter(level.value, wordtpe.value, cats.value)\">\n          <option value=\"-1\" [selected]=\"'-1'==selected.level\">Alle niveaus</option>\n          <option \n            *ngFor=\"let level of filters.levels\" [value]=\"level.val\" [selected]=\"level.val==selected.level\">\n            {{level.label}}\n          </option>\n        </select>\n      </li>\n      <li>\n        <select #wordtpe \n          class=\"form-control input-lg\"\n          (change)=\"onChangeFilter(level.value, wordtpe.value, cats.value)\">\n          <option value=\"all\" [selected]=\"'all'==selected.tpe\">Alle woordsoorten</option>\n          <option \n            *ngFor=\"let tpe of filters.tpes\" [value]=\"tpe.val\" [selected]=\"tpe.val==selected.tpe\">\n            {{tpe.label}}\n          </option>\n        </select>\n      </li>\n      <li>\n        <select #cats \n          class=\"form-control input-lg\"\n          (change)=\"onChangeFilter(level.value, wordtpe.value, cats.value)\">\n          <option value=\"all\" [selected]=\"'all'==selected.cats\">Alle categorie\u00EBn</option>\n          <option \n            *ngFor=\"let cat of filters.cats\" [value]=\"cat.name\" [selected]=\"cat.name==selected.cats\">\n            {{cat.name}}\n          </option>\n        </select>\n      </li>\n      <li>\n        <div class=\"text-muted\">Aantal woorden: <strong>{{totalWords}}</strong></div>\n        <div class=\"buttons\"> \n          <button *ngIf=\"filterTpe==='exercises'\"\n            class=\"btn btn-success btn-lg\" \n            [disabled]=\"totalWords < 1\"\n            (click)=\"start('test', level.value, wordtpe.value, cats.value)\">\n          <span class=\"fa fa-play\"></span>\n            Start Test\n          </button>\n          <button *ngIf=\"filterTpe==='exercises'\"\n            class=\"btn btn-success btn-lg\" \n            [disabled]=\"totalWords < 1\"\n            (click)=\"start('review', level.value, wordtpe.value, cats.value)\">\n          <span class=\"fa fa-play\"></span>\n            Bereid test voor\n          </button>\n        </div>\n      </li>\n    </ul>\n  </div>",
+            template: "\n  <div *ngIf=\"filtersLoaded\" class=\"filter\">\n    <ul class=\"list-unstyled\">\n      <li>\n        <select #level \n          class=\"form-control input-lg\"\n          (change)=\"onChangeFilter(level.value, wordtpe.value, cats.value)\">\n          <option value=\"-1\" [selected]=\"'-1'==selected.level\">Alle niveaus</option>\n          <option \n            *ngFor=\"let level of filters.levels\" [value]=\"level.val\" [selected]=\"level.val==selected.level\">\n            {{level.label}}\n          </option>\n        </select>\n      </li>\n      <li>\n        <select #wordtpe \n          class=\"form-control input-lg\"\n          (change)=\"onChangeFilter(level.value, wordtpe.value, cats.value)\">\n          <option value=\"all\" [selected]=\"'all'==selected.tpe\">Alle woordsoorten</option>\n          <option \n            *ngFor=\"let tpe of filters.tpes\" [value]=\"tpe.val\" [selected]=\"tpe.val==selected.tpe\">\n            {{tpe.label}}\n          </option>\n        </select>\n      </li>\n      <li>\n        <select #cats \n          class=\"form-control input-lg\"\n          (change)=\"onChangeFilter(level.value, wordtpe.value, cats.value)\">\n          <option value=\"all\" [selected]=\"'all'==selected.cats\">Alle categorie\u00EBn</option>\n          <option \n            *ngFor=\"let cat of filters.cats\" [value]=\"cat.name\" [selected]=\"cat.name==selected.cats\">\n            {{cat.name}} {{cat.name===cats.value ? '' : '(' + cat.total + ')'}}\n          </option>\n        </select>\n      </li>\n      <li>\n        <div class=\"text-muted\">Aantal woorden: <strong>{{totalWords}}</strong></div>\n        <div class=\"buttons\"> \n          <button *ngIf=\"filterTpe==='exercises'\"\n            class=\"btn btn-success btn-lg\" \n            [disabled]=\"totalWords < 1\"\n            (click)=\"start('test', level.value, wordtpe.value, cats.value)\">\n          <span class=\"fa fa-play\"></span>\n            Start Test\n          </button>\n          <button *ngIf=\"filterTpe==='exercises'\"\n            class=\"btn btn-success btn-lg\" \n            [disabled]=\"totalWords < 1\"\n            (click)=\"start('review', level.value, wordtpe.value, cats.value)\">\n          <span class=\"fa fa-play\"></span>\n            Bereid test voor\n          </button>\n        </div>\n      </li>\n    </ul>\n  </div>",
             styles: ["\n    .filter {margin: 0 20px;}\n    .btn {margin-top: 6px;}\n  "]
         }), __metadata('design:paramtypes', [filters_service_1.FilterService, settings_service_1.SettingsService, auth_service_1.AuthService, words_service_1.WordService, error_service_1.ErrorService])], Filter);
         return Filter;
@@ -18407,6 +18408,7 @@ $__System.registerDynamic("2a", ["3", "18", "19"], true, function ($__require, e
         CardItem.prototype.getCardData = function () {
             if (this.isQuestion) {
                 this.cardData = this.settings.lanDir === 'cznl' ? this.card.cz : this.card.nl;
+                this.cardDataPf = this.settings.lanDir === 'nlcz' && this.card.tpe === 'verb' ? this.card.nlP : null;
             } else {
                 this.cardDataPf = null;
                 if (this.settings.lanDir === 'cznl') {
@@ -18445,7 +18447,7 @@ $__System.registerDynamic("2a", ["3", "18", "19"], true, function ($__require, e
         __decorate([core_1.Output(), __metadata('design:type', Object)], CardItem.prototype, "cardAnswered", void 0);
         CardItem = __decorate([core_1.Component({
             selector: 'card-item',
-            template: "\n    <div class=\"card center-block\"\n      [@cardState]=\"state\">\n      <add-to-list [word]=\"card\"></add-to-list>\n\n<!-- Question -->\n      <div \n        *ngIf=\"isQuestion\"\n        (click)=\"turnCard()\"\n        class=\"question text-center\">\n        <div class=\"wordwrapper center-block\">\n          <h2 class=\"word\">\n            <span genusColor\n            [genus]=\"cardData.genus\" \n            [tpe]=\"card.tpe\">\n              {{cardData.word}}\n            </span>\n          </h2>\n        </div>\n        <em \n          getFilterValue \n          [value]=\"card.tpe\" \n          [tpe]=\"'tpes'\">\n        </em>\n        <div class=\"text-info\" *ngIf=\"cardData.hint\">hint: {{cardData.hint}}</div>\n      </div>\n\n<!-- Answer -->\n      <div *ngIf=\"!isQuestion\" class=\"answer\">\n        <card-answer \n          [cardData]=\"cardData\"\n          [tpe]=\"card.tpe\"\n          [showPronoun]=\"settings.showPronoun\">\n        </card-answer>\n\n<!-- Perfective aspect -->\n        <div class=\"clearfix\" *ngIf=\"this.cardDataPf\">\n          <card-answer \n            [cardData]=\"cardDataPf\"\n            [tpe]=\"card.tpe\"\n            [showPronoun]=\"false\">\n          </card-answer>\n        </div>\n\n<!-- Buttons -->\n        <div class=\"clearfix\">\n          <div \n            class=\"btn btn-success btn-sm pull-right\" \n            (click)=\"answerCard(true)\">\n            Juist\n          </div>\n          <div \n            class=\"btn btn-danger btn-sm pull-left\" \n            (click)=\"answerCard(false)\">\n            Fout\n          </div>\n        </div>\n    </div>\n\n<!-- Scorebar -->\n    <div class=\"scorebarwrapper\" \n      [ngStyle]=\"{width:total.correct + total.incorrect > 134 ? '270px' : (total.correct + total.incorrect) * 2 + 2 + 'px'}\">\n      <score-bar [total]=\"total\"></score-bar>\n    </div>\n    ",
+            template: "\n    <div class=\"card center-block\"\n      [@cardState]=\"state\">\n      <add-to-list [word]=\"card\"></add-to-list>\n\n<!-- Question -->\n      <div \n        *ngIf=\"isQuestion\"\n        (click)=\"turnCard()\"\n        class=\"question text-center\">\n        <div class=\"wordwrapper center-block\">\n          <h2 class=\"word\">\n            <span genusColor\n            [genus]=\"cardData.genus\" \n            [tpe]=\"card.tpe\">\n              {{cardData.word}}\n            </span>\n          </h2>\n        </div>\n        <em \n          getFilterValue \n          [value]=\"card.tpe\" \n          [tpe]=\"'tpes'\">\n        </em>\n        <div class=\"margin\"></div>\n        <div class=\"text-primary\" *ngIf=\"cardData.otherwords\"><span class=\"text-muted\">ook:</span> {{cardData.otherwords}}</div>\n        <div class=\"text-primary\" *ngIf=\"cardData.hint\"><span class=\"text-muted\">hint:</span> {{cardData.hint}}</div>\n        <div class=\"text-primary\" *ngIf=\"cardData.info\">({{cardData.info}})</div>\n        <div class=\"text-primary\" *ngIf=\"!card.perfective && cardDataPf && cardDataPf.word\">\n          <span class=\"text-muted\">Perfectief:</span> {{cardDataPf.word}}\n        </div>\n      </div>\n\n<!-- Answer -->\n      <div *ngIf=\"!isQuestion\" class=\"answer\">\n        <card-answer \n          [cardData]=\"cardData\"\n          [tpe]=\"card.tpe\"\n          [showPronoun]=\"settings.showPronoun\">\n        </card-answer>\n\n<!-- Perfective aspect -->\n        <div class=\"clearfix\" *ngIf=\"this.cardDataPf && !card.perfective\">\n          <card-answer \n            [cardData]=\"cardDataPf\"\n            [tpe]=\"card.tpe\"\n            [showPronoun]=\"false\">\n          </card-answer>\n        </div>\n\n<!-- Buttons -->\n        <div class=\"clearfix\">\n          <div \n            class=\"btn btn-success btn-sm pull-right\" \n            (click)=\"answerCard(true)\">\n            Juist\n          </div>\n          <div \n            class=\"btn btn-danger btn-sm pull-left\" \n            (click)=\"answerCard(false)\">\n            Fout\n          </div>\n        </div>\n    </div>\n\n<!-- Scorebar -->\n    <div class=\"scorebarwrapper\" \n      [ngStyle]=\"{width:total.correct + total.incorrect > 134 ? '270px' : (total.correct + total.incorrect) * 2 + 2 + 'px'}\">\n      <score-bar [total]=\"total\"></score-bar>\n    </div>\n    ",
             styleUrls: ['client/components/cards/card.component.css'],
             animations: [core_1.trigger('cardState', [core_1.transition('question => answer', core_1.animate(300, core_1.keyframes([core_1.style({ color: '#fff', transform: 'scaleX(0)' }), core_1.style({ transform: 'scaleX(1)' })]))), core_1.transition('answer => question', core_1.animate(500, core_1.keyframes([core_1.style({ borderColor: '#999', color: '#ddd', transform: 'rotate(300deg)' }), core_1.style({ borderColor: '#fff', color: '#fff', transform: 'translateX(400%)' })])))])]
         }), __metadata('design:paramtypes', [words_service_1.WordService, error_service_1.ErrorService])], CardItem);
@@ -18478,7 +18480,7 @@ $__System.registerDynamic("2b", ["3"], true, function ($__require, exports, modu
         __decorate([core_1.Input(), __metadata('design:type', Boolean)], CardItemAnswer.prototype, "showPronoun", void 0);
         CardItemAnswer = __decorate([core_1.Component({
             selector: 'card-answer',
-            template: "<div class=\"wordwrapper left\">\n          <div class=\"word\" *ngIf=\"showPronoun\">{{cardData.article}}</div>\n          <h2 class=\"word\">\n            <span genusColor\n            [genus]=\"cardData.genus\" \n            [tpe]=\"tpe\">\n              {{cardData.word}}\n            </span>\n            <span class=\"case\" *ngIf=\"cardData.case\">\n              +<span \n                getFilterValue\n                [value]=\"cardData.case\"\n                [tpe]=\"'cases'\">\n              </span>\n            </span>\n            <span class=\"subword\" *ngIf=\"(cardData.aspect)\">\n            ({{cardData.aspect}})\n            </span>\n          </h2>\n        </div>\n        <div class=\"clearfix left\">\n          <div class=\"text-info\">{{cardData.alt}}</div>\n          <div *ngIf=\"cardData.plural\">meervoud: <span class=\"text-primary\">{{cardData.plural}}</span></div>\n          <div *ngIf=\"cardData.firstpersonsingular\">1e p.: <span class=\"text-primary\">{{cardData.firstpersonsingular}}</span></div>\n          <div *ngIf=\"cardData.info\">info: <span class=\"text-primary\">{{cardData.info}}</span></div>\n        </div>\n        ",
+            template: "<div class=\"wordwrapper left\">\n          <div class=\"word\" *ngIf=\"showPronoun\">{{cardData.article}}</div>\n          <h2 class=\"word\">\n            <span genusColor\n            [genus]=\"cardData.genus\" \n            [tpe]=\"tpe\">\n              {{cardData.word}}\n            </span>\n            <span class=\"case\" *ngIf=\"cardData.case\">\n              +<span \n                getFilterValue\n                [value]=\"cardData.case\"\n                [tpe]=\"'cases'\">\n              </span>\n            </span>\n            <span class=\"subword\" *ngIf=\"(cardData.aspect)\">\n            ({{cardData.aspect}})\n            </span>\n          </h2>\n        </div>\n        <div class=\"clearfix left\">\n          <div *ngIf=\"cardData.otherwords\"><span class=\"text-muted\">ook:</span> <span class=\"text-info\">{{cardData.otherwords}}</span></div>\n          <div *ngIf=\"cardData.plural\"><span class=\"text-muted\">meervoud:</span> <span class=\"text-primary\">{{cardData.plural}}</span></div>\n          <div *ngIf=\"cardData.firstpersonsingular\">\n            <span class=\"text-muted\">1e p.:</span> <span class=\"text-primary\">{{cardData.firstpersonsingular}}</span>\n          </div>\n          <div *ngIf=\"cardData.info\"><span class=\"text-muted\">info:</span> <span class=\"text-primary\">{{cardData.info}}</span></div>\n        </div>\n        ",
             styleUrls: ['client/components/cards/card.component.css']
         }), __metadata('design:paramtypes', [])], CardItemAnswer);
         return CardItemAnswer;
@@ -22936,7 +22938,7 @@ $__System.registerDynamic("18", ["3", "16", "35", "33", "17"], true, function ($
                 url += '&w=' + wordFilter.word;
                 url += wordFilter.start ? '&s=1' : '';
             } else {
-                url += '&l=' + filter.level + '&t=' + filter.tpe + '&c=' + filter.cats;
+                url += '&l=' + filter.level + '&t=' + filter.tpe + '&c=' + filter.cats.toLowerCase();
             }
             return this.http.get(url, { headers: headers }).map(function (response) {
                 return response.json().total;
@@ -51287,7 +51289,7 @@ $__System.registerDynamic('18b', [], true, function ($__require, exports, module
         global = this || self,
         GLOBAL = global;
     exports.LEVELS = [{ label: 'Elementair', val: 0 }, { label: 'Basis', val: 1 }, { label: 'Medium', val: 2 }, { label: 'Hoog', val: 3 }];
-    exports.TPES = [{ label: 'Zelfst. naamwoord', val: 'noun' }, { label: 'Bijv. naamwoord', val: 'adj' }, { label: 'Bijwoord', val: 'adv' }, { label: 'Werkwoord', val: 'verb' }, { label: 'Voegwoord', val: 'conj' }, { label: 'Voorzetsel', val: 'prep' }, { label: 'Voornaamwoord', val: 'pronoun' }, { label: 'Eigennaam', val: 'propernoun' }, { label: 'Telwoord', val: 'numeral' }, { label: 'Partikel', val: 'part' }, { label: 'Uitdrukking', val: 'phrase' }];
+    exports.TPES = [{ label: 'Zelfst. naamwoord', val: 'noun' }, { label: 'Bijv. naamwoord', val: 'adj' }, { label: 'Bijwoord', val: 'adv' }, { label: 'Werkwoord', val: 'verb' }, { label: 'Voegwoord', val: 'conj' }, { label: 'Voorzetsel', val: 'prep' }, { label: 'Tussenwerpsel', val: 'interj' }, { label: 'Voornaamwoord', val: 'pronoun' }, { label: 'Eigennaam', val: 'propernoun' }, { label: 'Telwoord', val: 'numeral' }, { label: 'Partikel', val: 'part' }, { label: 'Uitdrukking', val: 'phrase' }];
     exports.GENUS = [{ label: 'Ma', val: 'Ma' }, { label: 'Mi', val: 'Mi' }, { label: 'F', val: 'F' }, { label: 'N', val: 'N' }];
     exports.CASES = [{ label: 'N', val: '1' }, { label: 'G', val: '2' }, { label: 'D', val: '3' }, { label: 'A', val: '4' }, { label: 'V', val: '5' }, { label: 'L', val: '6' }, { label: 'I', val: '7' }];
     return module.exports;
@@ -51319,20 +51321,26 @@ $__System.registerDynamic("20", ["3", "16", "35", "18b", "17"], true, function (
             this.http = http;
         }
         FilterService.prototype.getFilterOptions = function () {
+            var _this = this;
             var token = this.authService.getToken();
             var headers = new http_1.Headers();
             headers.append('Content-Type', 'application/json');
             headers.append('Authorization', 'Bearer ' + token);
-            return this.http.get('/api/cats?search=&max=200', { headers: headers }).map(function (response) {
+            return this.http.get('/api/cats?search=&max=250', { headers: headers }).map(function (response) {
                 var cats = response.status === 200 ? response.json().cats : [];
                 return {
                     'levels': filters_1.LEVELS,
                     'tpes': filters_1.TPES,
                     'genus': filters_1.GENUS,
                     'cases': filters_1.CASES,
-                    'cats': cats };
+                    'cats': _this.catsToPropercase(cats) };
             }).catch(function (error) {
                 return Observable_1.Observable.throw(error);
+            });
+        };
+        FilterService.prototype.catsToPropercase = function (arr) {
+            return arr.map(function (cat) {
+                return { 'name': cat.name[0].toUpperCase() + cat.name.substring(1), 'total': cat.total };
             });
         };
         FilterService = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [auth_service_1.AuthService, http_1.Http])], FilterService);
@@ -51373,6 +51381,227 @@ $__System.registerDynamic("1d", ["3", "33"], true, function ($__require, exports
     exports.RestartService = RestartService;
     return module.exports;
 });
+$__System.registerDynamic("18c", [], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var Error = function () {
+        function Error(title, message) {
+            this.title = title;
+            this.message = message;
+        }
+        return Error;
+    }();
+    exports.Error = Error;
+    return module.exports;
+});
+$__System.registerDynamic('19', ['3', '18c'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var core_1 = $__require('3');
+    var error_model_1 = $__require('18c');
+    var ErrorService = function () {
+        function ErrorService() {
+            this.errorOccurred = new core_1.EventEmitter();
+        }
+        ErrorService.prototype.handleError = function (error) {
+            console.log('Error:', error);
+            var msg = 'unknown error message';
+            var title = 'error';
+            if (error && error.error) {
+                msg = error.error.error || msg;
+                title = error.title || title;
+            }
+            this.errorOccurred.emit(new error_model_1.Error(title, msg));
+        };
+        return ErrorService;
+    }();
+    exports.ErrorService = ErrorService;
+    return module.exports;
+});
+$__System.registerDynamic("1e", [], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var UtilsService = function () {
+        function UtilsService() {}
+        //https://basarat.gitbooks.io/algorithms/content/docs/shuffling.html
+        UtilsService.prototype.shuffle = function (array) {
+            // if it's 1 or 0 items, just return
+            if (array.length <= 1) return array;
+            // For each index in array
+            for (var i = 0; i < array.length; i++) {
+                // choose a random not-yet-placed item to place there
+                // must be an item AFTER the current item, because the stuff
+                // before has all already been placed
+                var randomChoiceIndex = this.getRandom(i, array.length - 1);
+                // place the random choice in the spot by swapping
+                _a = [array[randomChoiceIndex], array[i]], array[i] = _a[0], array[randomChoiceIndex] = _a[1];
+            }
+            return array;
+            var _a;
+        };
+        UtilsService.prototype.getRandom = function (floor, ceiling) {
+            return Math.floor(Math.random() * (ceiling - floor + 1)) + floor;
+        };
+        return UtilsService;
+    }();
+    exports.UtilsService = UtilsService;
+    return module.exports;
+});
+$__System.registerDynamic('31', ['17'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var Observable_1 = $__require('17');
+    var ValidationService = function () {
+        function ValidationService() {}
+        ValidationService.getValidatorErrorMessage = function (label, validatorName, validatorValue) {
+            var config = {
+                'required': label + ' is verplicht',
+                'invalidEmailAddress': 'Incorrect email adres. Het juiste formaat is jan@peeters.com.',
+                'minlength': label + " moet minstens " + validatorValue.requiredLength + " karakters lang zijn.",
+                'invalidPassword': "Ongeldig wachtwoord. Het wachtwoord moet minstens " + validatorValue.requiredLength + " karakters lang zijn en een nummer bevatten.",
+                'usernameTaken': "Deze gebruikersnaam is niet beschikbaar. Gelieve een andere gebruikersnaam te kiezen.",
+                'emailTaken': "Dit email adres is niet beschikbaar. Gelieve een ander email te gebruiken."
+            };
+            return config[validatorName];
+        };
+        ValidationService.emailValidator = function (control) {
+            if (control.value.match(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/)) {
+                return null;
+            } else {
+                return { 'invalidEmailAddress': true };
+            }
+        };
+        ValidationService.passwordValidator = function (control) {
+            if (control.value.match(/^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{6,100}$/)) {
+                return null;
+            } else {
+                return { 'invalidPassword': { requiredLength: 6 } };
+            }
+        };
+        ValidationService.equalPasswordsValidator = function (group) {
+            if (group.controls['password'].value === group.controls['confirmPassword'].value) {
+                return null;
+            } else {
+                return { 'mismatchingPasswords': true };
+            }
+        };
+        ValidationService.checkUniqueUserName = function (http) {
+            return function (control) {
+                return http.get('/api/user/check?user=' + control.value).map(function (response) {
+                    if (response.json().obj === true) {
+                        return { 'usernameTaken': true };
+                    } else {
+                        return null;
+                    }
+                }).catch(function (error) {
+                    return Observable_1.Observable.throw(error.json());
+                });
+            };
+        };
+        ValidationService.checkUniqueEmail = function (http) {
+            return function (control) {
+                return http.get('/api/user/check?mail=' + control.value).map(function (response) {
+                    if (response.json().obj === true) {
+                        return { 'emailTaken': true };
+                    } else {
+                        return null;
+                    }
+                }).catch(function (error) {
+                    return Observable_1.Observable.throw(error.json());
+                });
+            };
+        };
+        return ValidationService;
+    }();
+    exports.ValidationService = ValidationService;
+    return module.exports;
+});
+$__System.registerDynamic("18d", ["3", "5", "24", "35", "8", "a", "15", "d", "e", "1c", "c", "1f", "21", "22", "23", "25", "27", "29", "28", "2a", "2b", "2c", "2d", "2e", "2f", "30", "11", "f", "10", "37", "38", "39", "14", "3a", "16", "12", "13", "18", "26", "1a", "20", "1d", "19", "1e", "31"], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1 = $__require("3");
+    var platform_browser_1 = $__require("5");
+    var forms_1 = $__require("24");
+    var http_1 = $__require("35");
+    var ng2_tooltip_1 = $__require("8");
+    var routes_1 = $__require("a");
+    var app_component_1 = $__require("15");
+    var wordbank_component_1 = $__require("d");
+    var settings_component_1 = $__require("e");
+    var menu_component_1 = $__require("1c");
+    var tests_component_1 = $__require("c");
+    var filter_component_1 = $__require("1f");
+    var cards_component_1 = $__require("21");
+    var review_component_1 = $__require("22");
+    var edit_word_component_1 = $__require("23");
+    var wordlists_component_1 = $__require("25");
+    var add_to_list_component_1 = $__require("27");
+    var edit_list_component_1 = $__require("29");
+    var show_lists_component_1 = $__require("28");
+    var card_item_component_1 = $__require("2a");
+    var card_item_answer_component_1 = $__require("2b");
+    var card_score_component_1 = $__require("2c");
+    var score_bar_component_1 = $__require("2d");
+    var info_message_component_1 = $__require("2e");
+    var error_message_component_1 = $__require("2f");
+    var field_messages_component_1 = $__require("30");
+    var auth_menu_component_1 = $__require("11");
+    var sign_up_component_1 = $__require("f");
+    var sign_in_component_1 = $__require("10");
+    var get_filter_value_directive_1 = $__require("37");
+    var get_key_pressed_directive_1 = $__require("38");
+    var show_color_directive_1 = $__require("39");
+    var access_resolver_1 = $__require("14");
+    var level_name_pipe_1 = $__require("3a");
+    var auth_service_1 = $__require("16");
+    var auth_guard_service_1 = $__require("12");
+    var auth_role_guard_service_1 = $__require("13");
+    var words_service_1 = $__require("18");
+    var wordlists_service_1 = $__require("26");
+    var settings_service_1 = $__require("1a");
+    var filters_service_1 = $__require("20");
+    var restart_service_1 = $__require("1d");
+    var error_service_1 = $__require("19");
+    var utils_service_1 = $__require("1e");
+    var validation_service_1 = $__require("31");
+    var AppModule = function () {
+        function AppModule() {}
+        AppModule = __decorate([core_1.NgModule({
+            imports: [platform_browser_1.BrowserModule, forms_1.FormsModule, forms_1.ReactiveFormsModule, http_1.HttpModule, routes_1.routing, ng2_tooltip_1.TooltipModule],
+            providers: [words_service_1.WordService, wordlists_service_1.WordlistService, settings_service_1.SettingsService, filters_service_1.FilterService, restart_service_1.RestartService, error_service_1.ErrorService, auth_service_1.AuthService, auth_guard_service_1.AuthGuard, auth_role_guard_service_1.AuthRoleGuard, utils_service_1.UtilsService, validation_service_1.ValidationService, access_resolver_1.AccessResolver],
+            declarations: [app_component_1.AppComponent, settings_component_1.AppSettings, menu_component_1.Menu, wordbank_component_1.WordBank, tests_component_1.Tests, filter_component_1.Filter, cards_component_1.Cards, review_component_1.Review, wordlists_component_1.WordLists, edit_word_component_1.EditWord, add_to_list_component_1.AddToList, edit_list_component_1.EditList, show_lists_component_1.ShowLists, card_item_component_1.CardItem, card_item_answer_component_1.CardItemAnswer, card_score_component_1.CardScore, score_bar_component_1.ScoreBar, info_message_component_1.InfoMessage, error_message_component_1.ErrorMessage, field_messages_component_1.FieldMessages, get_filter_value_directive_1.GetFilterValue, get_key_pressed_directive_1.GetKeyPress, show_color_directive_1.GenusColor, level_name_pipe_1.LevelNamePipe, auth_menu_component_1.AuthMenu, sign_in_component_1.SignIn, sign_up_component_1.SignUp],
+            bootstrap: [app_component_1.AppComponent]
+        }), __metadata('design:paramtypes', [])], AppModule);
+        return AppModule;
+    }();
+    exports.AppModule = AppModule;
+    return module.exports;
+});
 $__System.registerDynamic('173', [], true, function ($__require, exports, module) {
     "use strict";
 
@@ -51410,7 +51639,7 @@ $__System.registerDynamic('173', [], true, function ($__require, exports, module
 
     return module.exports;
 });
-$__System.registerDynamic("18c", ["6e"], true, function ($__require, exports, module) {
+$__System.registerDynamic("18e", ["6e"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -51460,7 +51689,7 @@ $__System.registerDynamic("18c", ["6e"], true, function ($__require, exports, mo
 
     return module.exports;
 });
-$__System.registerDynamic('33', ['17', 'a4', '6e', '173', '18c', '18a'], true, function ($__require, exports, module) {
+$__System.registerDynamic('33', ['17', 'a4', '6e', '173', '18e', '18a'], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -51477,7 +51706,7 @@ $__System.registerDynamic('33', ['17', 'a4', '6e', '173', '18c', '18a'], true, f
     var Subscriber_1 = $__require('a4');
     var Subscription_1 = $__require('6e');
     var ObjectUnsubscribedError_1 = $__require('173');
-    var SubjectSubscription_1 = $__require('18c');
+    var SubjectSubscription_1 = $__require('18e');
     var rxSubscriber_1 = $__require('18a');
     /**
      * @class SubjectSubscriber<T>
@@ -51622,6 +51851,785 @@ $__System.registerDynamic('33', ['17', 'a4', '6e', '173', '18c', '18a'], true, f
         return AnonymousSubject;
     }(Subject);
     exports.AnonymousSubject = AnonymousSubject;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic("58", [], true, function ($__require, exports, module) {
+  "use strict";
+
+  var define,
+      global = this || self,
+      GLOBAL = global;
+  exports.isArray = Array.isArray || function (x) {
+    return x && typeof x.length === 'number';
+  };
+  
+
+  return module.exports;
+});
+$__System.registerDynamic("18f", [], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    function isObject(x) {
+        return x != null && typeof x === 'object';
+    }
+    exports.isObject = isObject;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic("6d", [], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    function isFunction(x) {
+        return typeof x === 'function';
+    }
+    exports.isFunction = isFunction;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic("4e", ["4f"], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var errorObject_1 = $__require("4f");
+    var tryCatchTarget;
+    function tryCatcher() {
+        try {
+            return tryCatchTarget.apply(this, arguments);
+        } catch (e) {
+            errorObject_1.errorObject.e = e;
+            return errorObject_1.errorObject;
+        }
+    }
+    function tryCatch(fn) {
+        tryCatchTarget = fn;
+        return tryCatcher;
+    }
+    exports.tryCatch = tryCatch;
+    ;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic("4f", [], true, function ($__require, exports, module) {
+  "use strict";
+  // typeof any so that it we don't have to cast when comparing a result to the error object
+
+  var define,
+      global = this || self,
+      GLOBAL = global;
+  exports.errorObject = { e: {} };
+  
+
+  return module.exports;
+});
+$__System.registerDynamic("189", [], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    /**
+     * An error thrown when one or more errors have occurred during the
+     * `unsubscribe` of a {@link Subscription}.
+     */
+    var UnsubscriptionError = function (_super) {
+        __extends(UnsubscriptionError, _super);
+        function UnsubscriptionError(errors) {
+            _super.call(this);
+            this.errors = errors;
+            var err = Error.call(this, errors ? errors.length + " errors occurred during unsubscription:\n  " + errors.map(function (err, i) {
+                return i + 1 + ") " + err.toString();
+            }).join('\n  ') : '');
+            this.name = err.name = 'UnsubscriptionError';
+            this.stack = err.stack;
+            this.message = err.message;
+        }
+        return UnsubscriptionError;
+    }(Error);
+    exports.UnsubscriptionError = UnsubscriptionError;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('6e', ['58', '18f', '6d', '4e', '4f', '189'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var isArray_1 = $__require('58');
+    var isObject_1 = $__require('18f');
+    var isFunction_1 = $__require('6d');
+    var tryCatch_1 = $__require('4e');
+    var errorObject_1 = $__require('4f');
+    var UnsubscriptionError_1 = $__require('189');
+    /**
+     * Represents a disposable resource, such as the execution of an Observable. A
+     * Subscription has one important method, `unsubscribe`, that takes no argument
+     * and just disposes the resource held by the subscription.
+     *
+     * Additionally, subscriptions may be grouped together through the `add()`
+     * method, which will attach a child Subscription to the current Subscription.
+     * When a Subscription is unsubscribed, all its children (and its grandchildren)
+     * will be unsubscribed as well.
+     *
+     * @class Subscription
+     */
+    var Subscription = function () {
+        /**
+         * @param {function(): void} [unsubscribe] A function describing how to
+         * perform the disposal of resources when the `unsubscribe` method is called.
+         */
+        function Subscription(unsubscribe) {
+            /**
+             * A flag to indicate whether this Subscription has already been unsubscribed.
+             * @type {boolean}
+             */
+            this.closed = false;
+            if (unsubscribe) {
+                this._unsubscribe = unsubscribe;
+            }
+        }
+        /**
+         * Disposes the resources held by the subscription. May, for instance, cancel
+         * an ongoing Observable execution or cancel any other type of work that
+         * started when the Subscription was created.
+         * @return {void}
+         */
+        Subscription.prototype.unsubscribe = function () {
+            var hasErrors = false;
+            var errors;
+            if (this.closed) {
+                return;
+            }
+            this.closed = true;
+            var _a = this,
+                _unsubscribe = _a._unsubscribe,
+                _subscriptions = _a._subscriptions;
+            this._subscriptions = null;
+            if (isFunction_1.isFunction(_unsubscribe)) {
+                var trial = tryCatch_1.tryCatch(_unsubscribe).call(this);
+                if (trial === errorObject_1.errorObject) {
+                    hasErrors = true;
+                    (errors = errors || []).push(errorObject_1.errorObject.e);
+                }
+            }
+            if (isArray_1.isArray(_subscriptions)) {
+                var index = -1;
+                var len = _subscriptions.length;
+                while (++index < len) {
+                    var sub = _subscriptions[index];
+                    if (isObject_1.isObject(sub)) {
+                        var trial = tryCatch_1.tryCatch(sub.unsubscribe).call(sub);
+                        if (trial === errorObject_1.errorObject) {
+                            hasErrors = true;
+                            errors = errors || [];
+                            var err = errorObject_1.errorObject.e;
+                            if (err instanceof UnsubscriptionError_1.UnsubscriptionError) {
+                                errors = errors.concat(err.errors);
+                            } else {
+                                errors.push(err);
+                            }
+                        }
+                    }
+                }
+            }
+            if (hasErrors) {
+                throw new UnsubscriptionError_1.UnsubscriptionError(errors);
+            }
+        };
+        /**
+         * Adds a tear down to be called during the unsubscribe() of this
+         * Subscription.
+         *
+         * If the tear down being added is a subscription that is already
+         * unsubscribed, is the same reference `add` is being called on, or is
+         * `Subscription.EMPTY`, it will not be added.
+         *
+         * If this subscription is already in an `closed` state, the passed
+         * tear down logic will be executed immediately.
+         *
+         * @param {TeardownLogic} teardown The additional logic to execute on
+         * teardown.
+         * @return {Subscription} Returns the Subscription used or created to be
+         * added to the inner subscriptions list. This Subscription can be used with
+         * `remove()` to remove the passed teardown logic from the inner subscriptions
+         * list.
+         */
+        Subscription.prototype.add = function (teardown) {
+            if (!teardown || teardown === Subscription.EMPTY) {
+                return Subscription.EMPTY;
+            }
+            if (teardown === this) {
+                return this;
+            }
+            var sub = teardown;
+            switch (typeof teardown) {
+                case 'function':
+                    sub = new Subscription(teardown);
+                case 'object':
+                    if (sub.closed || typeof sub.unsubscribe !== 'function') {
+                        break;
+                    } else if (this.closed) {
+                        sub.unsubscribe();
+                    } else {
+                        (this._subscriptions || (this._subscriptions = [])).push(sub);
+                    }
+                    break;
+                default:
+                    throw new Error('unrecognized teardown ' + teardown + ' added to Subscription.');
+            }
+            return sub;
+        };
+        /**
+         * Removes a Subscription from the internal list of subscriptions that will
+         * unsubscribe during the unsubscribe process of this Subscription.
+         * @param {Subscription} subscription The subscription to remove.
+         * @return {void}
+         */
+        Subscription.prototype.remove = function (subscription) {
+            // HACK: This might be redundant because of the logic in `add()`
+            if (subscription == null || subscription === this || subscription === Subscription.EMPTY) {
+                return;
+            }
+            var subscriptions = this._subscriptions;
+            if (subscriptions) {
+                var subscriptionIndex = subscriptions.indexOf(subscription);
+                if (subscriptionIndex !== -1) {
+                    subscriptions.splice(subscriptionIndex, 1);
+                }
+            }
+        };
+        Subscription.EMPTY = function (empty) {
+            empty.closed = true;
+            return empty;
+        }(new Subscription());
+        return Subscription;
+    }();
+    exports.Subscription = Subscription;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic("190", [], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    exports.empty = {
+        closed: true,
+        next: function (value) {},
+        error: function (err) {
+            throw err;
+        },
+        complete: function () {}
+    };
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('a4', ['6d', '6e', '190', '18a'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    var isFunction_1 = $__require('6d');
+    var Subscription_1 = $__require('6e');
+    var Observer_1 = $__require('190');
+    var rxSubscriber_1 = $__require('18a');
+    /**
+     * Implements the {@link Observer} interface and extends the
+     * {@link Subscription} class. While the {@link Observer} is the public API for
+     * consuming the values of an {@link Observable}, all Observers get converted to
+     * a Subscriber, in order to provide Subscription-like capabilities such as
+     * `unsubscribe`. Subscriber is a common type in RxJS, and crucial for
+     * implementing operators, but it is rarely used as a public API.
+     *
+     * @class Subscriber<T>
+     */
+    var Subscriber = function (_super) {
+        __extends(Subscriber, _super);
+        /**
+         * @param {Observer|function(value: T): void} [destinationOrNext] A partially
+         * defined Observer or a `next` callback function.
+         * @param {function(e: ?any): void} [error] The `error` callback of an
+         * Observer.
+         * @param {function(): void} [complete] The `complete` callback of an
+         * Observer.
+         */
+        function Subscriber(destinationOrNext, error, complete) {
+            _super.call(this);
+            this.syncErrorValue = null;
+            this.syncErrorThrown = false;
+            this.syncErrorThrowable = false;
+            this.isStopped = false;
+            switch (arguments.length) {
+                case 0:
+                    this.destination = Observer_1.empty;
+                    break;
+                case 1:
+                    if (!destinationOrNext) {
+                        this.destination = Observer_1.empty;
+                        break;
+                    }
+                    if (typeof destinationOrNext === 'object') {
+                        if (destinationOrNext instanceof Subscriber) {
+                            this.destination = destinationOrNext;
+                            this.destination.add(this);
+                        } else {
+                            this.syncErrorThrowable = true;
+                            this.destination = new SafeSubscriber(this, destinationOrNext);
+                        }
+                        break;
+                    }
+                default:
+                    this.syncErrorThrowable = true;
+                    this.destination = new SafeSubscriber(this, destinationOrNext, error, complete);
+                    break;
+            }
+        }
+        Subscriber.prototype[rxSubscriber_1.$$rxSubscriber] = function () {
+            return this;
+        };
+        /**
+         * A static factory for a Subscriber, given a (potentially partial) definition
+         * of an Observer.
+         * @param {function(x: ?T): void} [next] The `next` callback of an Observer.
+         * @param {function(e: ?any): void} [error] The `error` callback of an
+         * Observer.
+         * @param {function(): void} [complete] The `complete` callback of an
+         * Observer.
+         * @return {Subscriber<T>} A Subscriber wrapping the (partially defined)
+         * Observer represented by the given arguments.
+         */
+        Subscriber.create = function (next, error, complete) {
+            var subscriber = new Subscriber(next, error, complete);
+            subscriber.syncErrorThrowable = false;
+            return subscriber;
+        };
+        /**
+         * The {@link Observer} callback to receive notifications of type `next` from
+         * the Observable, with a value. The Observable may call this method 0 or more
+         * times.
+         * @param {T} [value] The `next` value.
+         * @return {void}
+         */
+        Subscriber.prototype.next = function (value) {
+            if (!this.isStopped) {
+                this._next(value);
+            }
+        };
+        /**
+         * The {@link Observer} callback to receive notifications of type `error` from
+         * the Observable, with an attached {@link Error}. Notifies the Observer that
+         * the Observable has experienced an error condition.
+         * @param {any} [err] The `error` exception.
+         * @return {void}
+         */
+        Subscriber.prototype.error = function (err) {
+            if (!this.isStopped) {
+                this.isStopped = true;
+                this._error(err);
+            }
+        };
+        /**
+         * The {@link Observer} callback to receive a valueless notification of type
+         * `complete` from the Observable. Notifies the Observer that the Observable
+         * has finished sending push-based notifications.
+         * @return {void}
+         */
+        Subscriber.prototype.complete = function () {
+            if (!this.isStopped) {
+                this.isStopped = true;
+                this._complete();
+            }
+        };
+        Subscriber.prototype.unsubscribe = function () {
+            if (this.closed) {
+                return;
+            }
+            this.isStopped = true;
+            _super.prototype.unsubscribe.call(this);
+        };
+        Subscriber.prototype._next = function (value) {
+            this.destination.next(value);
+        };
+        Subscriber.prototype._error = function (err) {
+            this.destination.error(err);
+            this.unsubscribe();
+        };
+        Subscriber.prototype._complete = function () {
+            this.destination.complete();
+            this.unsubscribe();
+        };
+        return Subscriber;
+    }(Subscription_1.Subscription);
+    exports.Subscriber = Subscriber;
+    /**
+     * We need this JSDoc comment for affecting ESDoc.
+     * @ignore
+     * @extends {Ignored}
+     */
+    var SafeSubscriber = function (_super) {
+        __extends(SafeSubscriber, _super);
+        function SafeSubscriber(_parent, observerOrNext, error, complete) {
+            _super.call(this);
+            this._parent = _parent;
+            var next;
+            var context = this;
+            if (isFunction_1.isFunction(observerOrNext)) {
+                next = observerOrNext;
+            } else if (observerOrNext) {
+                context = observerOrNext;
+                next = observerOrNext.next;
+                error = observerOrNext.error;
+                complete = observerOrNext.complete;
+                if (isFunction_1.isFunction(context.unsubscribe)) {
+                    this.add(context.unsubscribe.bind(context));
+                }
+                context.unsubscribe = this.unsubscribe.bind(this);
+            }
+            this._context = context;
+            this._next = next;
+            this._error = error;
+            this._complete = complete;
+        }
+        SafeSubscriber.prototype.next = function (value) {
+            if (!this.isStopped && this._next) {
+                var _parent = this._parent;
+                if (!_parent.syncErrorThrowable) {
+                    this.__tryOrUnsub(this._next, value);
+                } else if (this.__tryOrSetError(_parent, this._next, value)) {
+                    this.unsubscribe();
+                }
+            }
+        };
+        SafeSubscriber.prototype.error = function (err) {
+            if (!this.isStopped) {
+                var _parent = this._parent;
+                if (this._error) {
+                    if (!_parent.syncErrorThrowable) {
+                        this.__tryOrUnsub(this._error, err);
+                        this.unsubscribe();
+                    } else {
+                        this.__tryOrSetError(_parent, this._error, err);
+                        this.unsubscribe();
+                    }
+                } else if (!_parent.syncErrorThrowable) {
+                    this.unsubscribe();
+                    throw err;
+                } else {
+                    _parent.syncErrorValue = err;
+                    _parent.syncErrorThrown = true;
+                    this.unsubscribe();
+                }
+            }
+        };
+        SafeSubscriber.prototype.complete = function () {
+            if (!this.isStopped) {
+                var _parent = this._parent;
+                if (this._complete) {
+                    if (!_parent.syncErrorThrowable) {
+                        this.__tryOrUnsub(this._complete);
+                        this.unsubscribe();
+                    } else {
+                        this.__tryOrSetError(_parent, this._complete);
+                        this.unsubscribe();
+                    }
+                } else {
+                    this.unsubscribe();
+                }
+            }
+        };
+        SafeSubscriber.prototype.__tryOrUnsub = function (fn, value) {
+            try {
+                fn.call(this._context, value);
+            } catch (err) {
+                this.unsubscribe();
+                throw err;
+            }
+        };
+        SafeSubscriber.prototype.__tryOrSetError = function (parent, fn, value) {
+            try {
+                fn.call(this._context, value);
+            } catch (err) {
+                parent.syncErrorValue = err;
+                parent.syncErrorThrown = true;
+                return true;
+            }
+            return false;
+        };
+        SafeSubscriber.prototype._unsubscribe = function () {
+            var _parent = this._parent;
+            this._context = null;
+            this._parent = null;
+            _parent.unsubscribe();
+        };
+        return SafeSubscriber;
+    }(Subscriber);
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('18a', ['a2'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var root_1 = $__require('a2');
+    var Symbol = root_1.root.Symbol;
+    exports.$$rxSubscriber = typeof Symbol === 'function' && typeof Symbol.for === 'function' ? Symbol.for('rxSubscriber') : '@@rxSubscriber';
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('191', ['a4', '18a'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var Subscriber_1 = $__require('a4');
+    var rxSubscriber_1 = $__require('18a');
+    function toSubscriber(nextOrObserver, error, complete) {
+        if (nextOrObserver) {
+            if (nextOrObserver instanceof Subscriber_1.Subscriber) {
+                return nextOrObserver;
+            }
+            if (nextOrObserver[rxSubscriber_1.$$rxSubscriber]) {
+                return nextOrObserver[rxSubscriber_1.$$rxSubscriber]();
+            }
+        }
+        if (!nextOrObserver && !error && !complete) {
+            return new Subscriber_1.Subscriber();
+        }
+        return new Subscriber_1.Subscriber(nextOrObserver, error, complete);
+    }
+    exports.toSubscriber = toSubscriber;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('a2', [], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var objectTypes = {
+        'boolean': false,
+        'function': true,
+        'object': true,
+        'number': false,
+        'string': false,
+        'undefined': false
+    };
+    exports.root = objectTypes[typeof self] && self || objectTypes[typeof window] && window;
+    var freeGlobal = objectTypes[typeof global] && global;
+    if (freeGlobal && (freeGlobal.global === freeGlobal || freeGlobal.window === freeGlobal)) {
+        exports.root = freeGlobal;
+    }
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('110', ['a2'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var root_1 = $__require('a2');
+    function getSymbolObservable(context) {
+        var $$observable;
+        var Symbol = context.Symbol;
+        if (typeof Symbol === 'function') {
+            if (Symbol.observable) {
+                $$observable = Symbol.observable;
+            } else {
+                $$observable = Symbol('observable');
+                Symbol.observable = $$observable;
+            }
+        } else {
+            $$observable = '@@observable';
+        }
+        return $$observable;
+    }
+    exports.getSymbolObservable = getSymbolObservable;
+    exports.$$observable = getSymbolObservable(root_1.root);
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('17', ['a2', '191', '110'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var root_1 = $__require('a2');
+    var toSubscriber_1 = $__require('191');
+    var observable_1 = $__require('110');
+    /**
+     * A representation of any set of values over any amount of time. This the most basic building block
+     * of RxJS.
+     *
+     * @class Observable<T>
+     */
+    var Observable = function () {
+        /**
+         * @constructor
+         * @param {Function} subscribe the function that is  called when the Observable is
+         * initially subscribed to. This function is given a Subscriber, to which new values
+         * can be `next`ed, or an `error` method can be called to raise an error, or
+         * `complete` can be called to notify of a successful completion.
+         */
+        function Observable(subscribe) {
+            this._isScalar = false;
+            if (subscribe) {
+                this._subscribe = subscribe;
+            }
+        }
+        /**
+         * Creates a new Observable, with this Observable as the source, and the passed
+         * operator defined as the new observable's operator.
+         * @method lift
+         * @param {Operator} operator the operator defining the operation to take on the observable
+         * @return {Observable} a new observable with the Operator applied
+         */
+        Observable.prototype.lift = function (operator) {
+            var observable = new Observable();
+            observable.source = this;
+            observable.operator = operator;
+            return observable;
+        };
+        /**
+         * Registers handlers for handling emitted values, error and completions from the observable, and
+         *  executes the observable's subscriber function, which will take action to set up the underlying data stream
+         * @method subscribe
+         * @param {PartialObserver|Function} observerOrNext (optional) either an observer defining all functions to be called,
+         *  or the first of three possible handlers, which is the handler for each value emitted from the observable.
+         * @param {Function} error (optional) a handler for a terminal event resulting from an error. If no error handler is provided,
+         *  the error will be thrown as unhandled
+         * @param {Function} complete (optional) a handler for a terminal event resulting from successful completion.
+         * @return {ISubscription} a subscription reference to the registered handlers
+         */
+        Observable.prototype.subscribe = function (observerOrNext, error, complete) {
+            var operator = this.operator;
+            var sink = toSubscriber_1.toSubscriber(observerOrNext, error, complete);
+            if (operator) {
+                operator.call(sink, this);
+            } else {
+                sink.add(this._subscribe(sink));
+            }
+            if (sink.syncErrorThrowable) {
+                sink.syncErrorThrowable = false;
+                if (sink.syncErrorThrown) {
+                    throw sink.syncErrorValue;
+                }
+            }
+            return sink;
+        };
+        /**
+         * @method forEach
+         * @param {Function} next a handler for each value emitted by the observable
+         * @param {PromiseConstructor} [PromiseCtor] a constructor function used to instantiate the Promise
+         * @return {Promise} a promise that either resolves on observable completion or
+         *  rejects with the handled error
+         */
+        Observable.prototype.forEach = function (next, PromiseCtor) {
+            var _this = this;
+            if (!PromiseCtor) {
+                if (root_1.root.Rx && root_1.root.Rx.config && root_1.root.Rx.config.Promise) {
+                    PromiseCtor = root_1.root.Rx.config.Promise;
+                } else if (root_1.root.Promise) {
+                    PromiseCtor = root_1.root.Promise;
+                }
+            }
+            if (!PromiseCtor) {
+                throw new Error('no Promise impl found');
+            }
+            return new PromiseCtor(function (resolve, reject) {
+                var subscription = _this.subscribe(function (value) {
+                    if (subscription) {
+                        // if there is a subscription, then we can surmise
+                        // the next handling is asynchronous. Any errors thrown
+                        // need to be rejected explicitly and unsubscribe must be
+                        // called manually
+                        try {
+                            next(value);
+                        } catch (err) {
+                            reject(err);
+                            subscription.unsubscribe();
+                        }
+                    } else {
+                        // if there is NO subscription, then we're getting a nexted
+                        // value synchronously during subscription. We can just call it.
+                        // If it errors, Observable's `subscribe` will ensure the
+                        // unsubscription logic is called, then synchronously rethrow the error.
+                        // After that, Promise will trap the error and send it
+                        // down the rejection path.
+                        next(value);
+                    }
+                }, reject, resolve);
+            });
+        };
+        Observable.prototype._subscribe = function (subscriber) {
+            return this.source.subscribe(subscriber);
+        };
+        /**
+         * An interop point defined by the es7-observable spec https://github.com/zenparsing/es-observable
+         * @method Symbol.observable
+         * @return {Observable} this instance of the observable
+         */
+        Observable.prototype[observable_1.$$observable] = function () {
+            return this;
+        };
+        // HACK: Since TypeScript inherits static properties too, we have to
+        // fight against TypeScript here so Subject can have a different static create signature
+        /**
+         * Creates a new cold Observable by calling the Observable constructor
+         * @static true
+         * @owner Observable
+         * @method create
+         * @param {Function} subscribe? the subscriber function to be passed to the Observable constructor
+         * @return {Observable} a new cold observable
+         */
+        Observable.create = function (subscribe) {
+            return new Observable(subscribe);
+        };
+        return Observable;
+    }();
+    exports.Observable = Observable;
     
 
     return module.exports;
@@ -58688,1014 +59696,16 @@ var define = $__System.amdDefine;
 }));
 
 })();
-$__System.registerDynamic("18d", [], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var Error = function () {
-        function Error(title, message) {
-            this.title = title;
-            this.message = message;
-        }
-        return Error;
-    }();
-    exports.Error = Error;
-    return module.exports;
-});
-$__System.registerDynamic('19', ['3', '18d'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var core_1 = $__require('3');
-    var error_model_1 = $__require('18d');
-    var ErrorService = function () {
-        function ErrorService() {
-            this.errorOccurred = new core_1.EventEmitter();
-        }
-        ErrorService.prototype.handleError = function (error) {
-            console.log('Error:', error);
-            var msg = 'unknown error message';
-            var title = 'error';
-            if (error && error.error) {
-                msg = error.error.error || msg;
-                title = error.title || title;
-            }
-            this.errorOccurred.emit(new error_model_1.Error(title, msg));
-        };
-        return ErrorService;
-    }();
-    exports.ErrorService = ErrorService;
-    return module.exports;
-});
-$__System.registerDynamic("1e", [], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var UtilsService = function () {
-        function UtilsService() {}
-        //https://basarat.gitbooks.io/algorithms/content/docs/shuffling.html
-        UtilsService.prototype.shuffle = function (array) {
-            // if it's 1 or 0 items, just return
-            if (array.length <= 1) return array;
-            // For each index in array
-            for (var i = 0; i < array.length; i++) {
-                // choose a random not-yet-placed item to place there
-                // must be an item AFTER the current item, because the stuff
-                // before has all already been placed
-                var randomChoiceIndex = this.getRandom(i, array.length - 1);
-                // place the random choice in the spot by swapping
-                _a = [array[randomChoiceIndex], array[i]], array[i] = _a[0], array[randomChoiceIndex] = _a[1];
-            }
-            return array;
-            var _a;
-        };
-        UtilsService.prototype.getRandom = function (floor, ceiling) {
-            return Math.floor(Math.random() * (ceiling - floor + 1)) + floor;
-        };
-        return UtilsService;
-    }();
-    exports.UtilsService = UtilsService;
-    return module.exports;
-});
-$__System.registerDynamic("58", [], true, function ($__require, exports, module) {
-  "use strict";
-
-  var define,
-      global = this || self,
-      GLOBAL = global;
-  exports.isArray = Array.isArray || function (x) {
-    return x && typeof x.length === 'number';
-  };
-  
-
-  return module.exports;
-});
-$__System.registerDynamic("18e", [], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    function isObject(x) {
-        return x != null && typeof x === 'object';
-    }
-    exports.isObject = isObject;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic("6d", [], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    function isFunction(x) {
-        return typeof x === 'function';
-    }
-    exports.isFunction = isFunction;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic("4e", ["4f"], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var errorObject_1 = $__require("4f");
-    var tryCatchTarget;
-    function tryCatcher() {
-        try {
-            return tryCatchTarget.apply(this, arguments);
-        } catch (e) {
-            errorObject_1.errorObject.e = e;
-            return errorObject_1.errorObject;
-        }
-    }
-    function tryCatch(fn) {
-        tryCatchTarget = fn;
-        return tryCatcher;
-    }
-    exports.tryCatch = tryCatch;
-    ;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic("4f", [], true, function ($__require, exports, module) {
-  "use strict";
-  // typeof any so that it we don't have to cast when comparing a result to the error object
-
-  var define,
-      global = this || self,
-      GLOBAL = global;
-  exports.errorObject = { e: {} };
-  
-
-  return module.exports;
-});
-$__System.registerDynamic("189", [], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    /**
-     * An error thrown when one or more errors have occurred during the
-     * `unsubscribe` of a {@link Subscription}.
-     */
-    var UnsubscriptionError = function (_super) {
-        __extends(UnsubscriptionError, _super);
-        function UnsubscriptionError(errors) {
-            _super.call(this);
-            this.errors = errors;
-            var err = Error.call(this, errors ? errors.length + " errors occurred during unsubscription:\n  " + errors.map(function (err, i) {
-                return i + 1 + ") " + err.toString();
-            }).join('\n  ') : '');
-            this.name = err.name = 'UnsubscriptionError';
-            this.stack = err.stack;
-            this.message = err.message;
-        }
-        return UnsubscriptionError;
-    }(Error);
-    exports.UnsubscriptionError = UnsubscriptionError;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('6e', ['58', '18e', '6d', '4e', '4f', '189'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var isArray_1 = $__require('58');
-    var isObject_1 = $__require('18e');
-    var isFunction_1 = $__require('6d');
-    var tryCatch_1 = $__require('4e');
-    var errorObject_1 = $__require('4f');
-    var UnsubscriptionError_1 = $__require('189');
-    /**
-     * Represents a disposable resource, such as the execution of an Observable. A
-     * Subscription has one important method, `unsubscribe`, that takes no argument
-     * and just disposes the resource held by the subscription.
-     *
-     * Additionally, subscriptions may be grouped together through the `add()`
-     * method, which will attach a child Subscription to the current Subscription.
-     * When a Subscription is unsubscribed, all its children (and its grandchildren)
-     * will be unsubscribed as well.
-     *
-     * @class Subscription
-     */
-    var Subscription = function () {
-        /**
-         * @param {function(): void} [unsubscribe] A function describing how to
-         * perform the disposal of resources when the `unsubscribe` method is called.
-         */
-        function Subscription(unsubscribe) {
-            /**
-             * A flag to indicate whether this Subscription has already been unsubscribed.
-             * @type {boolean}
-             */
-            this.closed = false;
-            if (unsubscribe) {
-                this._unsubscribe = unsubscribe;
-            }
-        }
-        /**
-         * Disposes the resources held by the subscription. May, for instance, cancel
-         * an ongoing Observable execution or cancel any other type of work that
-         * started when the Subscription was created.
-         * @return {void}
-         */
-        Subscription.prototype.unsubscribe = function () {
-            var hasErrors = false;
-            var errors;
-            if (this.closed) {
-                return;
-            }
-            this.closed = true;
-            var _a = this,
-                _unsubscribe = _a._unsubscribe,
-                _subscriptions = _a._subscriptions;
-            this._subscriptions = null;
-            if (isFunction_1.isFunction(_unsubscribe)) {
-                var trial = tryCatch_1.tryCatch(_unsubscribe).call(this);
-                if (trial === errorObject_1.errorObject) {
-                    hasErrors = true;
-                    (errors = errors || []).push(errorObject_1.errorObject.e);
-                }
-            }
-            if (isArray_1.isArray(_subscriptions)) {
-                var index = -1;
-                var len = _subscriptions.length;
-                while (++index < len) {
-                    var sub = _subscriptions[index];
-                    if (isObject_1.isObject(sub)) {
-                        var trial = tryCatch_1.tryCatch(sub.unsubscribe).call(sub);
-                        if (trial === errorObject_1.errorObject) {
-                            hasErrors = true;
-                            errors = errors || [];
-                            var err = errorObject_1.errorObject.e;
-                            if (err instanceof UnsubscriptionError_1.UnsubscriptionError) {
-                                errors = errors.concat(err.errors);
-                            } else {
-                                errors.push(err);
-                            }
-                        }
-                    }
-                }
-            }
-            if (hasErrors) {
-                throw new UnsubscriptionError_1.UnsubscriptionError(errors);
-            }
-        };
-        /**
-         * Adds a tear down to be called during the unsubscribe() of this
-         * Subscription.
-         *
-         * If the tear down being added is a subscription that is already
-         * unsubscribed, is the same reference `add` is being called on, or is
-         * `Subscription.EMPTY`, it will not be added.
-         *
-         * If this subscription is already in an `closed` state, the passed
-         * tear down logic will be executed immediately.
-         *
-         * @param {TeardownLogic} teardown The additional logic to execute on
-         * teardown.
-         * @return {Subscription} Returns the Subscription used or created to be
-         * added to the inner subscriptions list. This Subscription can be used with
-         * `remove()` to remove the passed teardown logic from the inner subscriptions
-         * list.
-         */
-        Subscription.prototype.add = function (teardown) {
-            if (!teardown || teardown === Subscription.EMPTY) {
-                return Subscription.EMPTY;
-            }
-            if (teardown === this) {
-                return this;
-            }
-            var sub = teardown;
-            switch (typeof teardown) {
-                case 'function':
-                    sub = new Subscription(teardown);
-                case 'object':
-                    if (sub.closed || typeof sub.unsubscribe !== 'function') {
-                        break;
-                    } else if (this.closed) {
-                        sub.unsubscribe();
-                    } else {
-                        (this._subscriptions || (this._subscriptions = [])).push(sub);
-                    }
-                    break;
-                default:
-                    throw new Error('unrecognized teardown ' + teardown + ' added to Subscription.');
-            }
-            return sub;
-        };
-        /**
-         * Removes a Subscription from the internal list of subscriptions that will
-         * unsubscribe during the unsubscribe process of this Subscription.
-         * @param {Subscription} subscription The subscription to remove.
-         * @return {void}
-         */
-        Subscription.prototype.remove = function (subscription) {
-            // HACK: This might be redundant because of the logic in `add()`
-            if (subscription == null || subscription === this || subscription === Subscription.EMPTY) {
-                return;
-            }
-            var subscriptions = this._subscriptions;
-            if (subscriptions) {
-                var subscriptionIndex = subscriptions.indexOf(subscription);
-                if (subscriptionIndex !== -1) {
-                    subscriptions.splice(subscriptionIndex, 1);
-                }
-            }
-        };
-        Subscription.EMPTY = function (empty) {
-            empty.closed = true;
-            return empty;
-        }(new Subscription());
-        return Subscription;
-    }();
-    exports.Subscription = Subscription;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic("18f", [], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    exports.empty = {
-        closed: true,
-        next: function (value) {},
-        error: function (err) {
-            throw err;
-        },
-        complete: function () {}
-    };
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('a4', ['6d', '6e', '18f', '18a'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    var isFunction_1 = $__require('6d');
-    var Subscription_1 = $__require('6e');
-    var Observer_1 = $__require('18f');
-    var rxSubscriber_1 = $__require('18a');
-    /**
-     * Implements the {@link Observer} interface and extends the
-     * {@link Subscription} class. While the {@link Observer} is the public API for
-     * consuming the values of an {@link Observable}, all Observers get converted to
-     * a Subscriber, in order to provide Subscription-like capabilities such as
-     * `unsubscribe`. Subscriber is a common type in RxJS, and crucial for
-     * implementing operators, but it is rarely used as a public API.
-     *
-     * @class Subscriber<T>
-     */
-    var Subscriber = function (_super) {
-        __extends(Subscriber, _super);
-        /**
-         * @param {Observer|function(value: T): void} [destinationOrNext] A partially
-         * defined Observer or a `next` callback function.
-         * @param {function(e: ?any): void} [error] The `error` callback of an
-         * Observer.
-         * @param {function(): void} [complete] The `complete` callback of an
-         * Observer.
-         */
-        function Subscriber(destinationOrNext, error, complete) {
-            _super.call(this);
-            this.syncErrorValue = null;
-            this.syncErrorThrown = false;
-            this.syncErrorThrowable = false;
-            this.isStopped = false;
-            switch (arguments.length) {
-                case 0:
-                    this.destination = Observer_1.empty;
-                    break;
-                case 1:
-                    if (!destinationOrNext) {
-                        this.destination = Observer_1.empty;
-                        break;
-                    }
-                    if (typeof destinationOrNext === 'object') {
-                        if (destinationOrNext instanceof Subscriber) {
-                            this.destination = destinationOrNext;
-                            this.destination.add(this);
-                        } else {
-                            this.syncErrorThrowable = true;
-                            this.destination = new SafeSubscriber(this, destinationOrNext);
-                        }
-                        break;
-                    }
-                default:
-                    this.syncErrorThrowable = true;
-                    this.destination = new SafeSubscriber(this, destinationOrNext, error, complete);
-                    break;
-            }
-        }
-        Subscriber.prototype[rxSubscriber_1.$$rxSubscriber] = function () {
-            return this;
-        };
-        /**
-         * A static factory for a Subscriber, given a (potentially partial) definition
-         * of an Observer.
-         * @param {function(x: ?T): void} [next] The `next` callback of an Observer.
-         * @param {function(e: ?any): void} [error] The `error` callback of an
-         * Observer.
-         * @param {function(): void} [complete] The `complete` callback of an
-         * Observer.
-         * @return {Subscriber<T>} A Subscriber wrapping the (partially defined)
-         * Observer represented by the given arguments.
-         */
-        Subscriber.create = function (next, error, complete) {
-            var subscriber = new Subscriber(next, error, complete);
-            subscriber.syncErrorThrowable = false;
-            return subscriber;
-        };
-        /**
-         * The {@link Observer} callback to receive notifications of type `next` from
-         * the Observable, with a value. The Observable may call this method 0 or more
-         * times.
-         * @param {T} [value] The `next` value.
-         * @return {void}
-         */
-        Subscriber.prototype.next = function (value) {
-            if (!this.isStopped) {
-                this._next(value);
-            }
-        };
-        /**
-         * The {@link Observer} callback to receive notifications of type `error` from
-         * the Observable, with an attached {@link Error}. Notifies the Observer that
-         * the Observable has experienced an error condition.
-         * @param {any} [err] The `error` exception.
-         * @return {void}
-         */
-        Subscriber.prototype.error = function (err) {
-            if (!this.isStopped) {
-                this.isStopped = true;
-                this._error(err);
-            }
-        };
-        /**
-         * The {@link Observer} callback to receive a valueless notification of type
-         * `complete` from the Observable. Notifies the Observer that the Observable
-         * has finished sending push-based notifications.
-         * @return {void}
-         */
-        Subscriber.prototype.complete = function () {
-            if (!this.isStopped) {
-                this.isStopped = true;
-                this._complete();
-            }
-        };
-        Subscriber.prototype.unsubscribe = function () {
-            if (this.closed) {
-                return;
-            }
-            this.isStopped = true;
-            _super.prototype.unsubscribe.call(this);
-        };
-        Subscriber.prototype._next = function (value) {
-            this.destination.next(value);
-        };
-        Subscriber.prototype._error = function (err) {
-            this.destination.error(err);
-            this.unsubscribe();
-        };
-        Subscriber.prototype._complete = function () {
-            this.destination.complete();
-            this.unsubscribe();
-        };
-        return Subscriber;
-    }(Subscription_1.Subscription);
-    exports.Subscriber = Subscriber;
-    /**
-     * We need this JSDoc comment for affecting ESDoc.
-     * @ignore
-     * @extends {Ignored}
-     */
-    var SafeSubscriber = function (_super) {
-        __extends(SafeSubscriber, _super);
-        function SafeSubscriber(_parent, observerOrNext, error, complete) {
-            _super.call(this);
-            this._parent = _parent;
-            var next;
-            var context = this;
-            if (isFunction_1.isFunction(observerOrNext)) {
-                next = observerOrNext;
-            } else if (observerOrNext) {
-                context = observerOrNext;
-                next = observerOrNext.next;
-                error = observerOrNext.error;
-                complete = observerOrNext.complete;
-                if (isFunction_1.isFunction(context.unsubscribe)) {
-                    this.add(context.unsubscribe.bind(context));
-                }
-                context.unsubscribe = this.unsubscribe.bind(this);
-            }
-            this._context = context;
-            this._next = next;
-            this._error = error;
-            this._complete = complete;
-        }
-        SafeSubscriber.prototype.next = function (value) {
-            if (!this.isStopped && this._next) {
-                var _parent = this._parent;
-                if (!_parent.syncErrorThrowable) {
-                    this.__tryOrUnsub(this._next, value);
-                } else if (this.__tryOrSetError(_parent, this._next, value)) {
-                    this.unsubscribe();
-                }
-            }
-        };
-        SafeSubscriber.prototype.error = function (err) {
-            if (!this.isStopped) {
-                var _parent = this._parent;
-                if (this._error) {
-                    if (!_parent.syncErrorThrowable) {
-                        this.__tryOrUnsub(this._error, err);
-                        this.unsubscribe();
-                    } else {
-                        this.__tryOrSetError(_parent, this._error, err);
-                        this.unsubscribe();
-                    }
-                } else if (!_parent.syncErrorThrowable) {
-                    this.unsubscribe();
-                    throw err;
-                } else {
-                    _parent.syncErrorValue = err;
-                    _parent.syncErrorThrown = true;
-                    this.unsubscribe();
-                }
-            }
-        };
-        SafeSubscriber.prototype.complete = function () {
-            if (!this.isStopped) {
-                var _parent = this._parent;
-                if (this._complete) {
-                    if (!_parent.syncErrorThrowable) {
-                        this.__tryOrUnsub(this._complete);
-                        this.unsubscribe();
-                    } else {
-                        this.__tryOrSetError(_parent, this._complete);
-                        this.unsubscribe();
-                    }
-                } else {
-                    this.unsubscribe();
-                }
-            }
-        };
-        SafeSubscriber.prototype.__tryOrUnsub = function (fn, value) {
-            try {
-                fn.call(this._context, value);
-            } catch (err) {
-                this.unsubscribe();
-                throw err;
-            }
-        };
-        SafeSubscriber.prototype.__tryOrSetError = function (parent, fn, value) {
-            try {
-                fn.call(this._context, value);
-            } catch (err) {
-                parent.syncErrorValue = err;
-                parent.syncErrorThrown = true;
-                return true;
-            }
-            return false;
-        };
-        SafeSubscriber.prototype._unsubscribe = function () {
-            var _parent = this._parent;
-            this._context = null;
-            this._parent = null;
-            _parent.unsubscribe();
-        };
-        return SafeSubscriber;
-    }(Subscriber);
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('18a', ['a2'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var root_1 = $__require('a2');
-    var Symbol = root_1.root.Symbol;
-    exports.$$rxSubscriber = typeof Symbol === 'function' && typeof Symbol.for === 'function' ? Symbol.for('rxSubscriber') : '@@rxSubscriber';
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('190', ['a4', '18a'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var Subscriber_1 = $__require('a4');
-    var rxSubscriber_1 = $__require('18a');
-    function toSubscriber(nextOrObserver, error, complete) {
-        if (nextOrObserver) {
-            if (nextOrObserver instanceof Subscriber_1.Subscriber) {
-                return nextOrObserver;
-            }
-            if (nextOrObserver[rxSubscriber_1.$$rxSubscriber]) {
-                return nextOrObserver[rxSubscriber_1.$$rxSubscriber]();
-            }
-        }
-        if (!nextOrObserver && !error && !complete) {
-            return new Subscriber_1.Subscriber();
-        }
-        return new Subscriber_1.Subscriber(nextOrObserver, error, complete);
-    }
-    exports.toSubscriber = toSubscriber;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('a2', [], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var objectTypes = {
-        'boolean': false,
-        'function': true,
-        'object': true,
-        'number': false,
-        'string': false,
-        'undefined': false
-    };
-    exports.root = objectTypes[typeof self] && self || objectTypes[typeof window] && window;
-    var freeGlobal = objectTypes[typeof global] && global;
-    if (freeGlobal && (freeGlobal.global === freeGlobal || freeGlobal.window === freeGlobal)) {
-        exports.root = freeGlobal;
-    }
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('110', ['a2'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var root_1 = $__require('a2');
-    function getSymbolObservable(context) {
-        var $$observable;
-        var Symbol = context.Symbol;
-        if (typeof Symbol === 'function') {
-            if (Symbol.observable) {
-                $$observable = Symbol.observable;
-            } else {
-                $$observable = Symbol('observable');
-                Symbol.observable = $$observable;
-            }
-        } else {
-            $$observable = '@@observable';
-        }
-        return $$observable;
-    }
-    exports.getSymbolObservable = getSymbolObservable;
-    exports.$$observable = getSymbolObservable(root_1.root);
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('17', ['a2', '190', '110'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var root_1 = $__require('a2');
-    var toSubscriber_1 = $__require('190');
-    var observable_1 = $__require('110');
-    /**
-     * A representation of any set of values over any amount of time. This the most basic building block
-     * of RxJS.
-     *
-     * @class Observable<T>
-     */
-    var Observable = function () {
-        /**
-         * @constructor
-         * @param {Function} subscribe the function that is  called when the Observable is
-         * initially subscribed to. This function is given a Subscriber, to which new values
-         * can be `next`ed, or an `error` method can be called to raise an error, or
-         * `complete` can be called to notify of a successful completion.
-         */
-        function Observable(subscribe) {
-            this._isScalar = false;
-            if (subscribe) {
-                this._subscribe = subscribe;
-            }
-        }
-        /**
-         * Creates a new Observable, with this Observable as the source, and the passed
-         * operator defined as the new observable's operator.
-         * @method lift
-         * @param {Operator} operator the operator defining the operation to take on the observable
-         * @return {Observable} a new observable with the Operator applied
-         */
-        Observable.prototype.lift = function (operator) {
-            var observable = new Observable();
-            observable.source = this;
-            observable.operator = operator;
-            return observable;
-        };
-        /**
-         * Registers handlers for handling emitted values, error and completions from the observable, and
-         *  executes the observable's subscriber function, which will take action to set up the underlying data stream
-         * @method subscribe
-         * @param {PartialObserver|Function} observerOrNext (optional) either an observer defining all functions to be called,
-         *  or the first of three possible handlers, which is the handler for each value emitted from the observable.
-         * @param {Function} error (optional) a handler for a terminal event resulting from an error. If no error handler is provided,
-         *  the error will be thrown as unhandled
-         * @param {Function} complete (optional) a handler for a terminal event resulting from successful completion.
-         * @return {ISubscription} a subscription reference to the registered handlers
-         */
-        Observable.prototype.subscribe = function (observerOrNext, error, complete) {
-            var operator = this.operator;
-            var sink = toSubscriber_1.toSubscriber(observerOrNext, error, complete);
-            if (operator) {
-                operator.call(sink, this);
-            } else {
-                sink.add(this._subscribe(sink));
-            }
-            if (sink.syncErrorThrowable) {
-                sink.syncErrorThrowable = false;
-                if (sink.syncErrorThrown) {
-                    throw sink.syncErrorValue;
-                }
-            }
-            return sink;
-        };
-        /**
-         * @method forEach
-         * @param {Function} next a handler for each value emitted by the observable
-         * @param {PromiseConstructor} [PromiseCtor] a constructor function used to instantiate the Promise
-         * @return {Promise} a promise that either resolves on observable completion or
-         *  rejects with the handled error
-         */
-        Observable.prototype.forEach = function (next, PromiseCtor) {
-            var _this = this;
-            if (!PromiseCtor) {
-                if (root_1.root.Rx && root_1.root.Rx.config && root_1.root.Rx.config.Promise) {
-                    PromiseCtor = root_1.root.Rx.config.Promise;
-                } else if (root_1.root.Promise) {
-                    PromiseCtor = root_1.root.Promise;
-                }
-            }
-            if (!PromiseCtor) {
-                throw new Error('no Promise impl found');
-            }
-            return new PromiseCtor(function (resolve, reject) {
-                var subscription = _this.subscribe(function (value) {
-                    if (subscription) {
-                        // if there is a subscription, then we can surmise
-                        // the next handling is asynchronous. Any errors thrown
-                        // need to be rejected explicitly and unsubscribe must be
-                        // called manually
-                        try {
-                            next(value);
-                        } catch (err) {
-                            reject(err);
-                            subscription.unsubscribe();
-                        }
-                    } else {
-                        // if there is NO subscription, then we're getting a nexted
-                        // value synchronously during subscription. We can just call it.
-                        // If it errors, Observable's `subscribe` will ensure the
-                        // unsubscription logic is called, then synchronously rethrow the error.
-                        // After that, Promise will trap the error and send it
-                        // down the rejection path.
-                        next(value);
-                    }
-                }, reject, resolve);
-            });
-        };
-        Observable.prototype._subscribe = function (subscriber) {
-            return this.source.subscribe(subscriber);
-        };
-        /**
-         * An interop point defined by the es7-observable spec https://github.com/zenparsing/es-observable
-         * @method Symbol.observable
-         * @return {Observable} this instance of the observable
-         */
-        Observable.prototype[observable_1.$$observable] = function () {
-            return this;
-        };
-        // HACK: Since TypeScript inherits static properties too, we have to
-        // fight against TypeScript here so Subject can have a different static create signature
-        /**
-         * Creates a new cold Observable by calling the Observable constructor
-         * @static true
-         * @owner Observable
-         * @method create
-         * @param {Function} subscribe? the subscriber function to be passed to the Observable constructor
-         * @return {Observable} a new cold observable
-         */
-        Observable.create = function (subscribe) {
-            return new Observable(subscribe);
-        };
-        return Observable;
-    }();
-    exports.Observable = Observable;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('31', ['17'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var Observable_1 = $__require('17');
-    var ValidationService = function () {
-        function ValidationService() {}
-        ValidationService.getValidatorErrorMessage = function (label, validatorName, validatorValue) {
-            var config = {
-                'required': label + ' is verplicht',
-                'invalidEmailAddress': 'Incorrect email adres. Het juiste formaat is jan@peeters.com.',
-                'minlength': label + " moet minstens " + validatorValue.requiredLength + " karakters lang zijn.",
-                'invalidPassword': "Ongeldig wachtwoord. Het wachtwoord moet minstens " + validatorValue.requiredLength + " karakters lang zijn en een nummer bevatten.",
-                'usernameTaken': "Deze gebruikersnaam is niet beschikbaar. Gelieve een andere gebruikersnaam te kiezen.",
-                'emailTaken': "Dit email adres is niet beschikbaar. Gelieve een ander email te gebruiken."
-            };
-            return config[validatorName];
-        };
-        ValidationService.emailValidator = function (control) {
-            if (control.value.match(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/)) {
-                return null;
-            } else {
-                return { 'invalidEmailAddress': true };
-            }
-        };
-        ValidationService.passwordValidator = function (control) {
-            if (control.value.match(/^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{6,100}$/)) {
-                return null;
-            } else {
-                return { 'invalidPassword': { requiredLength: 6 } };
-            }
-        };
-        ValidationService.equalPasswordsValidator = function (group) {
-            if (group.controls['password'].value === group.controls['confirmPassword'].value) {
-                return null;
-            } else {
-                return { 'mismatchingPasswords': true };
-            }
-        };
-        ValidationService.checkUniqueUserName = function (http) {
-            return function (control) {
-                return http.get('/api/user/check?user=' + control.value).map(function (response) {
-                    if (response.json().obj === true) {
-                        return { 'usernameTaken': true };
-                    } else {
-                        return null;
-                    }
-                }).catch(function (error) {
-                    return Observable_1.Observable.throw(error.json());
-                });
-            };
-        };
-        ValidationService.checkUniqueEmail = function (http) {
-            return function (control) {
-                return http.get('/api/user/check?mail=' + control.value).map(function (response) {
-                    if (response.json().obj === true) {
-                        return { 'emailTaken': true };
-                    } else {
-                        return null;
-                    }
-                }).catch(function (error) {
-                    return Observable_1.Observable.throw(error.json());
-                });
-            };
-        };
-        return ValidationService;
-    }();
-    exports.ValidationService = ValidationService;
-    return module.exports;
-});
-$__System.registerDynamic("191", ["3", "5", "24", "35", "8", "a", "15", "d", "e", "1c", "c", "1f", "21", "22", "23", "25", "27", "29", "28", "2a", "2b", "2c", "2d", "2e", "2f", "30", "11", "f", "10", "37", "38", "39", "14", "3a", "16", "12", "13", "18", "26", "1a", "20", "1d", "19", "1e", "31"], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1 = $__require("3");
-    var platform_browser_1 = $__require("5");
-    var forms_1 = $__require("24");
-    var http_1 = $__require("35");
-    var ng2_tooltip_1 = $__require("8");
-    var routes_1 = $__require("a");
-    var app_component_1 = $__require("15");
-    var wordbank_component_1 = $__require("d");
-    var settings_component_1 = $__require("e");
-    var menu_component_1 = $__require("1c");
-    var tests_component_1 = $__require("c");
-    var filter_component_1 = $__require("1f");
-    var cards_component_1 = $__require("21");
-    var review_component_1 = $__require("22");
-    var edit_word_component_1 = $__require("23");
-    var wordlists_component_1 = $__require("25");
-    var add_to_list_component_1 = $__require("27");
-    var edit_list_component_1 = $__require("29");
-    var show_lists_component_1 = $__require("28");
-    var card_item_component_1 = $__require("2a");
-    var card_item_answer_component_1 = $__require("2b");
-    var card_score_component_1 = $__require("2c");
-    var score_bar_component_1 = $__require("2d");
-    var info_message_component_1 = $__require("2e");
-    var error_message_component_1 = $__require("2f");
-    var field_messages_component_1 = $__require("30");
-    var auth_menu_component_1 = $__require("11");
-    var sign_up_component_1 = $__require("f");
-    var sign_in_component_1 = $__require("10");
-    var get_filter_value_directive_1 = $__require("37");
-    var get_key_pressed_directive_1 = $__require("38");
-    var show_color_directive_1 = $__require("39");
-    var access_resolver_1 = $__require("14");
-    var level_name_pipe_1 = $__require("3a");
-    var auth_service_1 = $__require("16");
-    var auth_guard_service_1 = $__require("12");
-    var auth_role_guard_service_1 = $__require("13");
-    var words_service_1 = $__require("18");
-    var wordlists_service_1 = $__require("26");
-    var settings_service_1 = $__require("1a");
-    var filters_service_1 = $__require("20");
-    var restart_service_1 = $__require("1d");
-    var error_service_1 = $__require("19");
-    var utils_service_1 = $__require("1e");
-    var validation_service_1 = $__require("31");
-    var AppModule = function () {
-        function AppModule() {}
-        AppModule = __decorate([core_1.NgModule({
-            imports: [platform_browser_1.BrowserModule, forms_1.FormsModule, forms_1.ReactiveFormsModule, http_1.HttpModule, routes_1.routing, ng2_tooltip_1.TooltipModule],
-            providers: [words_service_1.WordService, wordlists_service_1.WordlistService, settings_service_1.SettingsService, filters_service_1.FilterService, restart_service_1.RestartService, error_service_1.ErrorService, auth_service_1.AuthService, auth_guard_service_1.AuthGuard, auth_role_guard_service_1.AuthRoleGuard, utils_service_1.UtilsService, validation_service_1.ValidationService, access_resolver_1.AccessResolver],
-            declarations: [app_component_1.AppComponent, settings_component_1.AppSettings, menu_component_1.Menu, wordbank_component_1.WordBank, tests_component_1.Tests, filter_component_1.Filter, cards_component_1.Cards, review_component_1.Review, wordlists_component_1.WordLists, edit_word_component_1.EditWord, add_to_list_component_1.AddToList, edit_list_component_1.EditList, show_lists_component_1.ShowLists, card_item_component_1.CardItem, card_item_answer_component_1.CardItemAnswer, card_score_component_1.CardScore, score_bar_component_1.ScoreBar, info_message_component_1.InfoMessage, error_message_component_1.ErrorMessage, field_messages_component_1.FieldMessages, get_filter_value_directive_1.GetFilterValue, get_key_pressed_directive_1.GetKeyPress, show_color_directive_1.GenusColor, level_name_pipe_1.LevelNamePipe, auth_menu_component_1.AuthMenu, sign_in_component_1.SignIn, sign_up_component_1.SignUp],
-            bootstrap: [app_component_1.AppComponent]
-        }), __metadata('design:paramtypes', [])], AppModule);
-        return AppModule;
-    }();
-    exports.AppModule = AppModule;
-    return module.exports;
-});
-$__System.registerDynamic('1', ['4', '191'], true, function ($__require, exports, module) {
+$__System.registerDynamic('1', ['4', '18d', '3'], true, function ($__require, exports, module) {
   "use strict";
 
   var define,
       global = this || self,
       GLOBAL = global;
   var platform_browser_dynamic_1 = $__require('4');
-  var app_module_1 = $__require('191');
+  var app_module_1 = $__require('18d');
+  var core_1 = $__require('3');
+  core_1.enableProdMode();
   platform_browser_dynamic_1.platformBrowserDynamic().bootstrapModule(app_module_1.AppModule);
   return module.exports;
 });

@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {Word, Total} from '../../models/word.model';
+import {Word} from '../../models/word.model';
 
 @Component({
   selector: 'card-answer',
@@ -24,10 +24,12 @@ import {Word, Total} from '../../models/word.model';
           </h2>
         </div>
         <div class="clearfix left">
-          <div class="text-info">{{cardData.alt}}</div>
-          <div *ngIf="cardData.plural">meervoud: <span class="text-primary">{{cardData.plural}}</span></div>
-          <div *ngIf="cardData.firstpersonsingular">1e p.: <span class="text-primary">{{cardData.firstpersonsingular}}</span></div>
-          <div *ngIf="cardData.info">info: <span class="text-primary">{{cardData.info}}</span></div>
+          <div *ngIf="cardData.otherwords"><span class="text-muted">ook:</span> <span class="text-info">{{cardData.otherwords}}</span></div>
+          <div *ngIf="cardData.plural"><span class="text-muted">meervoud:</span> <span class="text-primary">{{cardData.plural}}</span></div>
+          <div *ngIf="cardData.firstpersonsingular">
+            <span class="text-muted">1e p.:</span> <span class="text-primary">{{cardData.firstpersonsingular}}</span>
+          </div>
+          <div *ngIf="cardData.info"><span class="text-muted">info:</span> <span class="text-primary">{{cardData.info}}</span></div>
         </div>
         `,
   styleUrls: ['client/components/cards/card.component.css']

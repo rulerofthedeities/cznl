@@ -31,7 +31,13 @@ import {ErrorService} from '../../services/error.service';
           [value]="card.tpe" 
           [tpe]="'tpes'">
         </em>
-        <div class="text-info" *ngIf="cardData.hint">hint: {{cardData.hint}}</div>
+        <div class="margin"></div>
+        <div class="text-primary" *ngIf="cardData.otherwords"><span class="text-muted">ook:</span> {{cardData.otherwords}}</div>
+        <div class="text-primary" *ngIf="cardData.hint"><span class="text-muted">hint:</span> {{cardData.hint}}</div>
+        <div class="text-primary" *ngIf="cardData.info">({{cardData.info}})</div>
+        <div class="text-primary" *ngIf="!card.perfective && cardDataPf && cardDataPf.word">
+          <span class="text-muted">Perfectief:</span> {{cardDataPf.word}}
+        </div>
       </div>
 
 <!-- Answer -->
@@ -43,7 +49,7 @@ import {ErrorService} from '../../services/error.service';
         </card-answer>
 
 <!-- Perfective aspect -->
-        <div class="clearfix" *ngIf="this.cardDataPf">
+        <div class="clearfix" *ngIf="this.cardDataPf && !card.perfective">
           <card-answer 
             [cardData]="cardDataPf"
             [tpe]="card.tpe"
@@ -126,6 +132,7 @@ export class CardItem implements OnChanges {
   getCardData() {
     if (this.isQuestion) {
       this.cardData = this.settings.lanDir === 'cznl' ? this.card.cz : this.card.nl;
+      this.cardDataPf = this.settings.lanDir === 'nlcz' && this.card.tpe === 'verb' ? this.card.nlP : null;
     } else {
       this.cardDataPf = null;
       if (this.settings.lanDir === 'cznl') {
@@ -141,6 +148,7 @@ export class CardItem implements OnChanges {
         }
       }
     }
+
     this.total = this.card.answer && this.card.answer.total ? {
       correct: this.card.answer.total.correct ? this.card.answer.total.correct : 0,
       incorrect: this.card.answer.total.incorrect ? this.card.answer.total.incorrect : 0

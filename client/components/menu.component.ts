@@ -26,7 +26,7 @@ import {Access} from '../models/access.model';
         <li 
           *ngFor="let route of routes"
           routerLinkActive="active">
-          <a [routerLink]="[route.path]" *ngIf="showMenuItem(route.role)">
+          <a [routerLink]="route.path" *ngIf="showMenuItem(route.role)">
             <span 
               class="glyphicon glyphicon-{{route.glyph}}" 
               aria-hidden="true">

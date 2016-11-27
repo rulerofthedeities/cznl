@@ -74,7 +74,7 @@ export class WordService {
       url+= '&w=' + wordFilter.word;
       url+= wordFilter.start ? '&s=1' : '';
     } else {
-      url+= '&l=' + filter.level + '&t=' + filter.tpe + '&c=' + filter.cats;
+      url+= '&l=' + filter.level + '&t=' + filter.tpe + '&c=' + filter.cats.toLowerCase();
     }
     return this.http
       .get(url, {headers})
