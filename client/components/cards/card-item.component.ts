@@ -1,44 +1,27 @@
-import {Component, Input, Output, EventEmitter, OnChanges,
+import {Component, Input, Output, OnInit, EventEmitter, OnChanges,
   trigger, style, transition, animate, keyframes} from '@angular/core';
-import {WordPair, Word, Total} from '../../models/word.model';
+import {WordPair, Word, Total, Direction} from '../../models/word.model';
 import {AllSettings} from '../../models/settings.model';
 import {WordService} from '../../services/words.service';
 import {ErrorService} from '../../services/error.service';
+
 
 @Component({
   selector: 'card-item',
   template: `
     <div class="card center-block"
-      [@cardState]="state">
+      [@cardState]="state" (click)="turnCard(false)">
       <add-to-list [word]="card"></add-to-list>
 
 <!-- Question -->
-      <div 
-        *ngIf="isQuestion"
-        (click)="turnCard()"
-        class="question text-center">
-        <div class="wordwrapper center-block">
-          <h2 class="word">
-            <span genusColor
-            [genus]="cardData.genus" 
-            [tpe]="card.tpe">
-              {{cardData.word}}
-            </span>
-          </h2>
-        </div>
-        <em 
-          getFilterValue 
-          [value]="card.tpe" 
-          [tpe]="'tpes'">
-        </em>
-        <div class="margin"></div>
-        <div class="text-primary" *ngIf="cardData.otherwords"><span class="text-muted">ook:</span> {{cardData.otherwords}}</div>
-        <div class="text-primary" *ngIf="cardData.hint"><span class="text-muted">hint:</span> {{cardData.hint}}</div>
-        <div class="text-primary" *ngIf="cardData.info">({{cardData.info}})</div>
-        <div class="text-primary" *ngIf="!card.perfective && cardDataPf && cardDataPf.word">
-          <span class="text-muted">Perfectief:</span> {{cardDataPf.word}}
-        </div>
-      </div>
+
+      <div *ngIf="isQuestion" class="question text-center">
+        <card-question 
+          [cardData]="cardData"
+          [tpe]="card.tpe"
+          [isPerfective]="card.perfective">
+        </card-question>
+      </div>  
 
 <!-- Answer -->
       <div *ngIf="!isQuestion" class="answer">
@@ -57,20 +40,24 @@ import {ErrorService} from '../../services/error.service';
           </card-answer>
         </div>
 
-<!-- Buttons -->
-        <div class="clearfix">
-          <div 
-            class="btn btn-success btn-sm pull-right" 
-            (click)="answerCard(true)">
-            Juist
-          </div>
-          <div 
-            class="btn btn-danger btn-sm pull-left" 
-            (click)="answerCard(false)">
-            Fout
-          </div>
+<!-- Answer Buttons -->
+      <div class="clearfix">
+        <div 
+          class="btn btn-success btn-sm pull-right" 
+          (click)="answerCard($event, true)">
+          Juist
         </div>
+        <div 
+          class="btn btn-danger btn-sm pull-left" 
+          (click)="answerCard($event, false)">
+          Fout
+        </div>
+      </div>
     </div>
+
+<!-- Practise (Question + Answer) -->
+
+
 
 <!-- Scorebar -->
     <div class="scorebarwrapper" 
@@ -93,11 +80,15 @@ import {ErrorService} from '../../services/error.service';
   ]
 })
 
-export class CardItem implements OnChanges {
+export class CardItem implements OnChanges, OnInit {
   @Input() card: WordPair;
   @Input() settings: AllSettings;
+  @Input() test: string;
+  @Input() exerciseTpe: string;
   @Output() cardAnswered = new EventEmitter();
+  @Output() cardNavigated = new EventEmitter();
   isQuestion = true;
+  isTest = true;
   cardData: Word;
   cardDataPf: Word;
   total: Total;
@@ -113,20 +104,33 @@ export class CardItem implements OnChanges {
     this.getCardData();
   }
 
-  turnCard() {
-    this.isQuestion = !this.isQuestion;
-    this.state = this.isQuestion ? 'question' : 'answer';
-    this.getCardData();
+  ngOnInit() {
+    if (this.exerciseTpe === 'practise') {
+      this.isTest = false;
+    }
   }
 
-  answerCard(correct: boolean) {
+  turnCard(answered: boolean) {
+    if (this.isQuestion || answered) {
+      this.isQuestion = !this.isQuestion;
+      this.state = this.isQuestion ? 'question' : 'answer';
+      this.getCardData();
+    }
+  }
+
+  answerCard(event: MouseEvent, correct: boolean) {
+    event.stopPropagation();
     this.cardAnswered.emit(correct);
     this.updateTotals(correct);
-    this.turnCard();
+    this.turnCard(true);
     this.wordService.saveAnswer(this.card._id, correct).subscribe(
         answer => {;},
         error => this.errorService.handleError(error)
       );
+  }
+
+  navigateCard(direction: Direction) {
+    this.cardNavigated.emit(direction);
   }
 
   getCardData() {

@@ -50,16 +50,23 @@ import {Filter as FilterModel} from '../models/filters.model';
           <button *ngIf="filterTpe==='exercises'"
             class="btn btn-success btn-lg" 
             [disabled]="totalWords < 1"
-            (click)="start('test', level.value, wordtpe.value, cats.value)">
+            (click)="start('review', level.value, wordtpe.value, cats.value)">
           <span class="fa fa-play"></span>
-            Start Test
+            Overzicht
           </button>
           <button *ngIf="filterTpe==='exercises'"
             class="btn btn-success btn-lg" 
             [disabled]="totalWords < 1"
-            (click)="start('review', level.value, wordtpe.value, cats.value)">
+            (click)="start('practise', level.value, wordtpe.value, cats.value)">
           <span class="fa fa-play"></span>
-            Bereid test voor
+            Oefen
+          </button>
+          <button *ngIf="filterTpe==='exercises'"
+            class="btn btn-success btn-lg" 
+            [disabled]="totalWords < 1"
+            (click)="start('test', level.value, wordtpe.value, cats.value)">
+          <span class="fa fa-play"></span>
+            Start Test
           </button>
         </div>
       </li>

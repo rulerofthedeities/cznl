@@ -28,6 +28,7 @@ import {Subscription}   from 'rxjs/Subscription';
         *ngIf="currentCard"
         [card]="currentCard"
         [settings]="settings"
+        [exerciseTpe]="tpe"
         (cardAnswered)="onCardAnswered($event)">
       </card-item>
       <card-score 
@@ -47,6 +48,7 @@ import {Subscription}   from 'rxjs/Subscription';
 
 export class Cards implements OnInit {
   @Input('data') cards: WordPair[];
+  @Input() tpe: string;
   maxCards: number;
   cardsIndex:number;
   isFinished: boolean;

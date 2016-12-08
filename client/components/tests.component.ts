@@ -56,7 +56,8 @@ import {Subscription}   from 'rxjs/Subscription';
       </word-lists>
       <div *ngIf="started && exerciseTpe=='test'" class="col-xs-12">
         <cards 
-          [data]="cards">
+          [data]="cards"
+          tpe="test">
         </cards>
       </div>
       <div *ngIf="started && exerciseTpe=='review'" class="col-xs-12">
@@ -64,6 +65,12 @@ import {Subscription}   from 'rxjs/Subscription';
           [words]="cards"
           (restart)="onStartTest($event)">
         </review>
+      </div>
+      <div *ngIf="started && exerciseTpe=='practise'" class="col-xs-12">
+        <cards 
+          [data]="cards"
+          tpe="practise">
+        </cards>
       </div>
     </div>
   </section>

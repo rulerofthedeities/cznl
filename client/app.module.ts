@@ -20,6 +20,7 @@ import {AddToList} from './components/wordlists/add-to-list.component';
 import {EditList} from './components/wordlists/edit-list.component';
 import {ShowLists} from './components/wordlists/show-lists.component';
 import {CardItem} from './components/cards/card-item.component';
+import {CardItemQuestion} from './components/cards/card-item-question.component';
 import {CardItemAnswer} from './components/cards/card-item-answer.component';
 import {CardScore} from './components/cards/card-score.component';
 import {ScoreBar} from './components/cards/score-bar.component';
@@ -88,6 +89,7 @@ import {ValidationService} from './services/validation.service';
     EditList,
     ShowLists,
     CardItem,
+    CardItemQuestion,
     CardItemAnswer,
     CardScore,
     ScoreBar,

@@ -1,3 +1,5 @@
+export enum Direction {Left = -1, Right = 1};
+
 export interface Total {
   correct?: number;
   incorrect?: number;
