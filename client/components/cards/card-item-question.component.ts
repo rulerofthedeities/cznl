@@ -6,9 +6,7 @@ import {Word} from '../../models/word.model';
   template: `
     <div class="wordwrapper center-block">
       <h2 class="word">
-        <span genusColor
-        [genus]="cardData.genus" 
-        [tpe]="tpe">
+        <span>
           {{cardData.word}}
         </span>
       </h2>

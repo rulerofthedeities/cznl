@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, OnChanges,
+import {Component, Input, Output, OnInit, EventEmitter, OnChanges,
   trigger, style, transition, animate, keyframes} from '@angular/core';
 import {WordPair, Word, Total, Direction} from '../../models/word.model';
 import {AllSettings} from '../../models/settings.model';
@@ -10,6 +10,7 @@ import {ErrorService} from '../../services/error.service';
   selector: 'card-item',
   template: `
     <div class="card center-block"
+      *ngIf="cardDataLoaded"
       [@cardState]="state" (click)="turnCard(false)">
       <add-to-list [word]="card"></add-to-list>
 
@@ -17,31 +18,34 @@ import {ErrorService} from '../../services/error.service';
 
       <div *ngIf="isQuestion" class="question text-center">
         <card-question 
-          [cardData]="cardData"
+          [cardData]="cardData.q"
           [tpe]="card.tpe"
           [isPerfective]="card.perfective">
         </card-question>
       </div>  
 
 <!-- Answer -->
-      <div *ngIf="!isQuestion" class="answer">
+Is test:{{isTest}}
+      <div *ngIf="!isQuestion || !isTest" class="answer">
+        answer
         <card-answer 
-          [cardData]="cardData"
+          [cardData]="cardData.a"
           [tpe]="card.tpe"
           [showPronoun]="settings.showPronoun">
         </card-answer>
+    tpe1:{{card.tpe}}
 
 <!-- Perfective aspect -->
-        <div class="clearfix" *ngIf="this.cardDataPf && !card.perfective">
+        <div class="clearfix" *ngIf="this.cardDataPf.a && !card.perfective">
           <card-answer 
-            [cardData]="cardDataPf"
+            [cardData]="cardDataPf.a"
             [tpe]="card.tpe"
             [showPronoun]="false">
           </card-answer>
         </div>
 
 <!-- Answer Buttons -->
-      <div class="clearfix">
+      <div class="clearfix" *ngIf="isTest">
         <div 
           class="btn btn-success btn-sm pull-right" 
           (click)="answerCard($event, true)">
@@ -76,17 +80,21 @@ import {ErrorService} from '../../services/error.service';
   ]
 })
 
-export class CardItem implements OnChanges {
+export class CardItem implements OnChanges, OnInit {
   @Input() card: WordPair;
   @Input() settings: AllSettings;
   @Input() test: string;
+  @Input() exerciseTpe: string;
   @Output() cardAnswered = new EventEmitter();
+  @Output() cardNavigated = new EventEmitter();
   isQuestion = true;
-  cardData: Word;
-  cardDataPf: Word;
+  isTest = true;
+  cardData: {q:Word,a:Word};
+  cardDataPf: {q:Word,a:Word};
   total: Total;
   state = 'question';
   showAnswer = false;
+  cardDataLoaded = false;
 
   constructor(
     private wordService: WordService,
@@ -94,14 +102,26 @@ export class CardItem implements OnChanges {
   ) {}
 
   ngOnChanges() {
+    this.cardDataLoaded = false;
     this.getCardData();
   }
 
+  ngOnInit() {
+    if (this.exerciseTpe === 'practise') {
+      this.isTest = false;
+    }
+  }
+
   turnCard(answered: boolean) {
+    console.log('turn?');
     if (this.isQuestion || answered) {
-      this.isQuestion = !this.isQuestion;
-      this.state = this.isQuestion ? 'question' : 'answer';
-      this.getCardData();
+      console.log('turn card', answered);
+      if (this.isTest) {
+        this.isQuestion = !this.isQuestion;
+        this.state = this.isQuestion ? 'question' : 'answer';
+      } else {
+        this.navigateCard(Direction.Right);
+      }
     }
   }
 
@@ -116,25 +136,34 @@ export class CardItem implements OnChanges {
       );
   }
 
+  navigateCard(direction: Direction) {
+    this.cardNavigated.emit(direction);
+  }
+
   getCardData() {
-    if (this.isQuestion) {
-      this.cardData = this.settings.lanDir === 'cznl' ? this.card.cz : this.card.nl;
-      this.cardDataPf = this.settings.lanDir === 'nlcz' && this.card.tpe === 'verb' ? this.card.nlP : null;
+    console.log('card data1');
+    this.cardData = {q:null,a:null};
+    this.cardDataPf = {q:null,a:null};
+    console.log('card data2', this.cardData);
+    //Question
+    this.cardData.q = this.settings.lanDir === 'cznl' ? this.card.cz : this.card.nl;
+    this.cardDataPf.q = this.settings.lanDir === 'nlcz' && this.card.tpe === 'verb' ? this.card.nlP : null;
+    console.log('card data3', this.cardData);
+
+    //Answer
+    if (this.settings.lanDir === 'cznl') {
+      this.cardData.a = this.card.nl;
     } else {
-      this.cardDataPf = null;
-      if (this.settings.lanDir === 'cznl') {
-        this.cardData = this.card.nl;
-      } else {
-        this.cardData = this.card.cz;
-        if(this.card.tpe === 'verb') {
-          this.cardData.aspect = 'impf';
-          this.cardDataPf = this.card.czP;
-          if (this.cardDataPf) {
-            this.cardDataPf.aspect = 'pf';
-          }
-        }
+      this.cardData.a = this.card.cz;
+      console.log('card data3b', this.cardData);
+      if(this.card.tpe === 'verb' && this.cardData.a) {
+        this.cardData.a.aspect = 'impf';
+        this.cardDataPf.a = this.card.czP;
+        this.cardDataPf.a.aspect = 'pf';
       }
     }
+
+    console.log('cardData4', this.cardData, this.cardDataPf, this.card.tpe);
 
     this.total = this.card.answer && this.card.answer.total ? {
       correct: this.card.answer.total.correct ? this.card.answer.total.correct : 0,
@@ -143,6 +172,8 @@ export class CardItem implements OnChanges {
       correct:0,
       incorrect:0
     };
+
+    this.cardDataLoaded = true;
   }
 
   updateTotals(correct: boolean) {

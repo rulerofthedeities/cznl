@@ -55,10 +55,9 @@ import {Subscription}   from 'rxjs/Subscription';
         class="col-xs-8">
       </word-lists>
       <div *ngIf="started && exerciseTpe=='test'" class="col-xs-12">
-        <cards 
-          [data]="cards"
-          tpe="test">
-        </cards>
+        <cards-test
+          [data]="cards">
+        </cards-test>
       </div>
       <div *ngIf="started && exerciseTpe=='review'" class="col-xs-12">
         <review 
@@ -67,10 +66,9 @@ import {Subscription}   from 'rxjs/Subscription';
         </review>
       </div>
       <div *ngIf="started && exerciseTpe=='practise'" class="col-xs-12">
-        <cards 
-          [data]="cards"
-          tpe="practise">
-        </cards>
+        <cards-practise 
+          [data]="cards">
+        </cards-practise>
       </div>
     </div>
   </section>

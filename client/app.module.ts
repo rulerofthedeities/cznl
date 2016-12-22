@@ -12,7 +12,8 @@ import {AppSettings} from './components/settings.component';
 import {Menu} from './components/menu.component';
 import {Tests} from './components/tests.component';
 import {Filter} from './components/filter.component';
-import {Cards} from './components/cards/cards.component';
+import {CardsTest} from './components/cards/cards-test.component';
+import {CardsPractise} from './components/cards/cards-practise.component';
 import {Review} from './components/review.component';
 import {EditWord} from './components/edit-word.component';
 import {WordLists} from './components/wordlists/wordlists.component';
@@ -20,6 +21,7 @@ import {AddToList} from './components/wordlists/add-to-list.component';
 import {EditList} from './components/wordlists/edit-list.component';
 import {ShowLists} from './components/wordlists/show-lists.component';
 import {CardItem} from './components/cards/card-item.component';
+import {CardItemAll} from './components/cards/card-item-all.component';
 import {CardItemQuestion} from './components/cards/card-item-question.component';
 import {CardItemAnswer} from './components/cards/card-item-answer.component';
 import {CardScore} from './components/cards/card-score.component';
@@ -81,7 +83,8 @@ import {ValidationService} from './services/validation.service';
     WordBank,
     Tests,
     Filter,
-    Cards,
+    CardsTest,
+    CardsPractise,
     Review,
     WordLists,
     EditWord,
@@ -89,6 +92,7 @@ import {ValidationService} from './services/validation.service';
     EditList,
     ShowLists,
     CardItem,
+    CardItemAll,
     CardItemQuestion,
     CardItemAnswer,
     CardScore,
