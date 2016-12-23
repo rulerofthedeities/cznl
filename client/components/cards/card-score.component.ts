@@ -26,7 +26,7 @@ import {RestartService} from '../../services/restart.service';
           class="btn btn-success btn-lg btn-block"
           (click)="doReview()">
           <span class="fa fa-list-alt"></span>
-          Herziening
+          Overzicht
         </button>
       </div>
     </div>`,

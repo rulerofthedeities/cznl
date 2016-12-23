@@ -15,6 +15,7 @@ import {Filter} from './components/filter.component';
 import {CardsTest} from './components/cards/cards-test.component';
 import {CardsPractise} from './components/cards/cards-practise.component';
 import {Review} from './components/review.component';
+import {TestButtons} from './components/test-buttons.component';
 import {EditWord} from './components/edit-word.component';
 import {WordLists} from './components/wordlists/wordlists.component';
 import {AddToList} from './components/wordlists/add-to-list.component';
@@ -49,6 +50,7 @@ import {WordlistService} from './services/wordlists.service';
 import {SettingsService} from './services/settings.service';
 import {FilterService} from './services/filters.service';
 import {RestartService} from './services/restart.service';
+import {TestService} from './services/test.service';
 import {ErrorService} from './services/error.service';
 import {UtilsService} from './services/utils.service';
 import {ValidationService} from './services/validation.service';
@@ -68,6 +70,7 @@ import {ValidationService} from './services/validation.service';
     SettingsService,
     FilterService,
     RestartService,
+    TestService,
     ErrorService,
     AuthService,
     AuthGuard,
@@ -86,6 +89,7 @@ import {ValidationService} from './services/validation.service';
     CardsTest,
     CardsPractise,
     Review,
+    TestButtons,
     WordLists,
     EditWord,
     AddToList,

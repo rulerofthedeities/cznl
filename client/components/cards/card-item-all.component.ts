@@ -53,7 +53,6 @@ import {ErrorService} from '../../services/error.service';
     <button class="btn btn-success" (click)="goBack()"><span class="fa fa-chevron-left"></span>Back</button>
 
   </div>
-
   `,
   styleUrls: ['client/components/cards/card.component.css'],
   styles: [`
@@ -79,6 +78,7 @@ export class CardItemAll {
   @Input() settings: AllSettings;
   @Input() test: string;
   @Output() cardTurned = new EventEmitter<number>();
+  @Output() review = new EventEmitter();
   iseven: boolean = true;
 
   constructor(
@@ -110,5 +110,13 @@ export class CardItemAll {
     } else {
       return this.settings.lanDir === 'cznl' ? this.card.nl : this.card.cz;
     }
+  }
+
+  doNewTest() {
+    this.restartService.restartTest();
+  }
+
+  doReview() {
+    this.review.emit(true);
   }
 }

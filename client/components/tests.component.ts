@@ -8,12 +8,13 @@ import {RestartService} from '../services/restart.service';
 import {AuthService} from '../services/auth.service';
 import {ErrorService} from '../services/error.service';
 import {SettingsService} from '../services/settings.service';
+import {TestService} from '../services/test.service';
 import {UtilsService} from '../services/utils.service';
 import {Subscription}   from 'rxjs/Subscription';
 
 @Component({
   template:`
-  <section>
+  <section id="test">
     <div class="row">
       <div *ngIf="!started" class="col-xs-4">
         <ul class="btn-group-vertical btn-group-lg">
@@ -91,6 +92,7 @@ export class Tests implements OnInit, OnDestroy {
     private errorService: ErrorService,
     private settingsService: SettingsService,
     private utilsService: UtilsService,
+    private testService: TestService,
     private route: ActivatedRoute,
     restartService: RestartService
   ) {
@@ -114,6 +116,13 @@ export class Tests implements OnInit, OnDestroy {
       },
       error => this.errorService.handleError(error)
     );
+
+    this.testService.start.subscribe(
+      testTpe => {
+        this.exerciseTpe = testTpe;
+      }
+    );
+
   }
 
   selectListType(tpe: string) {

@@ -29,13 +29,17 @@ import {Subscription}   from 'rxjs/Subscription';
         [settings]="settings"
         (cardTurned)="onCardTurned($event)">
       </card-item-all>
-    </div>`
+    </div>
+    <test-buttons
+      [test]="true"
+      [review]="true"
+    ></test-buttons>`
 })
 
 export class CardsPractise implements OnInit {
   @Input('data') cards: WordPair[];
   maxCards: number;
-  cardsIndex:number;
+  cardsIndex: number;
   progress: number;
   currentCard: WordPair;
   subscription: Subscription;
@@ -75,12 +79,6 @@ export class CardsPractise implements OnInit {
     } else if (this.cardsIndex < 1) {
       this.cardsIndex = this.cards.length;
     }
-    this.getNextCard();
-  }
-
-  onRestart(isRestart: boolean) {
-    this.reset();
-    this.cards = this.utilsService.shuffle(this.cards);
     this.getNextCard();
   }
 
