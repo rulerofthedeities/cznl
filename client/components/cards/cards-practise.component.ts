@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {SettingsService} from '../../services/settings.service';
 import {ErrorService} from '../../services/error.service';
 import {UtilsService} from '../../services/utils.service';
-import {WordPair} from '../../models/word.model';
+import {WordPair, Direction} from '../../models/word.model';
 import {Subscription}   from 'rxjs/Subscription';
 
 @Component({
@@ -33,6 +33,7 @@ import {Subscription}   from 'rxjs/Subscription';
     <test-buttons
       [test]="true"
       [review]="true"
+      [back]="true"
     ></test-buttons>`
 })
 
@@ -72,7 +73,7 @@ export class CardsPractise implements OnInit {
     this.progress = Math.trunc(this.cardsIndex / this.maxCards * 100);
   }
 
-  onCardTurned(direction: number) {
+  onCardTurned(direction: Direction) {
     this.cardsIndex += direction;
     if (this.cardsIndex > this.cards.length) {
       this.cardsIndex = 1;

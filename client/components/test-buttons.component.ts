@@ -9,8 +9,14 @@ import {TestService} from '../services/test.service';
       <button *ngIf="test"
         class="btn btn-success btn-lg btn-block"
         (click)="doStart('test')">
-        <span class="fa fa-file-o"></span>
-        Test deze lijst
+        <span class="fa" ngClass="{{getTestClass()}}"></span>
+        {{getTestTitle()}}
+      </button>
+      <button *ngIf="practise"
+        class="btn btn-success btn-lg btn-block"
+        (click)="doStart('practise')">
+        <span class="fa fa-play"></span>
+        Oefen deze lijst
       </button>
       <button *ngIf="review"
         class="btn btn-success btn-lg btn-block"
@@ -18,11 +24,17 @@ import {TestService} from '../services/test.service';
         <span class="fa fa-list-alt"></span>
         Overzicht
       </button>
+      <button *ngIf="back"
+        class="btn btn-success btn-lg btn-block"
+        (click)="doStart('newtest')">
+        <span class="fa fa-file-o"></span>
+        Nieuwe lijst
+      </button>
     </div>`,
   styles: [`
     .buttons {
-      width:200px;
-      margin-top: 12px;
+      width:270px;
+      margin-top:20px;
       margin-left:auto;
       margin-right:auto;
     }
@@ -30,9 +42,11 @@ import {TestService} from '../services/test.service';
 })
 
 export class TestButtons {
+  @Input() back: boolean = false;
   @Input() test: boolean = false;
   @Input() review: boolean = false;
   @Input() practise: boolean = false;
+  @Input() tpe: string = '';
 
   constructor(
     private testService: TestService
@@ -40,5 +54,13 @@ export class TestButtons {
 
   doStart(tpe: string) {
     this.testService.doStart(tpe);
+  }
+
+  getTestTitle() {
+    return this.tpe === 'test' ? 'Probeer opnieuw' : 'Test deze lijst';
+  }
+
+  getTestClass() {
+    return this.tpe === 'test' ? 'fa-repeat': 'fa-play';
   }
 }

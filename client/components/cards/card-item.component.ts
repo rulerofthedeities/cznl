@@ -1,6 +1,6 @@
 import {Component, Input, Output, EventEmitter, OnChanges,
   trigger, style, transition, animate, keyframes} from '@angular/core';
-import {WordPair, Word, Total, Direction} from '../../models/word.model';
+import {WordPair, Word, Total} from '../../models/word.model';
 import {AllSettings} from '../../models/settings.model';
 import {WordService} from '../../services/words.service';
 import {ErrorService} from '../../services/error.service';

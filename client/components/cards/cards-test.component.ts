@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {SettingsService} from '../../services/settings.service';
 import {ErrorService} from '../../services/error.service';
 import {UtilsService} from '../../services/utils.service';
+import {TestService} from '../../services/test.service';
 import {WordPair} from '../../models/word.model';
 import {Subscription}   from 'rxjs/Subscription';
 
@@ -31,26 +32,18 @@ import {Subscription}   from 'rxjs/Subscription';
         (cardAnswered)="onCardAnswered($event)">
       </card-item>
       <card-score 
-        *ngIf="isFinished && !isReview"
+        *ngIf="isFinished"
         [correct]="correct"
-        [total]="maxCards"
-        (restart)="onRestart($event)"
-        (review)="onReview($event)">
+        [total]="maxCards">
       </card-score>
-      <review 
-        *ngIf="isReview"
-        [words]="cards"
-        (restart)="onRestart($event)">
-      </review>
     </div>`
 })
 
 export class CardsTest implements OnInit {
   @Input('data') cards: WordPair[];
   maxCards: number;
-  cardsIndex:number;
+  cardsIndex: number;
   isFinished: boolean;
-  isReview: boolean;
   correct: number;
   progress: number;
   currentCard: WordPair;
@@ -60,12 +53,21 @@ export class CardsTest implements OnInit {
   constructor(
     private settingsService: SettingsService,
     private utilsService: UtilsService,
+    private testService: TestService,
     private errorService: ErrorService
   ) {}
 
   ngOnInit() {
     this.reset();
     this.getSettings();
+    this.testService.start.subscribe(
+      testTpe => {
+        if (testTpe === 'test') {
+          this.reset();
+          this.getNextCard();
+        }
+      }
+    );
   }
 
   getSettings() {
@@ -101,19 +103,8 @@ export class CardsTest implements OnInit {
     }
   }
 
-  onRestart(isRestart: boolean) {
-    this.reset();
-    this.cards = this.utilsService.shuffle(this.cards);
-    this.getNextCard();
-  }
-
-  onReview(isReview: boolean) {
-    this.isReview = true;
-  }
-
   reset() {
     this.isFinished = false;
-    this.isReview = false;
     this.progress = 0;
     this.correct = 0;
     this.cardsIndex = 0;

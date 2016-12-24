@@ -1,6 +1,6 @@
 import {Component, Input, Output, EventEmitter,
   trigger, style, transition, animate, keyframes} from '@angular/core';
-import {WordPair} from '../../models/word.model';
+import {WordPair, Direction} from '../../models/word.model';
 import {AllSettings} from '../../models/settings.model';
 import {WordService} from '../../services/words.service';
 import {ErrorService} from '../../services/error.service';
@@ -48,16 +48,26 @@ import {ErrorService} from '../../services/error.service';
         [showPronoun]="false">
       </card-answer>
     </div>
+
 <!-- Buttons -->
     
-    <button class="btn btn-success" (click)="goBack()"><span class="fa fa-chevron-left"></span>Back</button>
+    <button class="btn btn-primary" (click)="goBack()">
+      <span class="fa fa-chevron-left"></span>Back
+    </button>
 
   </div>
   `,
   styleUrls: ['client/components/cards/card.component.css'],
   styles: [`
-    .card {cursor:pointer;min-height:300px;position:relative;}
-    .btn {position: absolute;bottom:6px;}
+    .card {
+      cursor:pointer;
+      min-height:300px;
+      position:relative;
+    }
+    .btn {
+      position: absolute;
+      bottom:6px;
+    }
   `],
   animations: [
     trigger('cardState', [
@@ -78,7 +88,6 @@ export class CardItemAll {
   @Input() settings: AllSettings;
   @Input() test: string;
   @Output() cardTurned = new EventEmitter<number>();
-  @Output() review = new EventEmitter();
   iseven: boolean = true;
 
   constructor(
@@ -88,13 +97,13 @@ export class CardItemAll {
 
   turnCard() {
     event.stopPropagation();
-    this.cardTurned.emit(1);
+    this.cardTurned.emit(Direction.Right);
     this.iseven = !this.iseven;
   }
 
   goBack() {
     event.stopPropagation();
-    this.cardTurned.emit(-1);
+    this.cardTurned.emit(Direction.Left);
     this.iseven = !this.iseven;
   }
 
@@ -110,13 +119,5 @@ export class CardItemAll {
     } else {
       return this.settings.lanDir === 'cznl' ? this.card.nl : this.card.cz;
     }
-  }
-
-  doNewTest() {
-    this.restartService.restartTest();
-  }
-
-  doReview() {
-    this.review.emit(true);
   }
 }

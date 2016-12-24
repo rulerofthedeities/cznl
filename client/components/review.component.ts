@@ -1,7 +1,6 @@
-import {Component, Input, Output, OnInit, EventEmitter} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {WordPair, Word} from '../models/word.model';
 import {AllSettings} from '../models/settings.model';
-import {RestartService} from '../services/restart.service';
 import {SettingsService} from '../services/settings.service';
 import {ErrorService} from '../services/error.service';
 
@@ -9,7 +8,6 @@ import {ErrorService} from '../services/error.service';
   selector: 'review',
   templateUrl: '/client/components/review.component.html',
   styles:[`
-  .buttons {max-width: 240px;}
   .word {font-size:28px;}
   .translation .word {font-size:36px;}
   .genus,.subword {font-size:14px;}
@@ -24,7 +22,6 @@ import {ErrorService} from '../services/error.service';
 
 export class Review implements OnInit {
   @Input() words: WordPair[];
-  @Output() restart = new EventEmitter();
   selected: number;
   translation: Word = {word:'', article:'',genus:''};
   translationPf: Word = null;
@@ -32,7 +29,6 @@ export class Review implements OnInit {
   settings: AllSettings;
 
   constructor (
-    private restartService: RestartService,
     private settingsService: SettingsService,
     private errorService: ErrorService
   ) {}
@@ -49,14 +45,6 @@ export class Review implements OnInit {
       },
       error => this.errorService.handleError(error)
     );
-  }
-
-  doRestart() {
-    this.restart.emit(true);
-  }
-
-  doNewTest() {
-    this.restartService.restartTest();
   }
 
   isUndefined(correct: boolean): boolean {

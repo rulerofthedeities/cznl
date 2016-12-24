@@ -99,18 +99,8 @@
 
   </div>
 </div>
-<div class="clearfix"></div>
-<div class="buttons center-block">
-  <button 
-    class="btn btn-success btn-lg btn-block"
-    (click)="doRestart()">
-    <span class="fa fa-play"></span>
-    Test deze lijst
-  </button>
-  <button 
-    class="btn btn-success btn-lg btn-block"
-    (click)="doNewTest()">
-    <span class="fa fa-file-o"></span>
-    Nieuwe test
-  </button>
-</div>
+<test-buttons
+  [test]="true"
+  [back]="true"
+  [practise]="true"
+></test-buttons>

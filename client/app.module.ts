@@ -49,7 +49,6 @@ import {WordService} from './services/words.service';
 import {WordlistService} from './services/wordlists.service';
 import {SettingsService} from './services/settings.service';
 import {FilterService} from './services/filters.service';
-import {RestartService} from './services/restart.service';
 import {TestService} from './services/test.service';
 import {ErrorService} from './services/error.service';
 import {UtilsService} from './services/utils.service';
@@ -69,7 +68,6 @@ import {ValidationService} from './services/validation.service';
     WordlistService,
     SettingsService,
     FilterService,
-    RestartService,
     TestService,
     ErrorService,
     AuthService,

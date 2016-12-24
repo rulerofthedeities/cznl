@@ -4,7 +4,6 @@ import {Filter} from './filter.component';
 import {WordPair} from '../models/word.model';
 import {Filter as FilterModel} from '../models/filters.model';
 import {WordService} from '../services/words.service';
-import {RestartService} from '../services/restart.service';
 import {AuthService} from '../services/auth.service';
 import {ErrorService} from '../services/error.service';
 import {SettingsService} from '../services/settings.service';
@@ -62,8 +61,7 @@ import {Subscription}   from 'rxjs/Subscription';
       </div>
       <div *ngIf="started && exerciseTpe=='review'" class="col-xs-12">
         <review 
-          [words]="cards"
-          (restart)="onStartTest($event)">
+          [words]="cards">
         </review>
       </div>
       <div *ngIf="started && exerciseTpe=='practise'" class="col-xs-12">
@@ -93,14 +91,8 @@ export class Tests implements OnInit, OnDestroy {
     private settingsService: SettingsService,
     private utilsService: UtilsService,
     private testService: TestService,
-    private route: ActivatedRoute,
-    restartService: RestartService
-  ) {
-    this.subscription = restartService.restartFilter$.subscribe(
-      start => {
-        this.restart();
-      });
-  }
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     //access required for menu
@@ -111,7 +103,7 @@ export class Tests implements OnInit, OnDestroy {
     this.settingsService.getAppSettings().subscribe(
       settings => {
         if (settings && settings.all) {
-          this.maxWords = settings.all.maxWords;
+          this.maxWords = 2;//settings.all.maxWords;
         }
       },
       error => this.errorService.handleError(error)
@@ -119,10 +111,14 @@ export class Tests implements OnInit, OnDestroy {
 
     this.testService.start.subscribe(
       testTpe => {
-        this.exerciseTpe = testTpe;
+        if (testTpe === 'newtest') {
+          this.started = false;
+        } else {
+          this.cards = this.utilsService.shuffle(this.cards);
+          this.exerciseTpe = testTpe;
+        }
       }
     );
-
   }
 
   selectListType(tpe: string) {
@@ -160,16 +156,6 @@ export class Tests implements OnInit, OnDestroy {
       },
       error => this.errorService.handleError(error)
     );
-  }
-
-  restart() {
-    this.utilsService.shuffle(this.cards);
-    this.started = false;
-  }
-
-  onStartTest(event: boolean) {
-    this.cards = this.utilsService.shuffle(this.cards);
-    this.exerciseTpe = 'test';
   }
 
   ngOnDestroy() {
