@@ -9,7 +9,8 @@ var isPublic = typeof window != "undefined";
     'angular2-jwt':           (isPublic) ? 'node/angular2-jwt/angular2-jwt.js' : 'node_modules/angular2-jwt/angular2-jwt.js',
     'js-base64':              (isPublic) ? 'node/js-base64/base64.js' : 'node_modules/js-base64/base64.js',
     'buffer':                 '@empty', //jwt buffer
-    'ng2-tooltip':            (isPublic) ? 'node/ng2-tooltip' : 'node_modules/ng2-tooltip' 
+    'ng2-tooltip':            (isPublic) ? 'node/ng2-tooltip' : 'node_modules/ng2-tooltip',
+    'moment':                 (isPublic) ? 'node/moment/moment.js' : 'node_modules/moment/moment.js'
   };
   // packages tells the System loader how to load when no filename and/or no extension
   var packages = {

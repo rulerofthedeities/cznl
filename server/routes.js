@@ -4,6 +4,7 @@ var path = require("path"),
     words = require("./controllers/words"),
     settings = require("./controllers/settings"),
     answers = require("./controllers/answers"),
+    progress = require("./controllers/progress"),
     userlists = require("./controllers/userlists"),
     autolists = require("./controllers/autolists"),
     response = require('./response');
@@ -49,6 +50,7 @@ module.exports.initialize = function(app, router) {
   router.put('/answer', answers.update);
   router.put('/lists/edit', userlists.updateName);
   router.put('/lists/words', userlists.updateList);
+  router.put('/progress', progress.update);
   
   router.post('/words', words.save);
   router.post('/lists/add', userlists.save);

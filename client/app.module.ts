@@ -50,6 +50,7 @@ import {WordlistService} from './services/wordlists.service';
 import {SettingsService} from './services/settings.service';
 import {FilterService} from './services/filters.service';
 import {TestService} from './services/test.service';
+import {ProgressService} from './services/progress.service';
 import {ErrorService} from './services/error.service';
 import {UtilsService} from './services/utils.service';
 import {ValidationService} from './services/validation.service';
@@ -69,6 +70,7 @@ import {ValidationService} from './services/validation.service';
     SettingsService,
     FilterService,
     TestService,
+    ProgressService,
     ErrorService,
     AuthService,
     AuthGuard,

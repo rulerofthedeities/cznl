@@ -3,7 +3,9 @@ import {SettingsService} from '../../services/settings.service';
 import {ErrorService} from '../../services/error.service';
 import {UtilsService} from '../../services/utils.service';
 import {TestService} from '../../services/test.service';
+import {ProgressService} from '../../services/progress.service';
 import {WordPair} from '../../models/word.model';
+import {AllSettings} from '../../models/settings.model';
 import {Subscription}   from 'rxjs/Subscription';
 
 @Component({
@@ -48,12 +50,13 @@ export class CardsTest implements OnInit {
   progress: number;
   currentCard: WordPair;
   subscription: Subscription;
-  settings: Object;
+  settings: AllSettings;
 
   constructor(
     private settingsService: SettingsService,
     private utilsService: UtilsService,
     private testService: TestService,
+    private progressService: ProgressService,
     private errorService: ErrorService
   ) {}
 
@@ -88,6 +91,11 @@ export class CardsTest implements OnInit {
     } else {
       this.currentCard = null;
       this.isFinished = true;
+      //Save user statistics
+      this.progressService.updateTotalForToday(this.cards.length).subscribe(
+        progress => {;},
+        error => {this.errorService.handleError(error);}
+      );
     }
   }
 

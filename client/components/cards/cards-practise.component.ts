@@ -3,6 +3,7 @@ import {SettingsService} from '../../services/settings.service';
 import {ErrorService} from '../../services/error.service';
 import {UtilsService} from '../../services/utils.service';
 import {WordPair, Direction} from '../../models/word.model';
+import {AllSettings} from '../../models/settings.model';
 import {Subscription}   from 'rxjs/Subscription';
 
 @Component({
@@ -44,7 +45,7 @@ export class CardsPractise implements OnInit {
   progress: number;
   currentCard: WordPair;
   subscription: Subscription;
-  settings: Object;
+  settings: AllSettings;
 
   constructor(
     private settingsService: SettingsService,
