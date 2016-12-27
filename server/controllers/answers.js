@@ -7,10 +7,12 @@ var upsertAnswer = function(db, options, data, callback) {
   var counterObj = data.correct ? {'total.correct':1, 'total.incorrect':0} : {'total.correct':0, 'total.incorrect':1};
   db.collection('answers')
     .update(
-      {wordId: mongoWordId}, 
-        {$set: {
+      {wordId: mongoWordId, userId:options.userId}, 
+      { $setOnInsert:{
           userId: options.userId, 
           wordId: mongoWordId, 
+        },
+        $set: {
           correct: data.correct, 
           dt: new Date()
         },
