@@ -33,6 +33,7 @@ import {FieldMessages} from './components/msg/field-messages.component';
 import {AuthMenu} from './components/auth/auth-menu.component';
 import {SignUp} from './components/auth/sign-up.component';
 import {SignIn} from './components/auth/sign-in.component';
+import {ModalConfirm} from './components/modals/modal-confirm.component';
 
 import {GetFilterValue} from './directives/get-filter-value.directive';
 import {GetKeyPress} from './directives/get-key-pressed.directive';
@@ -110,7 +111,8 @@ import {ValidationService} from './services/validation.service';
     LevelNamePipe,
     AuthMenu,
     SignIn,
-    SignUp
+    SignUp,
+    ModalConfirm
   ],
   bootstrap: [AppComponent]
 })

@@ -71,6 +71,13 @@ import {Subscription}   from 'rxjs/Subscription';
       </div>
     </div>
   </section>
+  <modal-confirm *ngIf="showModal"
+    [level]="'warning'"
+    [showModal]="true"
+    (confirmed)="onStopConfirmed($event)">
+    <div title>Opgelet</div>
+    <div message>Bent u zeker dat u de test wenst te onderbreken?</div>
+  </modal-confirm>
   `,
   styles: [
   `li {cursor:pointer;}`]
@@ -83,6 +90,7 @@ export class Tests implements OnInit, OnDestroy {
   cards: WordPair[];
   exerciseTpe:string;
   subscription: Subscription;
+  showModal = false;
 
   constructor(
     private authService: AuthService,
@@ -112,7 +120,7 @@ export class Tests implements OnInit, OnDestroy {
     this.testService.start.subscribe(
       testTpe => {
         if (testTpe === 'newtest') {
-          this.started = false;
+          this.backToFilter();
         } else {
           this.cards = this.utilsService.shuffle(this.cards);
           this.exerciseTpe = testTpe;
@@ -121,14 +129,30 @@ export class Tests implements OnInit, OnDestroy {
     );
     this.testService.stop.subscribe(
       test => {
-        this.started = false;
-        this.listType = 'filter';
+        if (this.exerciseTpe==='test') {
+          this.showModal = true;
+        } else {
+          this.backToFilter();
+        }
       }
     );
   }
 
   selectListType(tpe: string) {
     this.listType = tpe;
+  }
+
+  backToFilter() {
+    this.started = false;
+    this.listType = 'filter';
+  }
+
+  onStopConfirmed(stopOk: boolean) {
+    this.showModal = false;
+    if (stopOk) {
+      this.backToFilter();
+      //Todo: save uncompleted result
+    }
   }
 
   getWordsFromFilter(filter: FilterModel) {
