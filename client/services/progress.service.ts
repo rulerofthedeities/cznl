@@ -11,7 +11,7 @@ export class ProgressService {
     private http: Http
   ) {}
 
-  updateTotalForToday(total: number) {
+  updateTotalsForToday(total: number) {
     let headers = new Headers();
     const token = this.authService.getToken();
 

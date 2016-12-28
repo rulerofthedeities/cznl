@@ -127,6 +127,7 @@ export class Tests implements OnInit, OnDestroy {
         }
       }
     );
+
     this.testService.stop.subscribe(
       test => {
         if (this.exerciseTpe==='test') {
@@ -151,7 +152,8 @@ export class Tests implements OnInit, OnDestroy {
     this.showModal = false;
     if (stopOk) {
       this.backToFilter();
-      //Todo: save uncompleted result
+      //Save uncompleted result
+      this.testService.doSaveResults();
     }
   }
 

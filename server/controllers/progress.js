@@ -55,11 +55,11 @@ module.exports = {
     var options = {userId:mongo.ObjectID(req.decoded.user._id)};
     var data = req.body;
     //First get data from answers collection
-    getAnswersData(mongo.DB, options, function(err, result){
+    getAnswersData(mongo.DB, options, function(err, result) {
       response.handleError(err, res, 500, 'Error fetching answers data for progress', function(){
         data.answers = result;
         //Save progress data
-        upsertProgress(mongo.DB, options, data, function(err, result){
+        upsertProgress(mongo.DB, options, data, function(err, result) {
           response.handleError(err, res, 500, 'Error upserting progress', function(){
             response.handleSuccess(res, result, 200, 'Upserted progress');
           });

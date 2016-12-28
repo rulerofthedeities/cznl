@@ -71,6 +71,17 @@ export class CardsTest implements OnInit {
         }
       }
     );
+    this.testService.saveresults.subscribe(
+      save => {
+        //Test interrupted - save partial progress
+        if (this.cardsIndex > 0) {
+          this.progressService.updateTotalsForToday(this.cardsIndex - 1).subscribe(
+            progress => {;},
+            error => {this.errorService.handleError(error);}
+          );
+        }
+      }
+    );
   }
 
   getSettings() {
@@ -92,7 +103,7 @@ export class CardsTest implements OnInit {
       this.currentCard = null;
       this.isFinished = true;
       //Save user statistics
-      this.progressService.updateTotalForToday(this.cards.length).subscribe(
+      this.progressService.updateTotalsForToday(this.cards.length).subscribe(
         progress => {;},
         error => {this.errorService.handleError(error);}
       );

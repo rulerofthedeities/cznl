@@ -5,6 +5,7 @@ export class TestService {
   //Restart a test, practise or review
   start = new EventEmitter<string>();
   stop = new EventEmitter();
+  saveresults = new EventEmitter();
 
   doStart(tpe: string) {
     this.start.emit(tpe);
@@ -12,6 +13,10 @@ export class TestService {
 
   doStop() {
     this.stop.emit();
+  }
+
+  doSaveResults() {
+    this.saveresults.emit();
   }
 
 }
