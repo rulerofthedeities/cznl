@@ -119,6 +119,12 @@ export class Tests implements OnInit, OnDestroy {
         }
       }
     );
+    this.testService.stop.subscribe(
+      test => {
+        this.started = false;
+        this.listType = 'filter';
+      }
+    );
   }
 
   selectListType(tpe: string) {

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Subscription}   from 'rxjs/Subscription';
 import {AuthService} from '../services/auth.service';
+import {TestService} from '../services/test.service';
 import {ErrorService} from '../services/error.service';
 import {Access} from '../models/access.model';
 
@@ -26,7 +27,7 @@ import {Access} from '../models/access.model';
         <li 
           *ngFor="let route of routes"
           routerLinkActive="active">
-          <a [routerLink]="route.path" *ngIf="showMenuItem(route.role)">
+          <a [routerLink]="route.path" *ngIf="showMenuItem(route.role)" (click)="stopTest()">
             <span 
               class="glyphicon glyphicon-{{route.glyph}}" 
               aria-hidden="true">
@@ -94,6 +95,7 @@ export class Menu implements OnInit {
   constructor(
     private authService: AuthService,
     private errorService: ErrorService,
+    private testService: TestService,
     private router: Router
   ) {}
 
@@ -140,5 +142,9 @@ export class Menu implements OnInit {
         );
       }
     }
+  }
+
+  stopTest() {
+    this.testService.doStop();
   }
 }
