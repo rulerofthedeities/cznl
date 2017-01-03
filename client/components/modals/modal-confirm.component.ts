@@ -45,12 +45,12 @@ export class ModalConfirm {
   @Output() confirmed = new EventEmitter<boolean>();
 
   onModalYes() {
-    this.showModal = false;
+    //this.showModal = false;
     this.confirmed.emit(true);
   }
 
   onModalNo() {
-    this.showModal = false;
+    //this.showModal = false;
     this.confirmed.emit(false);
   }
 }

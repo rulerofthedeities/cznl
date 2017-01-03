@@ -71,7 +71,7 @@ import {Subscription}   from 'rxjs/Subscription';
       </div>
     </div>
   </section>
-  <modal-confirm *ngIf="showModal"
+  <modal-confirm *ngIf="showModalBox"
     [level]="'warning'"
     [showModal]="true"
     (confirmed)="onStopConfirmed($event)">
@@ -88,9 +88,9 @@ export class Tests implements OnInit, OnDestroy {
   listType: string = 'filter';
   started: boolean = false;
   cards: WordPair[];
-  exerciseTpe:string;
+  exerciseTpe: string = '';
   subscription: Subscription;
-  showModal = false;
+  showModalBox = false;
 
   constructor(
     private authService: AuthService,
@@ -130,9 +130,11 @@ export class Tests implements OnInit, OnDestroy {
 
     this.testService.stop.subscribe(
       test => {
+        console.log('test interrupted:', this.exerciseTpe);
         if (this.exerciseTpe==='test') {
-          this.showModal = true;
-        } else {
+          console.log('show modal');
+          this.showModalBox = true;
+        } else if (this.exerciseTpe!=='') {
           this.backToFilter();
         }
       }
@@ -144,16 +146,21 @@ export class Tests implements OnInit, OnDestroy {
   }
 
   backToFilter() {
+    console.log('back to filter');
+    this.showModalBox = false;
+    this.exerciseTpe = '';
     this.started = false;
     this.listType = 'filter';
   }
 
   onStopConfirmed(stopOk: boolean) {
-    this.showModal = false;
+    console.log('stop confirmed');
     if (stopOk) {
       this.backToFilter();
       //Save uncompleted result
       this.testService.doSaveResults();
+    } else {
+      this.showModalBox = false;
     }
   }
 
@@ -195,5 +202,6 @@ export class Tests implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+    console.log('destroying test');
   }
 }

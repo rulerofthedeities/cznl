@@ -52,7 +52,7 @@ export class AuthService {
     };
     this.storeUserData(userData);
     this.setUserAccess(userAccess);
-    this.router.navigateByUrl('/');
+    this.router.navigateByUrl('/tests');
   }
 
   logout() {
