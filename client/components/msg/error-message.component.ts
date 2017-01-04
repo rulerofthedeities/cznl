@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Error} from '../../models/error.model';
 import {ErrorService} from '../../services/error.service';
+import 'rxjs/add/operator/takeWhile';
 
 @Component({
   selector:'error-msg',
@@ -11,14 +12,17 @@ import {ErrorService} from '../../services/error.service';
     </div>`
 })
 
-export class ErrorMessage implements OnInit {
+export class ErrorMessage implements OnInit, OnDestroy {
   errorData: Error;
-  showError = false;
+  showError: boolean = false;
+  componentActive: boolean = true;
 
   constructor (private errorService: ErrorService) {}
 
   ngOnInit() {
-    this.errorService.errorOccurred.subscribe(
+    this.errorService.errorOccurred
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       errorData => {
         this.errorData = errorData;
         this.showError = true;
@@ -28,5 +32,9 @@ export class ErrorMessage implements OnInit {
 
   onErrorHandled() {
      this.showError = false;
+  }
+
+  ngOnDestroy() {
+    this.componentActive = false;
   }
 }

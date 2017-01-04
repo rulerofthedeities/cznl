@@ -1,7 +1,8 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {WordlistService} from '../../services/wordlists.service';
 import {ErrorService} from '../../services/error.service';
 import {WordList} from '../../models/list.model';
+import 'rxjs/add/operator/takeWhile';
 
 @Component({
   selector: 'word-lists',
@@ -41,13 +42,14 @@ import {WordList} from '../../models/list.model';
     `]
 })
 
-export class WordLists implements OnInit {
+export class WordLists implements OnInit, OnDestroy {
   @Input('created') tpe;
   @Output() selectedUserList = new EventEmitter<Object>();
   lists: WordList[];
-  ready = false;
+  ready: boolean = false;
   selected: WordList;
-  wordsInList = 0;
+  wordsInList: number = 0;
+  componentActive: boolean = true;
 
   constructor(
     private wordlistService: WordlistService,
@@ -55,7 +57,10 @@ export class WordLists implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.wordlistService.getWordLists(this.tpe).subscribe(
+    this.wordlistService
+    .getWordLists(this.tpe)
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       lists => {
         this.lists = lists;
         this.ready = true;
@@ -77,4 +82,7 @@ export class WordLists implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    this.componentActive =  false;
+  }
 }

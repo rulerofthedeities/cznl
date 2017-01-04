@@ -1,10 +1,11 @@
-import {Component, Output, Input, EventEmitter, OnInit} from '@angular/core';
+import {Component, Output, Input, EventEmitter, OnInit, OnDestroy} from '@angular/core';
 import {FilterService} from '../services/filters.service';
 import {SettingsService} from '../services/settings.service';
 import {WordService} from '../services/words.service';
 import {AuthService} from '../services/auth.service';
 import {ErrorService} from '../services/error.service';
 import {Filter as FilterModel} from '../models/filters.model';
+import 'rxjs/add/operator/takeWhile';
 
 @Component({
   selector: 'filter',
@@ -78,13 +79,14 @@ import {Filter as FilterModel} from '../models/filters.model';
   `]
 })
 
-export class Filter implements OnInit {
+export class Filter implements OnInit, OnDestroy {
   @Input('tpe') filterTpe: string;
   @Output() selectedFilter = new EventEmitter<FilterModel>();
   filters: Object;
   selected: FilterModel;
   totalWords: number;
-  filtersLoaded = false;
+  filtersLoaded: boolean = false;
+  componentActive: boolean = true;
 
   constructor(
     private filterService: FilterService,
@@ -103,7 +105,10 @@ export class Filter implements OnInit {
   start(testTpe: string, level: string, wordTpe: string, cat: string) {
     if (this.totalWords < 1) {return;}
     let filter:FilterModel = this.getFilter(testTpe, level, wordTpe, cat);
-    this.settingsService.setFilterSettings(filter).subscribe(
+    this.settingsService
+    .setFilterSettings(filter)
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       settings => {;},
       error => this.errorService.handleError(error)
     );
@@ -120,7 +125,10 @@ export class Filter implements OnInit {
   }
 
   getCount(filter: FilterModel) {
-    this.wordService.getCount(filter).subscribe(
+    this.wordService
+    .getCount(filter)
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       total => {this.totalWords = total;},
       error => this.errorService.handleError(error)
     );
@@ -137,7 +145,10 @@ export class Filter implements OnInit {
   }
 
   getFilterOptions() {
-    this.settingsService.getFilterSettings().subscribe(
+    this.settingsService
+    .getFilterSettings()
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       settings => {
         if (settings) {
           this.selected = settings.filter;
@@ -145,7 +156,10 @@ export class Filter implements OnInit {
           this.selected = {level:-1, cats:'all', tpe:'all'};
         }
         this.getCount(this.selected);
-        this.filterService.getFilterOptions().subscribe(
+        this.filterService
+        .getFilterOptions()
+        .takeWhile(() => this.componentActive)
+        .subscribe(
           filters => {
             this.filters = filters;
             this.filtersLoaded = true;
@@ -154,5 +168,9 @@ export class Filter implements OnInit {
         );
       }
     );
+  }
+
+  ngOnDestroy() {
+    this.componentActive = false;
   }
 }

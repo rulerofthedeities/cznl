@@ -1,9 +1,10 @@
-import {Component, Input, ViewChild, OnChanges} from '@angular/core';
+import {Component, Input, ViewChild, OnChanges, OnDestroy} from '@angular/core';
 import {ShowLists} from './show-lists.component';
 import {WordPair} from '../../models/word.model';
 import {WordList} from '../../models/list.model';
 import {WordlistService} from '../../services/wordlists.service';
 import {ErrorService} from '../../services/error.service';
+import 'rxjs/add/operator/takeWhile';
 
 @Component({
   selector: 'add-to-list',
@@ -21,10 +22,11 @@ import {ErrorService} from '../../services/error.service';
   styleUrls:['client/components/wordlists/word-list.css']
 })
 
-export class AddToList implements OnChanges {
+export class AddToList implements OnChanges, OnDestroy {
   @Input() word: WordPair;
   @ViewChild(ShowLists) lists: ShowLists;
-  isInList = false;
+  isInList: boolean = false;
+  componentActive: boolean = true;
 
   constructor(
     private wordlistService: WordlistService,
@@ -32,7 +34,10 @@ export class AddToList implements OnChanges {
   ) {}
 
   ngOnChanges() {
-    this.wordlistService.getWordLists('user').subscribe(
+    this.wordlistService
+    .getWordLists('user')
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       lists => {
         this.isInList = this._checkIfInUserlist(lists);
       },
@@ -50,6 +55,10 @@ export class AddToList implements OnChanges {
       if (inList) {isInList = true;}
     });
     this.isInList = isInList;
+  }
+
+  ngOnDestroy() {
+    this.componentActive = false;
   }
 
   private _checkIfInUserlist(lists: WordList[]): boolean {

@@ -1,10 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, OnDestroy} from '@angular/core';
 import {SettingsService} from '../../services/settings.service';
 import {ErrorService} from '../../services/error.service';
 import {UtilsService} from '../../services/utils.service';
 import {WordPair, Direction} from '../../models/word.model';
 import {AllSettings} from '../../models/settings.model';
-import {Subscription}   from 'rxjs/Subscription';
+import 'rxjs/add/operator/takeWhile';
 
 @Component({
   selector: 'cards-practise',
@@ -38,14 +38,14 @@ import {Subscription}   from 'rxjs/Subscription';
     ></test-buttons>`
 })
 
-export class CardsPractise implements OnInit {
+export class CardsPractise implements OnInit, OnDestroy {
   @Input('data') cards: WordPair[];
   maxCards: number;
   cardsIndex: number;
   progress: number;
   currentCard: WordPair;
-  subscription: Subscription;
   settings: AllSettings;
+  componentActive: boolean = true;
 
   constructor(
     private settingsService: SettingsService,
@@ -59,7 +59,10 @@ export class CardsPractise implements OnInit {
   }
 
   getSettings() {
-    this.settingsService.getAppSettings().subscribe(
+    this.settingsService
+    .getAppSettings()
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       settings => {
         this.maxCards = Math.min(settings.all.maxWords, this.cards.length);
         this.settings = settings.all;
@@ -87,5 +90,9 @@ export class CardsPractise implements OnInit {
   reset() {
     this.progress = 0;
     this.cardsIndex = 1;
+  }
+
+  ngOnDestroy() {
+    this.componentActive = false;
   }
 }

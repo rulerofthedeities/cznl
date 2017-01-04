@@ -1,8 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, OnDestroy} from '@angular/core';
 import {WordPair, Word} from '../models/word.model';
 import {AllSettings} from '../models/settings.model';
 import {SettingsService} from '../services/settings.service';
 import {ErrorService} from '../services/error.service';
+import 'rxjs/add/operator/takeWhile';
 
 @Component({
   selector: 'review',
@@ -20,13 +21,14 @@ import {ErrorService} from '../services/error.service';
   `]
 })
 
-export class Review implements OnInit {
+export class Review implements OnInit, OnDestroy {
   @Input() words: WordPair[];
   selected: number;
   translation: Word = {word:'', article:'',genus:''};
   translationPf: Word = null;
-  ready = false;
+  ready: boolean = false;
   settings: AllSettings;
+  componentActive: boolean = true;
 
   constructor (
     private settingsService: SettingsService,
@@ -38,7 +40,10 @@ export class Review implements OnInit {
       if (!word.answer) {
         word.answer = {_id: null, total: {correct:0, incorrect:0}};
     }});
-    this.settingsService.getAppSettings().subscribe(
+    this.settingsService
+    .getAppSettings()
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       settings => {
         this.settings = settings.all;
         this.ready = true;
@@ -83,5 +88,9 @@ export class Review implements OnInit {
         this.translationPf.aspect = 'pf';
       }
     }
+  }
+
+  ngOnDestroy() {
+    this.componentActive = false;
   }
 }

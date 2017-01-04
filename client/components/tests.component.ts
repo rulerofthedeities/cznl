@@ -9,7 +9,7 @@ import {ErrorService} from '../services/error.service';
 import {SettingsService} from '../services/settings.service';
 import {TestService} from '../services/test.service';
 import {UtilsService} from '../services/utils.service';
-import {Subscription}   from 'rxjs/Subscription';
+import 'rxjs/add/operator/takeWhile';
 
 @Component({
   template:`
@@ -84,13 +84,13 @@ import {Subscription}   from 'rxjs/Subscription';
 })
 
 export class Tests implements OnInit, OnDestroy {
-  maxWords = 20;
+  maxWords: number = 20;
   listType: string = 'filter';
   started: boolean = false;
   cards: WordPair[];
   exerciseTpe: string = '';
-  subscription: Subscription;
-  showModalBox = false;
+  showModalBox: boolean = false;
+  componentActive: boolean = true;
 
   constructor(
     private authService: AuthService,
@@ -108,7 +108,10 @@ export class Tests implements OnInit, OnDestroy {
       this.authService.setUserAccess(this.route.snapshot.data['access']);
     }
 
-    this.settingsService.getAppSettings().subscribe(
+    this.settingsService
+    .getAppSettings()
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       settings => {
         if (settings && settings.all) {
           this.maxWords = settings.all.maxWords;
@@ -117,7 +120,9 @@ export class Tests implements OnInit, OnDestroy {
       error => this.errorService.handleError(error)
     );
 
-    this.testService.start.subscribe(
+    this.testService.start
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       testTpe => {
         if (testTpe === 'newtest') {
           this.backToFilter();
@@ -128,7 +133,9 @@ export class Tests implements OnInit, OnDestroy {
       }
     );
 
-    this.testService.stop.subscribe(
+    this.testService.stop
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       test => {
         console.log('test interrupted:', this.exerciseTpe);
         if (this.exerciseTpe==='test') {
@@ -165,7 +172,10 @@ export class Tests implements OnInit, OnDestroy {
   }
 
   getWordsFromFilter(filter: FilterModel) {
-    this.wordService.getWordsFromFilter(filter, this.maxWords).subscribe(
+    this.wordService
+    .getWordsFromFilter(filter, this.maxWords)
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       words => {
         this.cards = words;
         this.exerciseTpe = filter.test;
@@ -176,7 +186,10 @@ export class Tests implements OnInit, OnDestroy {
   }
 
   getWordsFromUserList(data: any) {
-    this.wordService.getWordsFromWordList(data.selected._id, this.maxWords).subscribe(
+    this.wordService
+    .getWordsFromWordList(data.selected._id, this.maxWords)
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       words => {
         this.cards = words;
         this.exerciseTpe = data.exerciseTpe;
@@ -187,7 +200,10 @@ export class Tests implements OnInit, OnDestroy {
   }
 
   getWordsFromAutoList(data: any) {
-    this.wordService.getWordsFromAutoList(data.selected.id, this.maxWords).subscribe(
+    this.wordService
+    .getWordsFromAutoList(data.selected.id, this.maxWords)
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       words => {
         this.cards = words;
         this.exerciseTpe = data.exerciseTpe;
@@ -198,10 +214,7 @@ export class Tests implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // prevent memory leak when component destroyed
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
     console.log('destroying test');
+    this.componentActive = false;
   }
 }

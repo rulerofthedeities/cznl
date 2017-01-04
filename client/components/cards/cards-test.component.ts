@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, OnDestroy} from '@angular/core';
 import {SettingsService} from '../../services/settings.service';
 import {ErrorService} from '../../services/error.service';
 import {UtilsService} from '../../services/utils.service';
@@ -6,7 +6,7 @@ import {TestService} from '../../services/test.service';
 import {ProgressService} from '../../services/progress.service';
 import {WordPair} from '../../models/word.model';
 import {AllSettings} from '../../models/settings.model';
-import {Subscription}   from 'rxjs/Subscription';
+import 'rxjs/add/operator/takeWhile';
 
 @Component({
   selector: 'cards-test',
@@ -41,7 +41,7 @@ import {Subscription}   from 'rxjs/Subscription';
     </div>`
 })
 
-export class CardsTest implements OnInit {
+export class CardsTest implements OnInit, OnDestroy {
   @Input('data') cards: WordPair[];
   maxCards: number;
   cardsIndex: number;
@@ -49,8 +49,8 @@ export class CardsTest implements OnInit {
   correct: number;
   progress: number;
   currentCard: WordPair;
-  subscription: Subscription;
   settings: AllSettings;
+  componentActive: boolean = true;
 
   constructor(
     private settingsService: SettingsService,
@@ -63,7 +63,9 @@ export class CardsTest implements OnInit {
   ngOnInit() {
     this.reset();
     this.getSettings();
-    this.testService.start.subscribe(
+    this.testService.start
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       testTpe => {
         if (testTpe === 'test') {
           this.reset();
@@ -71,11 +73,16 @@ export class CardsTest implements OnInit {
         }
       }
     );
-    this.testService.saveresults.subscribe(
+    this.testService.saveresults
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       save => {
         //Test interrupted - save partial progress
         if (this.cardsIndex > 0) {
-          this.progressService.updateTotalsForToday(this.cardsIndex - 1).subscribe(
+          this.progressService
+          .updateTotalsForToday(this.cardsIndex - 1)
+          .takeWhile(() => this.componentActive)
+          .subscribe(
             progress => {;},
             error => {this.errorService.handleError(error);}
           );
@@ -85,7 +92,10 @@ export class CardsTest implements OnInit {
   }
 
   getSettings() {
-    this.settingsService.getAppSettings().subscribe(
+    this.settingsService
+    .getAppSettings()
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       settings => {
         this.maxCards = Math.min(settings.all.maxWords, this.cards.length);
         this.settings = settings.all;
@@ -103,7 +113,10 @@ export class CardsTest implements OnInit {
       this.currentCard = null;
       this.isFinished = true;
       //Save user statistics
-      this.progressService.updateTotalsForToday(this.cards.length).subscribe(
+      this.progressService
+      .updateTotalsForToday(this.cards.length)
+      .takeWhile(() => this.componentActive)
+      .subscribe(
         progress => {;},
         error => {this.errorService.handleError(error);}
       );
@@ -127,5 +140,9 @@ export class CardsTest implements OnInit {
     this.progress = 0;
     this.correct = 0;
     this.cardsIndex = 0;
+  }
+
+  ngOnDestroy() {
+    this.componentActive = false;
   }
 }

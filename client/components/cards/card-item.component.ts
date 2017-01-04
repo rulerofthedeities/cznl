@@ -1,10 +1,10 @@
-import {Component, Input, Output, EventEmitter, OnChanges,
+import {Component, Input, Output, EventEmitter, OnChanges, OnDestroy,
   trigger, style, transition, animate, keyframes} from '@angular/core';
 import {WordPair, Word, Total} from '../../models/word.model';
 import {AllSettings} from '../../models/settings.model';
 import {WordService} from '../../services/words.service';
 import {ErrorService} from '../../services/error.service';
-
+import 'rxjs/add/operator/takeWhile';
 
 @Component({
   selector: 'card-item',
@@ -76,17 +76,18 @@ import {ErrorService} from '../../services/error.service';
   ]
 })
 
-export class CardItem implements OnChanges {
+export class CardItem implements OnChanges, OnDestroy {
   @Input() card: WordPair;
   @Input() settings: AllSettings;
   @Input() test: string;
   @Output() cardAnswered = new EventEmitter();
-  isQuestion = true;
+  isQuestion: boolean = true;
   cardData: Word;
   cardDataPf: Word;
   total: Total;
-  state = 'question';
-  showAnswer = false;
+  state: string = 'question';
+  showAnswer: boolean = false;
+  componentActive: boolean = true;
 
   constructor(
     private wordService: WordService,
@@ -110,10 +111,13 @@ export class CardItem implements OnChanges {
     this.cardAnswered.emit(correct);
     this.updateTotals(correct);
     this.turnCard(true);
-    this.wordService.saveAnswer(this.card._id, correct).subscribe(
-        answer => {;},
-        error => this.errorService.handleError(error)
-      );
+    this.wordService
+    .saveAnswer(this.card._id, correct)
+    .takeWhile(() => this.componentActive)
+    .subscribe(
+      answer => {;},
+      error => this.errorService.handleError(error)
+    );
   }
 
   getCardData() {
@@ -154,5 +158,9 @@ export class CardItem implements OnChanges {
     } else {
       this.card.answer.total.incorrect++;
     }
+  }
+
+  ngOnDestroy() {
+    this.componentActive = false;
   }
 }

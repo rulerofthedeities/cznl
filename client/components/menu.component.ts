@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
-import {Subscription}   from 'rxjs/Subscription';
 import {AuthService} from '../services/auth.service';
 import {TestService} from '../services/test.service';
 import {ErrorService} from '../services/error.service';
 import {Access} from '../models/access.model';
+import 'rxjs/add/operator/takeWhile';
 
 @Component({
   selector: 'menu-bar',
@@ -85,12 +85,12 @@ import {Access} from '../models/access.model';
   `]
 })
 
-export class Menu implements OnInit {
-  subscription: Subscription;
+export class Menu implements OnInit, OnDestroy {
   url: string;
   routes: Object[];
   access = new Access();
-  showAccess = false;
+  showAccess: boolean = false;
+  componentActive: boolean = true;
 
   constructor(
     private authService: AuthService,
@@ -133,7 +133,10 @@ export class Menu implements OnInit {
     if (this.showAccess) {
       this.access = this.authService.getUserAccess();
       if (!this.access) {
-        this.authService.fetchUserAccess().subscribe(
+        this.authService
+        .fetchUserAccess()
+        .takeWhile(() => this.componentActive)
+        .subscribe(
           access => {
             this.authService.setUserAccess(access);
             this.access = access;
@@ -146,5 +149,9 @@ export class Menu implements OnInit {
 
   stopTest() {
     this.testService.doStop();
+  }
+
+  ngOnDestroy() {
+    this.componentActive = false;
   }
 }

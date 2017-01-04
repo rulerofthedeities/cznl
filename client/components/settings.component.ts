@@ -1,20 +1,22 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {AllSettings} from '../models/settings.model';
 import {SettingsService} from '../services/settings.service';
 import {AuthService} from '../services/auth.service';
 import {ErrorService} from '../services/error.service';
+import 'rxjs/add/operator/takeWhile';
 
 @Component({
   templateUrl: 'client/components/settings.component.html'
 })
 
-export class AppSettings implements OnInit {
+export class AppSettings implements OnInit, OnDestroy {
   testLength: number[];
   directions: Object[];
   settings: AllSettings;
-  isReady = false;
-  isSubmitted = false;
+  isReady: boolean = false;
+  isSubmitted: boolean = false;
+  componentActive: boolean = true;
 
   constructor (
     private authService: AuthService,
@@ -34,7 +36,9 @@ export class AppSettings implements OnInit {
       {label:'Nederlands -> Tsjechisch', val:'nlcz'},
       {label:'Tsjechisch -> Nederlands', val:'cznl'}
     ];
-    this.settingsService.getAppSettings().subscribe(
+    this.settingsService.getAppSettings()
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       settings => {
         if (settings) {
           this.settings = settings.all;
@@ -57,11 +61,16 @@ export class AppSettings implements OnInit {
   }
 
   onSubmit() {
-    this.settingsService.setAppSettings(this.settings).subscribe(
+    this.settingsService.setAppSettings(this.settings)
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       settings => {;},
       error => this.errorService.handleError(error)
     );
     this.isSubmitted = true;
   }
 
+  ngOnDestroy() {
+    this.componentActive = false;
+  }
 }

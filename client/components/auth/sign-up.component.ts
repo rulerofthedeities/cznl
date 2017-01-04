@@ -1,10 +1,11 @@
-import {Component, OnInit } from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Http} from '@angular/http';
 import {AuthService } from '../../services/auth.service';
 import {ErrorService} from '../../services/error.service';
 import {ValidationService} from '../../services/validation.service';
 import {User} from '../../models/user.model';
+import 'rxjs/add/operator/takeWhile';
 
 @Component({
   template: `
@@ -100,11 +101,12 @@ import {User} from '../../models/user.model';
   `]
 })
 
-export class SignUp implements OnInit {
+export class SignUp implements OnInit, OnDestroy {
   userForm: FormGroup;
   user: User;
   mailInUse: boolean;
   userInUse: boolean;
+  componentActive: boolean = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -127,9 +129,15 @@ export class SignUp implements OnInit {
 
   onSubmitForm(user: User) {
     if (this.userForm.valid) {
-      this.authService.signup(user).subscribe(
+      this.authService
+      .signup(user)
+      .takeWhile(() => this.componentActive)
+      .subscribe(
         data => {
-          this.authService.signin(user).subscribe(
+          this.authService
+          .signin(user)
+          .takeWhile(() => this.componentActive)
+          .subscribe(
             data => this.authService.signedIn(data),
             error => this.errorService.handleError(error)
           );
@@ -137,5 +145,9 @@ export class SignUp implements OnInit {
         error => this.errorService.handleError(error)
       );
     }
+  }
+
+  ngOnDestroy() {
+    this.componentActive = false;
   }
 }

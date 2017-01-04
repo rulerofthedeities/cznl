@@ -1,7 +1,8 @@
-import {Component, OnInit } from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {ErrorService} from '../../services/error.service';
 import {User} from '../../models/user.model';
+import 'rxjs/add/operator/takeWhile';
 
 @Component({
   template: `
@@ -96,8 +97,9 @@ import {User} from '../../models/user.model';
   `
 })
 
-export class SignIn implements OnInit {
+export class SignIn implements OnInit, OnDestroy {
   user: User;
+  componentActive: boolean = true;
 
   constructor(
     private authService: AuthService,
@@ -109,10 +111,16 @@ export class SignIn implements OnInit {
   }
 
   onSubmit(user: User) {
-    this.authService.signin(user)
-      .subscribe(
-        data => this.authService.signedIn(data),
-        error => this.errorService.handleError(error)
-      );
+    this.authService
+    .signin(user)
+    .takeWhile(() => this.componentActive)
+    .subscribe(
+      data => this.authService.signedIn(data),
+      error => this.errorService.handleError(error)
+    );
+  }
+
+  ngOnDestroy() {
+    this.componentActive = false;
   }
 }

@@ -5,8 +5,8 @@ import {AuthService} from '../services/auth.service';
 import {ErrorService} from '../services/error.service';
 import {ErrorObject} from '../models/word.model';
 import {WordPair} from '../models/word.model';
-import {Subscription} from 'rxjs/Subscription';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import 'rxjs/add/operator/takeWhile';
 
 @Component({
   selector: 'edit-word',
@@ -40,13 +40,13 @@ export class EditWord implements OnInit, OnDestroy {
   @Output() updatedWord = new EventEmitter<WordPair>();
   wordForm: FormGroup;
   filters: Object;
-  subscription: Subscription;
   submitMessage: string;
   cats: string[];
-  isNew = true;
-  filtersLoaded = false;
-  disableSubmit = false;
-  wordAlreadyExists = false;
+  isNew: boolean = true;
+  filtersLoaded: boolean = false;
+  disableSubmit: boolean = false;
+  wordAlreadyExists: boolean = false;
+  componentActive: boolean = true;
 
   constructor(
     private filterService: FilterService,
@@ -59,7 +59,9 @@ export class EditWord implements OnInit, OnDestroy {
   ngOnInit() {
     this._getFilterOptions();
     this._buildForm();
-    this.subscription = this.wordService.editWordSource$.subscribe(
+    this.wordService.editWordSource$
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       word => {
         this.editForm(word);
       }
@@ -107,7 +109,10 @@ export class EditWord implements OnInit, OnDestroy {
   onChange() {
     this.wordAlreadyExists = false;
     if (this.isNew) {
-      this.wordService.checkIfWordExists(this.wordForm.controls['cz.word'].value).subscribe(
+      this.wordService
+      .checkIfWordExists(this.wordForm.controls['cz.word'].value)
+      .takeWhile(() => this.componentActive)
+      .subscribe(
         itExists => this.wordAlreadyExists = itExists,
         error => this.errorService.handleError(error)
       );
@@ -115,7 +120,10 @@ export class EditWord implements OnInit, OnDestroy {
   }
 
   _saveWord(form: any): void {
-    this.wordService.addWord(form).subscribe(
+    this.wordService
+    .addWord(form)
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       wordPair => {
         this.submitMessage = `Het woord ${wordPair.cz.word}/${wordPair.nl.word} is succesvol opgeslagen.`;
         this.disableSubmit = true;
@@ -128,7 +136,10 @@ export class EditWord implements OnInit, OnDestroy {
   }
 
   _updateWord(form: any): void {
-    this.wordService.updateWord(form).subscribe(
+    this.wordService
+    .updateWord(form)
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       wordPair => {
         this.submitMessage = `Het woord ${wordPair.cz.word}/${wordPair.nl.word} is succesvol aangepast.`;
         this.disableSubmit = true;
@@ -194,7 +205,10 @@ export class EditWord implements OnInit, OnDestroy {
   }
 
   _getFilterOptions() {
-    this.filterService.getFilterOptions().subscribe(
+    this.filterService
+    .getFilterOptions()
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       filters => {
         this.filters = filters;
         this.filtersLoaded = true;
@@ -204,7 +218,10 @@ export class EditWord implements OnInit, OnDestroy {
 
   searchCats(cats: string):void {
     if (cats.length > 0) {
-      this.wordService.searchCategories(cats).subscribe(
+      this.wordService
+      .searchCategories(cats)
+      .takeWhile(() => this.componentActive)
+      .subscribe(
         cats => {this.cats = cats || [];},
         error => this.errorService.handleError(error)
       );
@@ -246,10 +263,7 @@ export class EditWord implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.componentActive = false;
   }
-
 }
 

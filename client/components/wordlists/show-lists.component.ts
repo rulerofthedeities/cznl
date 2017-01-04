@@ -1,8 +1,9 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnDestroy} from '@angular/core';
 import {WordPair} from '../../models/word.model';
 import {WordList} from '../../models/list.model';
 import {WordlistService} from '../../services/wordlists.service';
 import {ErrorService} from '../../services/error.service';
+import 'rxjs/add/operator/takeWhile';
 
 @Component({
     selector: 'show-lists',
@@ -13,17 +14,18 @@ import {ErrorService} from '../../services/error.service';
     `]
 })
 
-export class ShowLists {
+export class ShowLists implements OnDestroy {
   @Input() word: WordPair;
   @Output() userlistChanged = new EventEmitter<any>();
   userLists: WordList[];
   isWordInList: boolean[] = [];
-  isVisible = false;
-  changesMade = false;
-  creatingNewList = false;
+  isVisible: boolean = false;
+  changesMade: boolean = false;
+  creatingNewList: boolean = false;
   listEditing: number;
   listsEdited: number[] = [];
   listsToggled: number[] = [];
+  componentActive: boolean = true;
 
   constructor(
     private wordlistService: WordlistService,
@@ -43,7 +45,10 @@ export class ShowLists {
   }
 
   updateUserLists(word: WordPair) {
-    this.wordlistService.getWordLists('user').subscribe(
+    this.wordlistService
+    .getWordLists('user')
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       lists => {
         this.userLists = lists;
         this._checkIfWordInLists();
@@ -118,7 +123,10 @@ export class ShowLists {
   }
 
   _saveNewList(list: WordList, cnt: number, callback) {
-    this.wordlistService.saveList(list).subscribe(
+    this.wordlistService
+    .saveList(list)
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       result  => {
         list._id = result.insertedIds[0];
         callback();
@@ -130,7 +138,10 @@ export class ShowLists {
   _saveEditedLists() {
     //Save edited lists (name changed)
     this.listsEdited.forEach(i => {
-      this.wordlistService.updateListName(this.userLists[i]).subscribe(
+      this.wordlistService
+      .updateListName(this.userLists[i])
+      .takeWhile(() => this.componentActive)
+      .subscribe(
         list  => {;},
         error => this.errorService.handleError(error)
       );
@@ -142,10 +153,12 @@ export class ShowLists {
     this.listsToggled.forEach(i => {
       //add list , list ID, word ID
       this.wordlistService
-        .updateWordList(this.isWordInList[i], this.userLists[i]._id, this.word._id).subscribe(
-          update => this.userlistChanged.emit(update),
-          error => this.errorService.handleError(error)
-        );
+      .updateWordList(this.isWordInList[i], this.userLists[i]._id, this.word._id)
+      .takeWhile(() => this.componentActive)
+      .subscribe(
+        update => this.userlistChanged.emit(update),
+        error => this.errorService.handleError(error)
+      );
     });
   }
 
@@ -153,4 +166,7 @@ export class ShowLists {
     this.creatingNewList = true;
   }
 
+  ngOnDestroy() {
+    this.componentActive = false;
+  }
 }

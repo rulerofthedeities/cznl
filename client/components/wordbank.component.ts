@@ -5,7 +5,7 @@ import {ErrorService} from '../services/error.service';
 import {AuthService} from '../services/auth.service';
 import {FilterWord} from '../models/filters.model';
 import {WordPair} from '../models/word.model';
-import {Subscription} from 'rxjs/Subscription';
+import 'rxjs/add/operator/takeWhile';
 
 @Component({
   template: `
@@ -63,8 +63,8 @@ export class WordBank implements OnInit, OnDestroy {
   words: WordPair[];
   selected: number; //shown on mouseover
   editing: number; //shown on clicked
-  subscription: Subscription;
   totalWords: number;
+  componentActive: boolean = true;
 
   constructor(
     private wordService: WordService,
@@ -75,7 +75,9 @@ export class WordBank implements OnInit, OnDestroy {
 
   ngOnInit() {
     //A new word is being created
-    this.subscription = this.wordService.newWordSource$.subscribe(
+    this.wordService.newWordSource$
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       isNewWord => {
         this.editing = null;
       }
@@ -114,17 +116,21 @@ export class WordBank implements OnInit, OnDestroy {
   }
 
   getWords(filter: FilterWord) {
-    this.wordService.getFilterWords(filter, this.maxWords).subscribe(
+    this.wordService.getFilterWords(filter, this.maxWords)
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       words => {this.words = words;},
       error => this.errorService.handleError(error)
     );
-    this.wordService.getCount(null, filter).subscribe(
+    this.wordService.getCount(null, filter)
+    .takeWhile(() => this.componentActive)
+    .subscribe(
       total => {this.totalWords = total;},
       error => this.errorService.handleError(error)
     );
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.componentActive = false;
   }
 }
