@@ -127,7 +127,9 @@ export class Tests implements OnInit, OnDestroy {
         if (testTpe === 'newtest') {
           this.backToFilter();
         } else {
-          this.cards = this.utilsService.shuffle(this.cards);
+          if (testTpe !== 'review') {
+            this.cards = this.utilsService.shuffle(this.cards);
+          }
           this.exerciseTpe = testTpe;
         }
       }
@@ -137,9 +139,7 @@ export class Tests implements OnInit, OnDestroy {
     .takeWhile(() => this.componentActive)
     .subscribe(
       test => {
-        console.log('test interrupted:', this.exerciseTpe);
         if (this.exerciseTpe==='test') {
-          console.log('show modal');
           this.showModalBox = true;
         } else if (this.exerciseTpe!=='') {
           this.backToFilter();
@@ -153,7 +153,6 @@ export class Tests implements OnInit, OnDestroy {
   }
 
   backToFilter() {
-    console.log('back to filter');
     this.showModalBox = false;
     this.exerciseTpe = '';
     this.started = false;
@@ -161,7 +160,6 @@ export class Tests implements OnInit, OnDestroy {
   }
 
   onStopConfirmed(stopOk: boolean) {
-    console.log('stop confirmed');
     if (stopOk) {
       this.backToFilter();
       //Save uncompleted result
