@@ -16,6 +16,7 @@ export interface Word {
   info?: string;
   aspect?:string;
   plural?:string;
+  diminutive?:string;
   total?:Total;
 }
 

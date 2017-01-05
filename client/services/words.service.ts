@@ -223,6 +223,7 @@ export class WordService {
       wordCz.genus = word['cz.genus'];
       wordNl.article = word['nl.article'];
       if (word['cz.plural']) {wordCz.plural = word['cz.plural'];}
+      if (word['cz.diminutive']) {wordCz.diminutive = word['cz.diminutive'];}
     }
     if (word.tpe === 'prep' || word.tpe === 'verb') {
       wordCz.case = word['cz.case'];

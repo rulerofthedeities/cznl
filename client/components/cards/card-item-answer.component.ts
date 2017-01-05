@@ -27,12 +27,21 @@ import {Word} from '../../models/word.model';
         </h2>
       </div>
       <div class="clearfix left">
-        <div *ngIf="cardData.otherwords"><span class="text-muted">ook:</span> <span class="text-info">{{cardData.otherwords}}</span></div>
-        <div *ngIf="cardData.plural"><span class="text-muted">meervoud:</span> <span class="text-primary">{{cardData.plural}}</span></div>
+        <div *ngIf="cardData.otherwords">
+          <span class="text-muted">ook:</span> <span class="text-info">{{cardData.otherwords}}</span>
+        </div>
+        <div *ngIf="cardData.diminutive">
+          <span class="text-muted">verkleinwoord:</span> <span class="text-primary">{{cardData.diminutive}}</span>
+        </div>
+        <div *ngIf="cardData.plural">
+          <span class="text-muted">meervoud:</span> <span class="text-primary">{{cardData.plural}}</span>
+        </div>
         <div *ngIf="cardData.firstpersonsingular">
           <span class="text-muted">1e p.:</span> <span class="text-primary">{{cardData.firstpersonsingular}}</span>
         </div>
-        <div *ngIf="cardData.info"><span class="text-muted">info:</span> <span class="text-primary">{{cardData.info}}</span></div>
+        <div *ngIf="cardData.info">
+          <span class="text-muted">info:</span> <span class="text-primary">{{cardData.info}}</span>
+        </div>
       </div>
         `,
   styleUrls: ['client/components/cards/card.component.css']
