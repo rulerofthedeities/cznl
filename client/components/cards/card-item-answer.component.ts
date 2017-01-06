@@ -5,7 +5,12 @@ import {Word} from '../../models/word.model';
   selector: 'card-answer',
   template: `
       <div class="wordwrapper center-block">
-        <div class="word" *ngIf="showPronoun">{{cardData.article}}
+        <div genusColor
+          [genus]="cardData.genus" 
+          [tpe]="tpe" 
+          class="word pronoun" 
+          *ngIf="showPronoun">
+          {{cardData.article}}
         </div>
         <h2 class="word">
           <span 

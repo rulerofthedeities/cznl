@@ -36,3 +36,7 @@ em{
 .case {font-size:24px;}
 .subword {font-size:14px;}
 .margin {height:8px;}
+.pronoun {
+  position: relative;
+  top:-1px;
+}

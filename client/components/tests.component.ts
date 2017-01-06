@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Filter} from './filter.component';
 import {WordPair} from '../models/word.model';
@@ -10,6 +10,7 @@ import {SettingsService} from '../services/settings.service';
 import {TestService} from '../services/test.service';
 import {UtilsService} from '../services/utils.service';
 import 'rxjs/add/operator/takeWhile';
+import {CardsTest} from './cards/cards-test.component';
 
 @Component({
   template:`
@@ -84,6 +85,8 @@ import 'rxjs/add/operator/takeWhile';
 })
 
 export class Tests implements OnInit, OnDestroy {
+  @ViewChild(CardsTest)
+  private cardsTest: CardsTest;
   maxWords: number = 20;
   listType: string = 'filter';
   started: boolean = false;
@@ -139,7 +142,9 @@ export class Tests implements OnInit, OnDestroy {
     .takeWhile(() => this.componentActive)
     .subscribe(
       test => {
-        if (this.exerciseTpe==='test') {
+        //Only show a modal box if this is a test and it is not finished (score view)
+        const isFinished = this.cardsTest && this.cardsTest.isFinished;
+        if (this.exerciseTpe==='test' && !isFinished) {
           this.showModalBox = true;
         } else if (this.exerciseTpe!=='') {
           this.backToFilter();
