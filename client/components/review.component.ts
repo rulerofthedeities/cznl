@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, OnDestroy} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {WordPair, Word} from '../models/word.model';
 import {AllSettings} from '../models/settings.model';
 import {SettingsService} from '../services/settings.service';
@@ -21,14 +21,13 @@ import 'rxjs/add/operator/takeWhile';
   `]
 })
 
-export class Review implements OnInit, OnDestroy {
+export class Review implements OnInit {
   @Input() words: WordPair[];
   selected: number;
   translation: Word = {word:'', article:'',genus:''};
   translationPf: Word = null;
   ready: boolean = false;
   settings: AllSettings;
-  componentActive: boolean = true;
 
   constructor (
     private settingsService: SettingsService,
@@ -42,7 +41,7 @@ export class Review implements OnInit, OnDestroy {
     }});
     this.settingsService
     .getAppSettings()
-    .takeWhile(() => this.componentActive)
+    .takeWhile(() => !this.ready)
     .subscribe(
       settings => {
         this.settings = settings.all;
@@ -88,9 +87,5 @@ export class Review implements OnInit, OnDestroy {
         this.translationPf.aspect = 'pf';
       }
     }
-  }
-
-  ngOnDestroy() {
-    this.componentActive = false;
   }
 }

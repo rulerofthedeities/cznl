@@ -25,7 +25,9 @@ import {Observable} from 'rxjs/Observable';
 })
 
 export class AppComponent implements OnInit {
-  constructor (private authService: AuthService) {}
+  constructor (
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     let timer = Observable.timer(30000, 3600000); //Start after 30 secs, then check every hour

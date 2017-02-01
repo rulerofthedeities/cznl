@@ -9,8 +9,9 @@ import {ErrorService} from '../services/error.service';
 import {SettingsService} from '../services/settings.service';
 import {TestService} from '../services/test.service';
 import {UtilsService} from '../services/utils.service';
-import 'rxjs/add/operator/takeWhile';
 import {CardsTest} from './cards/cards-test.component';
+import 'rxjs/add/operator/takeWhile';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   template:`
@@ -86,7 +87,6 @@ import {CardsTest} from './cards/cards-test.component';
 
 export class Tests implements OnInit, OnDestroy {
   @ViewChild(CardsTest)
-  private cardsTest: CardsTest;
   maxWords: number = 20;
   listType: string = 'filter';
   started: boolean = false;
@@ -94,6 +94,7 @@ export class Tests implements OnInit, OnDestroy {
   exerciseTpe: string = '';
   showModalBox: boolean = false;
   componentActive: boolean = true;
+  private cardsTest: CardsTest;
 
   constructor(
     private authService: AuthService,
@@ -110,18 +111,7 @@ export class Tests implements OnInit, OnDestroy {
     if (!this.authService.getUserAccess()) {
       this.authService.setUserAccess(this.route.snapshot.data['access']);
     }
-
-    this.settingsService
-    .getAppSettings()
-    .takeWhile(() => this.componentActive)
-    .subscribe(
-      settings => {
-        if (settings && settings.all) {
-          this.maxWords = settings.all.maxWords;
-        }
-      },
-      error => this.errorService.handleError(error)
-    );
+    this.getSettings();
 
     this.testService.start
     .takeWhile(() => this.componentActive)
@@ -146,11 +136,23 @@ export class Tests implements OnInit, OnDestroy {
         const isFinished = this.cardsTest && this.cardsTest.isFinished;
         if (this.exerciseTpe==='test' && !isFinished) {
           this.showModalBox = true;
-        } else if (this.exerciseTpe!=='') {
+        } else if (this.exerciseTpe !== '') {
           this.backToFilter();
         }
       }
     );
+  }
+
+  canDeactivate(): Observable<boolean>|boolean {
+    //Only show a modal box if this is a test and it is not finished (score view)
+    const isFinished = this.cardsTest && this.cardsTest.isFinished;
+    if (this.exerciseTpe === 'test' && !isFinished) {
+      this.showModalBox = true;
+      return this.testService.saveresults
+      .takeWhile(() => this.componentActive).first();
+    } else {
+      return true;
+    }
   }
 
   selectListType(tpe: string) {
@@ -158,6 +160,7 @@ export class Tests implements OnInit, OnDestroy {
   }
 
   backToFilter() {
+    this.getSettings();
     this.showModalBox = false;
     this.exerciseTpe = '';
     this.started = false;
@@ -166,7 +169,6 @@ export class Tests implements OnInit, OnDestroy {
 
   onStopConfirmed(stopOk: boolean) {
     if (stopOk) {
-      this.backToFilter();
       //Save uncompleted result
       this.testService.doSaveResults();
     } else {
@@ -216,8 +218,21 @@ export class Tests implements OnInit, OnDestroy {
     );
   }
 
+  getSettings() {
+    this.settingsService
+    .getAppSettings()
+    .takeWhile(() => this.componentActive)
+    .subscribe(
+      settings => {
+        if (settings && settings.all) {
+          this.maxWords = settings.all.maxWords;
+        }
+      },
+      error => this.errorService.handleError(error)
+    );
+  }
+
   ngOnDestroy() {
-    console.log('destroying test');
     this.componentActive = false;
   }
 }

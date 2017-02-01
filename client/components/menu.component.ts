@@ -27,7 +27,7 @@ import 'rxjs/add/operator/takeWhile';
         <li 
           *ngFor="let route of routes"
           routerLinkActive="active">
-          <a [routerLink]="route.path" *ngIf="showMenuItem(route.role)" (click)="stopTest()">
+          <a [routerLink]="route.path" *ngIf="showMenuItem(route.role)">
             <span 
               class="glyphicon glyphicon-{{route.glyph}}" 
               aria-hidden="true">
@@ -145,10 +145,6 @@ export class Menu implements OnInit, OnDestroy {
         );
       }
     }
-  }
-
-  stopTest() {
-    this.testService.doStop();
   }
 
   ngOnDestroy() {

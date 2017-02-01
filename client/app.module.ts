@@ -46,6 +46,7 @@ import {LevelNamePipe} from './pipes/level-name.pipe';
 import {AuthService} from './services/auth.service';
 import {AuthGuard} from './services/auth-guard.service';
 import {AuthRoleGuard} from './services/auth-role-guard.service';
+import {CanDeactivateGuard} from './services/candeactivate-guard.service';
 import {WordService} from './services/words.service';
 import {WordlistService} from './services/wordlists.service';
 import {SettingsService} from './services/settings.service';
@@ -76,6 +77,7 @@ import {ValidationService} from './services/validation.service';
     AuthService,
     AuthGuard,
     AuthRoleGuard,
+    CanDeactivateGuard,
     UtilsService,
     ValidationService,
     AccessResolver

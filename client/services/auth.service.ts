@@ -61,7 +61,7 @@ export class AuthService {
   }
 
   isLoggedIn() {
-    return tokenNotExpired('km-cznl.token');
+    return !!tokenNotExpired('km-cznl.token');
   }
 
   getUserName() {

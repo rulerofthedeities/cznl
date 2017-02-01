@@ -9,6 +9,8 @@ var express = require('express'),
     routes = require('./server/routes'),
     db = require('./server/db');
 
+process.on("uncaughtException", console.error);
+
 //config
 app.set('port', process.env.PORT || 4000);
 app.set('env', process.env.NODE_ENV || 'development');

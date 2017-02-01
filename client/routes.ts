@@ -1,3 +1,4 @@
+import {ModuleWithProviders} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {Tests} from './components/tests.component';
 import {WordBank} from './components/wordbank.component';
@@ -8,6 +9,7 @@ import {AuthMenu} from './components/auth/auth-menu.component';
 import {AuthGuard} from './services/auth-guard.service';
 import {AuthRoleGuard} from './services/auth-role-guard.service';
 import {AccessResolver} from './resolves/access.resolver';
+import {CanDeactivateGuard} from './services/candeactivate-guard.service';
 
 const routes: Routes = [
   {
@@ -20,6 +22,7 @@ const routes: Routes = [
     path: 'tests',
     component: Tests,
     canActivate: [AuthGuard],
+    canDeactivate: [CanDeactivateGuard],
     resolve: {access:AccessResolver}
   },
   {
@@ -49,4 +52,4 @@ const routes: Routes = [
   }
 ];
 
-export const routing = RouterModule.forRoot(routes);
+export const routing:ModuleWithProviders = RouterModule.forRoot(routes);
