@@ -46,6 +46,7 @@ export class AddToList implements OnChanges, OnDestroy {
   }
 
   showModalLists() {
+    event.stopPropagation();
     this.lists.updateUserLists(this.word);
   }
 

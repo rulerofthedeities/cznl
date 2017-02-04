@@ -77,6 +77,7 @@ export class ShowLists implements OnDestroy {
   }
 
   toggleInList(i: number) {
+    event.stopPropagation();
     this.isWordInList[i] = !this.isWordInList[i];
     this.listsToggled.push(i);
     this.changesMade = true;
@@ -95,6 +96,7 @@ export class ShowLists implements OnDestroy {
   }
 
   saveLists() {
+    event.stopPropagation();
     let toSaveLists: WordList[] = this.userLists.filter(list => !list._id);
     if (toSaveLists.length > 0) {
       this._saveNewLists(toSaveLists, () => {
