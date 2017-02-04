@@ -5,7 +5,8 @@
 <div 
   *ngIf="isVisible" 
   class="modal fade show in" 
-  id="myModal">
+  id="myModal"
+  (click)="stopPropagation()">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
