@@ -4,7 +4,6 @@ var mongo = require('mongodb'),
 
 var upsertProgress = function(db, options, data, callback) {
   const totalObj = {
-    'wordsTestedToday': data.total,
     'totalCorrect': data.answers.correct,
     'totalInCorrect': data.answers.incorrect,
     'totalAnswers': data.answers.incorrect + data.answers.correct,
@@ -19,7 +18,8 @@ var upsertProgress = function(db, options, data, callback) {
       {dt: day, userId:options.userId}, 
       {
         $setOnInsert:{dt: day, userId:options.userId},
-        $inc:totalObj
+        $set:totalObj,
+        $inc:{wordsTestedToday: data.total}
       },
       {upsert: true},
       function(err, result){
@@ -29,12 +29,13 @@ var upsertProgress = function(db, options, data, callback) {
 }
 
 var getAnswersData = function(db, options, callback) {
+  /*
   var pipeline = [
     {$match:{userId:options.userId}},
     {$group:{"_id": "$userId", "correct":{"$sum":"$total.correct"}, "incorrect":{"$sum":"$total.incorrect"}}},
     {$project:{"userId": "$_id", correct:1, incorrect:1, _id:0}}
   ];
-
+*/
   var pipeline = [
     {$match:{userId:options.userId}},
     {$project: {lastAnswerCorrect : {$cond : [ "$correct", 1, 0 ]}, lastAnswerFalse : {$cond : [ "$correct", 0, 1 ]}, total:1,userId:1}},
