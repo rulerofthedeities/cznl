@@ -86,7 +86,7 @@ import {Observable} from 'rxjs/Observable';
 })
 
 export class Tests implements OnInit, OnDestroy {
-  @ViewChild(CardsTest)
+  @ViewChild(CardsTest) cardsTest: CardsTest;
   maxWords: number = 20;
   listType: string = 'filter';
   started: boolean = false;
@@ -94,7 +94,6 @@ export class Tests implements OnInit, OnDestroy {
   exerciseTpe: string = '';
   showModalBox: boolean = false;
   componentActive: boolean = true;
-  private cardsTest: CardsTest;
 
   constructor(
     private authService: AuthService,
@@ -124,20 +123,6 @@ export class Tests implements OnInit, OnDestroy {
             this.cards = this.utilsService.shuffle(this.cards);
           }
           this.exerciseTpe = testTpe;
-        }
-      }
-    );
-
-    this.testService.stop
-    .takeWhile(() => this.componentActive)
-    .subscribe(
-      test => {
-        //Only show a modal box if this is a test and it is not finished (score view)
-        const isFinished = this.cardsTest && this.cardsTest.isFinished;
-        if (this.exerciseTpe==='test' && !isFinished) {
-          this.showModalBox = true;
-        } else if (this.exerciseTpe !== '') {
-          this.backToFilter();
         }
       }
     );
