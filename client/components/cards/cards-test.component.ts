@@ -78,12 +78,14 @@ export class CardsTest implements OnInit, OnDestroy {
     .subscribe(
       save => {
         //Test interrupted - save partial progress
-        if (this.cardsIndex > 0) {
+        if (this.cardsIndex > 1) {
+          let progressSaved = false;
+          console.log('updating progress', this.cards);
           this.progressService
-          .updateTotalsForToday(this.cardsIndex - 1)
-          .takeWhile(() => this.componentActive)
+          .updateTotalsForToday(this.cards.splice(0, this.cardsIndex - 1))
+          .takeWhile(() => !progressSaved)
           .subscribe(
-            progress => {;},
+            progress => {progressSaved = true;},
             error => {this.errorService.handleError(error);}
           );
         }
@@ -113,8 +115,9 @@ export class CardsTest implements OnInit, OnDestroy {
       this.currentCard = null;
       this.isFinished = true;
       //Save user statistics
+      console.log('test finished', this.cards);
       this.progressService
-      .updateTotalsForToday(this.cards.length)
+      .updateTotalsForToday(this.cards)
       .takeWhile(() => this.componentActive)
       .subscribe(
         progress => {;},

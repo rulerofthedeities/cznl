@@ -33,6 +33,7 @@ import {FieldMessages} from './components/msg/field-messages.component';
 import {AuthMenu} from './components/auth/auth-menu.component';
 import {SignUp} from './components/auth/sign-up.component';
 import {SignIn} from './components/auth/sign-in.component';
+import {Progress} from './components/progress.component';
 import {ModalConfirm} from './components/modals/modal-confirm.component';
 
 import {GetFilterValue} from './directives/get-filter-value.directive';
@@ -114,6 +115,7 @@ import {ValidationService} from './services/validation.service';
     AuthMenu,
     SignIn,
     SignUp,
+    Progress,
     ModalConfirm
   ],
   bootstrap: [AppComponent]

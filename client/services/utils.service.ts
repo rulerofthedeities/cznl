@@ -16,6 +16,31 @@ export class UtilsService {
     return array;
   }
 
+  getDaysNames(tpe: string = 'long') {
+    const days = {
+      long:[
+        'maandag',
+        'dinsdag',
+        'woensdag',
+        'donderdag',
+        'vrijdag',
+        'zaterdag',
+        'zondag'
+      ],
+      short: [
+        'ma',
+        'di',
+        'wo',
+        'do',
+        'vr',
+        'za',
+        'zo'
+      ]
+    };
+
+    return days[tpe];
+  }
+
   private getRandom(floor:number, ceiling:number) {
     return Math.floor(Math.random() * (ceiling - floor + 1)) + floor;
   }

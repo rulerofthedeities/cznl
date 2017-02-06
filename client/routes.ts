@@ -3,6 +3,7 @@ import {Routes, RouterModule} from '@angular/router';
 import {Tests} from './components/tests.component';
 import {WordBank} from './components/wordbank.component';
 import {AppSettings} from './components/settings.component';
+import {Progress} from './components/progress.component';
 import {SignUp} from './components/auth/sign-up.component';
 import {SignIn} from './components/auth/sign-in.component';
 import {AuthMenu} from './components/auth/auth-menu.component';
@@ -14,6 +15,7 @@ import {CanDeactivateGuard} from './services/candeactivate-guard.service';
 const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
     component: Tests,
     canActivate: [AuthGuard],
     resolve: {access:AccessResolver}
@@ -33,6 +35,12 @@ const routes: Routes = [
   {
     path: 'settings',
     component: AppSettings,
+    canActivate: [AuthGuard],
+    resolve: {access:AccessResolver}
+  },
+  {
+    path: 'progress',
+    component: Progress,
     canActivate: [AuthGuard],
     resolve: {access:AccessResolver}
   },

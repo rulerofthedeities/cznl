@@ -44,6 +44,7 @@ module.exports.initialize = function(app, router) {
   router.get('/lists/user', userlists.load);
   router.get('/lists/auto', autolists.load);
   router.get('/cats', words.cats);
+  router.get('/progress', progress.getStats);
 
   router.put('/words', words.update);
   router.put('/settings', settings.update);

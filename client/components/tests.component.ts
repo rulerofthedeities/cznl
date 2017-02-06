@@ -131,6 +131,7 @@ export class Tests implements OnInit, OnDestroy {
   canDeactivate(): Observable<boolean>|boolean {
     //Only show a modal box if this is a test and it is not finished (score view)
     const isFinished = this.cardsTest && this.cardsTest.isFinished;
+    console.log('isfinished', this.cardsTest, isFinished);
     if (this.exerciseTpe === 'test' && !isFinished) {
       this.showModalBox = true;
       return this.testService.saveresults
