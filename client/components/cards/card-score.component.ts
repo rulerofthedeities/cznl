@@ -10,6 +10,7 @@ import {Component, Input, OnInit} from '@angular/core';
       <test-buttons
         [test]="true"
         [review]="true"
+        [practise]="true"
         [back]="true"
         tpe="test"
       ></test-buttons>

@@ -126,12 +126,27 @@ export class Tests implements OnInit, OnDestroy {
         }
       }
     );
+
+    this.testService.stop
+    .takeWhile(() => this.componentActive)
+    .subscribe(
+      () => {
+        this.showModalBox = true;
+        this.testService.saveresults
+        .takeWhile(() => this.componentActive)
+        .subscribe(
+          () => {
+            //Go back to review
+            this.testService.doStart('review');
+          }
+        );
+      }
+    );
   }
 
   canDeactivate(): Observable<boolean>|boolean {
     //Only show a modal box if this is a test and it is not finished (score view)
     const isFinished = this.cardsTest && this.cardsTest.isFinished;
-    console.log('isfinished', this.cardsTest, isFinished);
     if (this.exerciseTpe === 'test' && !isFinished) {
       this.showModalBox = true;
       return this.testService.saveresults
@@ -157,9 +172,8 @@ export class Tests implements OnInit, OnDestroy {
     if (stopOk) {
       //Save uncompleted result
       this.testService.doSaveResults();
-    } else {
-      this.showModalBox = false;
     }
+    this.showModalBox = false;
   }
 
   getWordsFromFilter(filter: FilterModel) {

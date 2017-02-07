@@ -161,6 +161,7 @@ export class CardItem implements OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
+    event.stopPropagation();
     this.componentActive = false;
   }
 }

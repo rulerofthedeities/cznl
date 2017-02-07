@@ -9,8 +9,8 @@ import 'rxjs/add/operator/takeWhile';
   selector: 'review',
   templateUrl: '/client/components/review.component.html',
   styles:[`
-  .word {font-size:28px;}
-  .translation .word {font-size:36px;}
+  .word {font-size:20px;}
+  .translation .word {font-size:24px;}
   .genus,.subword {font-size:14px;}
   li{height:80px;}
   .translation .list-group-item{border:0;}

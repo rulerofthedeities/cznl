@@ -33,6 +33,9 @@ import 'rxjs/add/operator/takeWhile';
         [settings]="settings"
         (cardAnswered)="onCardAnswered($event)">
       </card-item>
+      <div class="btn btn-default" (click)="quit()" *ngIf="!isFinished">
+        Quit
+      </div>
       <card-score 
         *ngIf="isFinished"
         [correct]="correct"
@@ -115,7 +118,6 @@ export class CardsTest implements OnInit, OnDestroy {
       this.currentCard = null;
       this.isFinished = true;
       //Save user statistics
-      console.log('test finished', this.cards);
       this.progressService
       .updateTotalsForToday(this.cards)
       .takeWhile(() => this.componentActive)
@@ -143,6 +145,10 @@ export class CardsTest implements OnInit, OnDestroy {
     this.progress = 0;
     this.correct = 0;
     this.cardsIndex = 0;
+  }
+
+  quit() {
+    this.testService.doStop();
   }
 
   ngOnDestroy() {
