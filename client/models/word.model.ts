@@ -3,6 +3,8 @@ export enum Direction {Left = -1, Right = 1};
 export interface Total {
   correct?: number;
   incorrect?: number;
+  new?: number;
+  review?: number;
 }
 
 export interface Word {
@@ -24,6 +26,7 @@ export interface Answer {
   _id: string;
   wordId?: string;
   correct?: boolean;
+  review?: boolean;
   total?: Total;
 }
 

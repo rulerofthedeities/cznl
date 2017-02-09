@@ -6,10 +6,8 @@ var upsertProgress = function(db, options, data, callback) {
   const totalObj = {
     'totalCorrect': data.answers.correct,
     'totalInCorrect': data.answers.incorrect,
-    //'totalAnswers': data.answers.incorrect + data.answers.correct,
     'totalLastCorrect': data.answers.lastCorrect,
-    'totalLastInCorrect': data.answers.lastIncorrect,
-    //'totalDifferentWords': data.answers.lastCorrect + data.answers.lastIncorrect,
+    'totalLastInCorrect': data.answers.lastIncorrect
   };
   const day = moment().format('YYYY-MM-DD');
 
@@ -23,6 +21,8 @@ var upsertProgress = function(db, options, data, callback) {
           wordsTestedToday: data.total,
           wordsCorrectToday: data.correct,
           wordsInCorrectToday: data.incorrect,
+          wordsReviewedToday: data.review,
+          wordsNewToday: data.new
         }
       },
       {upsert: true},

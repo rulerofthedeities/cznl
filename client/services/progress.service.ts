@@ -22,7 +22,9 @@ export class ProgressService {
     const obj = {
       total: cards.length,
       correct: cards.filter(card => card.answer.correct === true).length,
-      incorrect: cards.filter(card => card.answer.correct === false).length
+      incorrect: cards.filter(card => card.answer.correct !== true).length,
+      review: cards.filter(card => card.answer.review === true).length,
+      new: cards.filter(card => card.answer.review !== true).length
     };
 
     return this.http

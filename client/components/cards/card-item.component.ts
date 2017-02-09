@@ -114,7 +114,7 @@ export class CardItem implements OnChanges, OnDestroy {
     .subscribe(
       answer => {
         this.cardAnswered.emit(correct);
-        this.updateTotals(correct);
+        this.updateTotals(correct, answer.upserted);
         this.turnCard(true);
       },
       error => this.errorService.handleError(error)
@@ -150,14 +150,22 @@ export class CardItem implements OnChanges, OnDestroy {
     };
   }
 
-  updateTotals(correct: boolean) {
+  updateTotals(correct: boolean, upserted: Array<Object>) {
     if (!this.card.answer.total) {
-      this.card.answer.total = {correct:0, incorrect:0};
+      this.card.answer.total = {
+        correct: 0,
+        incorrect: 0
+      };
     }
     if (correct) {
       this.card.answer.total.correct++;
     } else {
       this.card.answer.total.incorrect++;
+    }
+    if (upserted) {
+      this.card.answer.review = false;
+    } else {
+      this.card.answer.review = true;
     }
   }
 
