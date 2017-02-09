@@ -108,14 +108,15 @@ export class CardItem implements OnChanges, OnDestroy {
 
   answerCard(event: MouseEvent, correct: boolean) {
     event.stopPropagation();
-    this.cardAnswered.emit(correct);
-    this.updateTotals(correct);
-    this.turnCard(true);
     this.wordService
     .saveAnswer(this.card._id, correct)
     .takeWhile(() => this.componentActive)
     .subscribe(
-      answer => {;},
+      answer => {
+        this.cardAnswered.emit(correct);
+        this.updateTotals(correct);
+        this.turnCard(true);
+      },
       error => this.errorService.handleError(error)
     );
   }

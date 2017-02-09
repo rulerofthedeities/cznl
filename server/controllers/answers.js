@@ -20,6 +20,7 @@ var upsertAnswer = function(db, options, data, callback) {
       },
       {upsert: true},
       function(err, result){
+        console.log('answer upserted');
         callback(err, result);
       }
     )
