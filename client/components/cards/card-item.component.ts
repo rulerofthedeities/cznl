@@ -113,6 +113,7 @@ export class CardItem implements OnChanges, OnDestroy {
     .takeWhile(() => this.componentActive)
     .subscribe(
       answer => {
+        console.log('answer', answer);
         this.cardAnswered.emit(correct);
         this.updateTotals(correct, answer.upserted);
         this.turnCard(true);

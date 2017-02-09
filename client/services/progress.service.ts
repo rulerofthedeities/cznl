@@ -19,6 +19,11 @@ export class ProgressService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + token);
 
+    console.log(cards,
+      cards.filter(card => card.answer.review === true),
+      cards.filter(card => card.answer.review !== true),
+      cards.filter(card => card.answer.review === false));
+
     const obj = {
       total: cards.length,
       correct: cards.filter(card => card.answer.correct === true).length,

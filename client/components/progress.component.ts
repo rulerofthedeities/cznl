@@ -4,14 +4,10 @@ import {ProgressService} from '../services/progress.service';
 import {ErrorService} from '../services/error.service';
 import {AuthService} from '../services/auth.service';
 import {UtilsService} from '../services/utils.service';
-import {ProgressStats} from '../models/stats.model';
+import {ProgressStats, CalendarDay} from '../models/stats.model';
 import 'rxjs/add/operator/takeWhile';
 import * as moment from 'moment';
 
-interface CalendarDay {
-  day: string;
-  currentMonth: boolean;
-}
 
 @Component({
   template: `
@@ -24,7 +20,10 @@ interface CalendarDay {
     </div>
     <div class="row" *ngFor="let row of rows">
       <div *ngFor="let col of cols;" class="col-md-1">
-        <span [ngClass]="{'diffMonth': !calendarDays[row * 7 + col].currentMonth}">{{calendarDays[row * 7 + col].day}}</span>
+        <span [ngClass]="{'diffMonth': !calendarDays[row * 7 + col].currentMonth}">
+          {{calendarDays[row * 7 + col].day}}
+        </span>
+        {{calendarDays[row * 7 + col].stats.wordsTestedToday}}
       </div>
       <div class="col-md-5">extra</div>
     </div>
@@ -39,7 +38,7 @@ interface CalendarDay {
 
 export class Progress implements OnInit, OnDestroy {
   componentActive: boolean = true;
-  stats: ProgressStats;
+  stats: ProgressStats[];
   cols: number[];
   rows: number[];
   dayNames: string[];
@@ -58,7 +57,6 @@ export class Progress implements OnInit, OnDestroy {
     if (!this.authService.getUserAccess()) {
       this.authService.setUserAccess(this.route.snapshot.data['access']);
     }
-    this.buildCalendar();
     this.fetchStats();
   }
 
@@ -69,9 +67,9 @@ export class Progress implements OnInit, OnDestroy {
 
     //get  first day of the month
     const date = new Date(),
-        y = date.getFullYear(),
-        m = date.getMonth();
-    const firstDay = new Date(y, m, 1);
+          y = date.getFullYear(),
+          m = date.getMonth(),
+          firstDay = new Date(y, m, 1);
     //get first monday of that week
     const firstMonday = moment(firstDay).startOf('isoWeek');
     let calendarDay = moment(firstMonday);
@@ -79,21 +77,26 @@ export class Progress implements OnInit, OnDestroy {
     for (let indx = 0; indx < 35; indx++) {
       this.calendarDays[indx] = {
         day: calendarDay.format('DD'),
-        currentMonth: calendarDay.month() === moment(firstDay).month()
+        currentMonth: calendarDay.month() === moment(firstDay).month(),
+        stats: this.stats && this.stats[calendarDay.format('YYYY-MM-DD')] ? this.stats[calendarDay.format('YYYY-MM-DD')] : ''
       };
       calendarDay = calendarDay.add(1, 'd');
     }
   }
 
   fetchStats() {
-    let statsFetched = false;
     this.progressService
     .getProgressStats()
     .takeWhile(() => this.componentActive)
     .subscribe(
       stats => {
-        this.stats = stats;
-        statsFetched = true;
+        let arr: Array<ProgressStats> = Object.values(stats);
+        let dailyStats: ProgressStats[] = [];
+        arr.forEach(day => {
+          dailyStats[day.dt.toString()] = day;
+        });
+        this.stats = dailyStats;
+        this.buildCalendar();
       },
       error => this.errorService.handleError(error)
     );

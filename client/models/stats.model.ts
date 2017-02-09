@@ -1,5 +1,5 @@
 export interface ProgressStats {
-  dt: Date;
+  dt: string;
   totalCorrect: number;
   totalInCorrect: number;
   totalLastCorrect: number;
@@ -7,4 +7,12 @@ export interface ProgressStats {
   wordsTestedToday: number;
   wordsCorrectToday: number;
   wordsInCorrectToday: number;
+  wordsNewToday: number;
+  wordsReviewedToday: number;
+}
+
+export interface CalendarDay {
+  day: string;
+  currentMonth: boolean;
+  stats: ProgressStats;
 }
