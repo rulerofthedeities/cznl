@@ -82,7 +82,7 @@ var getWordIdsAbovePercentage = function(db, filter, callback) {
 
 var hasAnswerById = function(db, id, userId, callback) {
   db.collection('answers')
-    .count({wordId:id,userId:userId}, function(err, count) {
+    .count({userId:userId, wordId:id}, function(err, count) {
       callback(err, count);
   })
 }

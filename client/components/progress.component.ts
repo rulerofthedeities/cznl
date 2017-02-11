@@ -8,7 +8,6 @@ import {ProgressStats, CalendarDay} from '../models/stats.model';
 import 'rxjs/add/operator/takeWhile';
 import * as moment from 'moment';
 
-
 @Component({
   template: `
     <h1>Progress</h1>

@@ -7,6 +7,7 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     bearerToken  = require('express-bearer-token'),
     routes = require('./server/routes'),
+    indexes = require('./server/indexes'),
     db = require('./server/db');
 
 process.on("uncaughtException", console.error);
@@ -49,7 +50,9 @@ app.use(function (req, res, next) {
 
 //start server
 db.connect(function() {
-  app.listen(app.get('port'), function() { 
-    console.log('Server up: http://localhost:' + app.get('port'));
-  });
+  indexes.create(function() {
+    app.listen(app.get('port'), function() { 
+      console.log('Server up: http://localhost:' + app.get('port'));
+    })
+  })
 });

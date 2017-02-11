@@ -50,10 +50,10 @@ var getAnswersData = function(db, options, callback) {
 
 var loadProgress = function(db, options, callback) {
   //today
-  const day = moment().subtract(31, 'd').format('YYYY-MM-DD');
+  const day = moment().subtract(35, 'd').format('YYYY-MM-DD');
   db.collection('progress')
     .find({userId:options.userId, dt: {$gte:day}}, {_id:0, userId:0})
-    .limit(31)
+    .limit(35)
     .sort({dt:1})
     .toArray(function(err, docs) {
       callback(err, docs);
