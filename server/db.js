@@ -10,11 +10,12 @@ exports.connect = function(callback){
     server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } },
     replset: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } }
   };
-  mongoClient.connect(url, options, function(err, db) {
+  mongoClient.connect(url, function(err, db) {
     if (err){
       console.log("Error connecting to mongodb");
       process.exit(1);
     } else {
+      mongoClient.options = options;
       console.log("Connected to mongodb");
       mongo.DB = db;
       callback();

@@ -10,10 +10,10 @@ var path = require("path"),
     response = require('./response');
 
 module.exports.initialize = function(app, router) {
-  var home = path.resolve(__dirname + '/../public/index.html');
+  var home = path.resolve(__dirname + '/../dist/index.html');
 
-  router.get('/', function(request, response){
-    response.sendFile(home);
+  router.get('/', function(req, res){
+    res.sendFile(home);
   });
 
   router.use(['/user/refresh', '/user/signin'], function(req, res, next) {
@@ -33,7 +33,6 @@ module.exports.initialize = function(app, router) {
       });
     });
   });
-
 
   router.patch('/user/refresh', users.refreshToken);
   router.get('/user/access', users.getAccess);
@@ -57,5 +56,4 @@ module.exports.initialize = function(app, router) {
   router.post('/lists/add', userlists.save);
 
   app.use('/api/', router);
-
 };

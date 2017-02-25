@@ -91,7 +91,7 @@ module.exports = {
   getAccess: function(req, res) {
     var userId = mongo.ObjectID(req.decoded.user._id);
     mongo.DB.collection('users').findOne({_id:userId}, function (err, user) {
-      response.handleError(err, res, 500, 'Error fetching user access', function(){
+      response.handleError(err, res, 500, 'Error fetching user access', function() {
         response.handleSuccess(res, user.access, 200, 'Fetched user access');
       });
     });
