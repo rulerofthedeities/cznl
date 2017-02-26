@@ -52,7 +52,7 @@ import {Word} from '../../models/word.model';
   styleUrls: ['./card.component.css']
 })
 
-export class CardItemAnswer {
+export class CardItemAnswerComponent {
   @Input() cardData: Word;
   @Input() tpe: string;
   @Input() showPronoun: boolean;

@@ -9,7 +9,7 @@ import {ErrorService} from '../../services/error.service';
   selector: 'card-item-all',
   template: `
   <div class="card center-block"
-    [@cardState]="state" (click)="turnCard()">
+    (click)="turnCard()">
     <add-to-list [word]="card"></add-to-list>
 
 <!-- Question -->
@@ -17,8 +17,7 @@ import {ErrorService} from '../../services/error.service';
     <div class="question text-center">
       <card-question 
         [cardData]="getQuestionData()"
-        [tpe]="card.tpe"
-        [isPerfective]="card.perfective">
+        [tpe]="card.tpe">
       </card-question>
     </div>
 
@@ -41,7 +40,7 @@ import {ErrorService} from '../../services/error.service';
 
 <!-- Perfective aspect -->
 
-    <div class="clearfix" *ngIf="this.cardDataPf && !card.perfective">
+    <div class="clearfix" *ngIf="hasPerfective()">
       <card-answer 
         [cardData]="getAnswerData(true)"
         [tpe]="card.tpe"
@@ -52,7 +51,7 @@ import {ErrorService} from '../../services/error.service';
 <!-- Buttons -->
     
     <button class="btn btn-primary" (click)="goBack()">
-      <span class="fa fa-chevron-left"></span>Back
+      <span class="fa fa-chevron-left"></span> Back
     </button>
 
   </div>
@@ -83,12 +82,12 @@ import {ErrorService} from '../../services/error.service';
   ]
 })
 
-export class CardItemAll {
+export class CardItemAllComponent {
   @Input() card: WordPair;
   @Input() settings: AllSettings;
   @Input() test: string;
   @Output() cardTurned = new EventEmitter<number>();
-  iseven = true;
+  iseven = true; // Force refresh of data
 
   constructor(
     private wordService: WordService,
@@ -112,12 +111,25 @@ export class CardItemAll {
   }
 
   getAnswerData(perfective: boolean) {
-    if (perfective) {
-      if (this.settings.lanDir === 'cznl') {
-          return this.card.czP;
-      }
+    let cardData = null,
+        cardDataPf = null;
+    if (this.settings.lanDir === 'cznl') {
+      cardData = this.card.nl;
     } else {
-      return this.settings.lanDir === 'cznl' ? this.card.nl : this.card.cz;
+      cardData = this.card.cz;
+      if (this.card.tpe === 'verb') {
+        cardData.aspect = 'impf';
+        cardDataPf = this.card.perfective ? this.card.cz : this.card.czP;
+        if (cardDataPf || this.card.perfective) {
+          cardDataPf.aspect = 'pf';
+        }
+      }
     }
+
+    return perfective ? cardDataPf : cardData;
+  }
+
+  hasPerfective() {
+    return !!this.card.czP;
   }
 }

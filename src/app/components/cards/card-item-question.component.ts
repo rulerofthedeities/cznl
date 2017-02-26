@@ -20,16 +20,12 @@ import {Word} from '../../models/word.model';
     <div class="text-primary" *ngIf="cardData.otherwords"><span class="text-muted">ook:</span> {{cardData.otherwords}}</div>
     <div class="text-primary" *ngIf="cardData.hint"><span class="text-muted">hint:</span> {{cardData.hint}}</div>
     <div class="text-primary" *ngIf="cardData.info">({{cardData.info}})</div>
-    <div class="text-primary" *ngIf="!isPerfective && cardDataPf && cardDataPf.word">
-      <span class="text-muted">Perfectief:</span> {{cardDataPf.word}}
-    </div>
     `,
   styleUrls: ['./card.component.css']
 })
 
-export class CardItemQuestion {
+export class CardItemQuestionComponent {
   @Input() cardData: Word;
   @Input() cardDataPf: Word;
   @Input() tpe: string;
-  @Input() isPerfective: boolean;
 }

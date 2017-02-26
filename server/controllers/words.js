@@ -182,6 +182,7 @@ var buildFilter = function(options) {
     if (options.cat != "all") {
       filterArr.push('"categories":"' + options.cat + '"');
     } 
+    //filterArr.push('"perfective":true');
     filter = JSON.parse('{' + filterArr.join(',') + '}');
   }
   return filter;

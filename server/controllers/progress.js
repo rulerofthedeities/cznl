@@ -33,7 +33,6 @@ var upsertProgress = function(db, options, data, callback) {
 }
 
 var getAnswersData = function(db, options, callback) {
-        console.log('fetch answers data');
   var pipeline = [
     {$match:{userId:options.userId}},
     {$project: {lastAnswerCorrect : {$cond : [ "$correct", 1, 0 ]}, lastAnswerFalse : {$cond : [ "$correct", 0, 1 ]}, total:1,userId:1}},

@@ -18,8 +18,7 @@ import 'rxjs/add/operator/takeWhile';
       <div *ngIf="isQuestion" class="question text-center">
         <card-question 
           [cardData]="cardData"
-          [tpe]="card.tpe"
-          [isPerfective]="card.perfective">
+          [tpe]="card.tpe">
         </card-question>
       </div>  
 
@@ -76,7 +75,7 @@ import 'rxjs/add/operator/takeWhile';
   ]
 })
 
-export class CardItem implements OnChanges, OnDestroy {
+export class CardItemComponent implements OnChanges, OnDestroy {
   @Input() card: WordPair;
   @Input() settings: AllSettings;
   @Input() test: string;
@@ -133,7 +132,7 @@ export class CardItem implements OnChanges, OnDestroy {
       } else {
         this.cardData = this.card.cz;
         if (this.card.tpe === 'verb') {
-          this.cardData.aspect = 'impf';
+          this.cardData.aspect =  this.card.perfective ? 'pf' : 'impf';
           this.cardDataPf = this.card.czP;
           if (this.cardDataPf) {
             this.cardDataPf.aspect = 'pf';

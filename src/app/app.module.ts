@@ -21,10 +21,10 @@ import {WordLists} from './components/wordlists/wordlists.component';
 import {AddToList} from './components/wordlists/add-to-list.component';
 import {EditList} from './components/wordlists/edit-list.component';
 import {ShowLists} from './components/wordlists/show-lists.component';
-import {CardItem} from './components/cards/card-item.component';
-import {CardItemAll} from './components/cards/card-item-all.component';
-import {CardItemQuestion} from './components/cards/card-item-question.component';
-import {CardItemAnswer} from './components/cards/card-item-answer.component';
+import {CardItemComponent} from './components/cards/card-item.component';
+import {CardItemAllComponent} from './components/cards/card-item-all.component';
+import {CardItemQuestionComponent} from './components/cards/card-item-question.component';
+import {CardItemAnswerComponent} from './components/cards/card-item-answer.component';
 import {CardScore} from './components/cards/card-score.component';
 import {ScoreBar} from './components/cards/score-bar.component';
 import {InfoMessage} from './components/msg/info-message.component';
@@ -100,10 +100,10 @@ import {ValidationService} from './services/validation.service';
     AddToList,
     EditList,
     ShowLists,
-    CardItem,
-    CardItemAll,
-    CardItemQuestion,
-    CardItemAnswer,
+    CardItemComponent,
+    CardItemAllComponent,
+    CardItemQuestionComponent,
+    CardItemAnswerComponent,
     CardScore,
     ScoreBar,
     InfoMessage,
