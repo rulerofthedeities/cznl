@@ -35,6 +35,7 @@ import {SignUp} from './components/auth/sign-up.component';
 import {SignIn} from './components/auth/sign-in.component';
 import {Progress} from './components/progress.component';
 import {ModalConfirm} from './components/modals/modal-confirm.component';
+import {PageNotFoundComponent} from './components/page-not-found.component';
 
 import {GetFilterValue} from './directives/get-filter-value.directive';
 import {GetKeyPress} from './directives/get-key-pressed.directive';
@@ -116,7 +117,8 @@ import {ValidationService} from './services/validation.service';
     SignIn,
     SignUp,
     Progress,
-    ModalConfirm
+    ModalConfirm,
+    PageNotFoundComponent
   ],
   bootstrap: [AppComponent]
 })

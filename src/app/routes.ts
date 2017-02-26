@@ -7,6 +7,7 @@ import {Progress} from './components/progress.component';
 import {SignUp} from './components/auth/sign-up.component';
 import {SignIn} from './components/auth/sign-in.component';
 import {AuthMenu} from './components/auth/auth-menu.component';
+import {PageNotFoundComponent} from './components/page-not-found.component';
 import {AuthGuard} from './services/auth-guard.service';
 import {AuthRoleGuard} from './services/auth-role-guard.service';
 import {AccessResolver} from './resolves/access.resolver';
@@ -53,9 +54,7 @@ const routes: Routes = [
   {
     // To be replaced with Not found component
     path: '**',
-    component: Tests,
-    canActivate: [AuthGuard],
-    resolve: {access: AccessResolver}
+    component: PageNotFoundComponent
   }
 ];
 
