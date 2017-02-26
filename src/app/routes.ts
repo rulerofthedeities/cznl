@@ -22,6 +22,13 @@ const routes: Routes = [
     resolve: {access: AccessResolver}
   },
   {
+    path: 'tests',
+    component: Tests,
+    canActivate: [AuthGuard],
+    canDeactivate: [CanDeactivateGuard],
+    resolve: {access: AccessResolver}
+  },
+  {
     path: 'words',
     component: WordBank,
     canActivate: [AuthGuard, AuthRoleGuard]
