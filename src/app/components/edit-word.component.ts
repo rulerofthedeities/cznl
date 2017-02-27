@@ -36,7 +36,7 @@ import 'rxjs/add/operator/takeWhile';
   `]
 })
 
-export class EditWord implements OnInit, OnDestroy {
+export class EditWordComponent implements OnInit, OnDestroy {
   @Output() updatedWord = new EventEmitter<WordPair>();
   wordForm: FormGroup;
   filters: Object;

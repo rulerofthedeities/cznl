@@ -21,7 +21,7 @@ import 'rxjs/add/operator/takeWhile';
   `]
 })
 
-export class Review implements OnInit {
+export class ReviewComponent implements OnInit {
   @Input() words: WordPair[];
   selected: number;
   translation: Word = {word: '', article: '', genus: ''};

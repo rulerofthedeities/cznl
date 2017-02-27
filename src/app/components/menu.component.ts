@@ -85,7 +85,7 @@ import 'rxjs/add/operator/takeWhile';
   `]
 })
 
-export class Menu implements OnInit, OnDestroy {
+export class MenuComponent implements OnInit, OnDestroy {
   url: string;
   routes: Object[];
   access = new Access();

@@ -38,6 +38,7 @@ export class CardItemPractiseComponent {
   getQuestionData() {
     return this.wordService.getCardData({
       card: this.card,
+      settings: this.settings,
       isQuestion: true,
       perfective: false
     });

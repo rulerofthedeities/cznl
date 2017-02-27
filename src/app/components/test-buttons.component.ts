@@ -41,7 +41,7 @@ import {TestService} from '../services/test.service';
   `]
 })
 
-export class TestButtons {
+export class TestButtonsComponent {
   @Input() back = false;
   @Input() test = false;
   @Input() review = false;

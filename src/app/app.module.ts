@@ -7,20 +7,21 @@ import {TooltipModule} from 'ng2-tooltip';
 import {routing} from './routes';
 
 import {AppComponent} from './components/app.component';
-import {WordBank} from './components/wordbank.component';
-import {AppSettings} from './components/settings.component';
-import {Menu} from './components/menu.component';
+import {WordBankComponent} from './components/wordbank.component';
+import {AppSettingsComponent} from './components/settings.component';
+import {MenuComponent} from './components/menu.component';
 import {TestsComponent} from './components/tests.component';
 import {FilterComponent} from './components/filter.component';
-import {Review} from './components/review.component';
-import {TestButtons} from './components/test-buttons.component';
-import {EditWord} from './components/edit-word.component';
+import {ReviewComponent} from './components/review.component';
+import {ProgressComponent} from './components/progress.component';
+import {TestButtonsComponent} from './components/test-buttons.component';
+import {EditWordComponent} from './components/edit-word.component';
 import {WordListsComponent} from './components/wordlists/wordlists.component';
 import {AddToList} from './components/wordlists/add-to-list.component';
 import {EditList} from './components/wordlists/edit-list.component';
 import {ShowLists} from './components/wordlists/show-lists.component';
 import {CardItemTestComponent} from './components/cards/card-item-test.component';
-import {CardItemPractiseComponent} from './components/cards/card-item-all.component';
+import {CardItemPractiseComponent} from './components/cards/card-item-practise.component';
 import {CardItemQuestionComponent} from './components/cards/card-item-question.component';
 import {CardItemAnswerComponent} from './components/cards/card-item-answer.component';
 import {CardsPractiseComponent} from './components/cards/cards-practise.component';
@@ -33,7 +34,6 @@ import {FieldMessages} from './components/msg/field-messages.component';
 import {AuthMenu} from './components/auth/auth-menu.component';
 import {SignUp} from './components/auth/sign-up.component';
 import {SignIn} from './components/auth/sign-in.component';
-import {Progress} from './components/progress.component';
 import {ModalConfirm} from './components/modals/modal-confirm.component';
 import {PageNotFoundComponent} from './components/page-not-found.component';
 
@@ -86,15 +86,16 @@ import {ValidationService} from './services/validation.service';
   ],
   declarations: [
     AppComponent,
-    AppSettings,
-    Menu,
-    WordBank,
+    AppSettingsComponent,
+    MenuComponent,
+    WordBankComponent,
     TestsComponent,
     FilterComponent,
-    Review,
-    TestButtons,
+    ReviewComponent,
+    ProgressComponent,
+    TestButtonsComponent,
     WordListsComponent,
-    EditWord,
+    EditWordComponent,
     AddToList,
     EditList,
     ShowLists,
@@ -116,7 +117,6 @@ import {ValidationService} from './services/validation.service';
     AuthMenu,
     SignIn,
     SignUp,
-    Progress,
     ModalConfirm,
     PageNotFoundComponent
   ],

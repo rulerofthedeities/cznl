@@ -10,7 +10,7 @@ import 'rxjs/add/operator/takeWhile';
   templateUrl: './settings.component.html'
 })
 
-export class AppSettings implements OnInit, OnDestroy {
+export class AppSettingsComponent implements OnInit, OnDestroy {
   testLength: number[];
   directions: Object[];
   settings: AllSettings;

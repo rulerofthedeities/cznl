@@ -35,7 +35,7 @@ import * as moment from 'moment';
   `]
 })
 
-export class Progress implements OnInit, OnDestroy {
+export class ProgressComponent implements OnInit, OnDestroy {
   componentActive = true;
   stats: ProgressStats[];
   cols: number[];
