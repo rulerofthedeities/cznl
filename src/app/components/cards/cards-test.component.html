@@ -14,12 +14,12 @@
       </span>
     </div>
   </div>
-  <card-item 
+  <card-item-test
     *ngIf="currentCard"
     [card]="currentCard"
     [settings]="settings"
     (cardAnswered)="onCardAnswered($event)">
-  </card-item>
+  </card-item-test>
   <div class="btn btn-default" (click)="quit()" *ngIf="!isFinished">
     Quit
   </div>

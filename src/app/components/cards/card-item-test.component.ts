@@ -1,14 +1,14 @@
 import {Component, Input, Output, EventEmitter, OnChanges, OnDestroy,
   trigger, style, transition, animate, keyframes} from '@angular/core';
-import {WordPair, Word, Total} from '../../models/word.model';
+import {WordPair, Word, Total, CardQA} from '../../models/word.model';
 import {AllSettings} from '../../models/settings.model';
 import {WordService} from '../../services/words.service';
 import {ErrorService} from '../../services/error.service';
 import 'rxjs/add/operator/takeWhile';
 
 @Component({
-  selector: 'card-item',
-  templateUrl: 'card-item.component.html',
+  selector: 'card-item-test',
+  templateUrl: 'card-item-test.component.html',
   styleUrls: ['./card.component.css'],
   animations: [
     trigger('cardState', [
@@ -24,7 +24,7 @@ import 'rxjs/add/operator/takeWhile';
   ]
 })
 
-export class CardItemComponent implements OnChanges, OnDestroy {
+export class CardItemTestComponent implements OnChanges, OnDestroy {
   @Input() card: WordPair;
   @Input() settings: AllSettings;
   @Input() test: string;
@@ -61,7 +61,6 @@ export class CardItemComponent implements OnChanges, OnDestroy {
     .takeWhile(() => this.componentActive)
     .subscribe(
       answer => {
-        console.log('answer', answer);
         this.cardAnswered.emit(correct);
         this.updateTotals(correct, answer.upserted);
         this.turnCard(true);
@@ -71,23 +70,20 @@ export class CardItemComponent implements OnChanges, OnDestroy {
   }
 
   getCardData() {
+    const cardQA: CardQA = {
+      card: this.card,
+      settings: this.settings,
+      isQuestion: true,
+      perfective: false
+    };
+
     if (this.isQuestion) {
-      this.cardData = this.settings.lanDir === 'cznl' ? this.card.cz : this.card.nl;
-      this.cardDataPf = this.settings.lanDir === 'nlcz' && this.card.tpe === 'verb' ? this.card.nlP : null;
+      this.cardData = this.wordService.getCardData(cardQA);
     } else {
-      this.cardDataPf = null;
-      if (this.settings.lanDir === 'cznl') {
-        this.cardData = this.card.nl;
-      } else {
-        this.cardData = this.card.cz;
-        if (this.card.tpe === 'verb') {
-          this.cardData.aspect =  this.card.perfective ? 'pf' : 'impf';
-          this.cardDataPf = this.card.czP;
-          if (this.cardDataPf) {
-            this.cardDataPf.aspect = 'pf';
-          }
-        }
-      }
+      cardQA.isQuestion = false;
+      this.cardData = this.wordService.getCardData(cardQA);
+      cardQA.perfective = true;
+      this.cardDataPf = this.wordService.getCardData(cardQA);
     }
 
     this.total = this.card.answer && this.card.answer.total ? {

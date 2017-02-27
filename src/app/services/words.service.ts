@@ -4,8 +4,7 @@ import {Http, Headers} from '@angular/http';
 import {Filter, FilterWord} from '../models/filters.model';
 import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
-import {WordPair, Word} from '../models/word.model';
-
+import {WordPair, Word, CardQA} from '../models/word.model';
 
 @Injectable()
 export class WordService {
@@ -193,6 +192,30 @@ export class WordService {
     }
 
     return article;
+  }
+
+  getCardData(cardQA: CardQA) {
+    let cardData = null,
+        cardDataPf = null;
+
+    if (cardQA.isQuestion) {
+      cardData = cardQA.settings.lanDir === 'cznl' ? cardQA.card.cz : cardQA.card.nl;
+    } else {
+      if (cardQA.settings.lanDir === 'cznl') {
+        cardData = cardQA.card.nl;
+      } else {
+        cardData = cardQA.card.cz;
+        if (cardQA.card.tpe === 'verb') {
+          cardData.aspect = 'impf';
+          cardDataPf = cardQA.card.perfective ? cardQA.card.cz : cardQA.card.czP;
+          if (cardDataPf || cardQA.card.perfective) {
+            cardDataPf.aspect = 'pf';
+          }
+        }
+      }
+    }
+
+    return cardQA.perfective ? cardDataPf : cardData;
   }
 
   cleanWord(word: WordPair): WordPair {

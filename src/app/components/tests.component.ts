@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {Filter} from './filter.component';
+import {FilterComponent} from './filter.component';
 import {WordPair} from '../models/word.model';
 import {Filter as FilterModel} from '../models/filters.model';
 import {WordService} from '../services/words.service';

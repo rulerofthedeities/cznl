@@ -1,10 +1,10 @@
 import {Filter} from './filters.model';
 
 export interface AllSettings {
-    maxWords: number;
-    lanDir: string;
-    showPronoun: boolean;
-    showColors: boolean;
+  maxWords: number;
+  lanDir: string;
+  showPronoun: boolean;
+  showColors: boolean;
 }
 
 export interface Settings {

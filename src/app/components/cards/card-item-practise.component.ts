@@ -6,12 +6,12 @@ import {WordService} from '../../services/words.service';
 import {ErrorService} from '../../services/error.service';
 
 @Component({
-  selector: 'card-item-all',
-  templateUrl: 'card-item-all.component.html',
+  selector: 'card-item-practise',
+  templateUrl: 'card-item-practise.component.html',
   styleUrls: ['./card.component.css']
 })
 
-export class CardItemAllComponent {
+export class CardItemPractiseComponent {
   @Input() card: WordPair;
   @Input() settings: AllSettings;
   @Input() test: string;
@@ -36,26 +36,20 @@ export class CardItemAllComponent {
   }
 
   getQuestionData() {
-    return this.settings.lanDir === 'cznl' ? this.card.cz : this.card.nl;
+    return this.wordService.getCardData({
+      card: this.card,
+      isQuestion: true,
+      perfective: false
+    });
   }
 
   getAnswerData(perfective: boolean) {
-    let cardData = null,
-        cardDataPf = null;
-    if (this.settings.lanDir === 'cznl') {
-      cardData = this.card.nl;
-    } else {
-      cardData = this.card.cz;
-      if (this.card.tpe === 'verb') {
-        cardData.aspect = 'impf';
-        cardDataPf = this.card.perfective ? this.card.cz : this.card.czP;
-        if (cardDataPf || this.card.perfective) {
-          cardDataPf.aspect = 'pf';
-        }
-      }
-    }
-
-    return perfective ? cardDataPf : cardData;
+    return this.wordService.getCardData({
+      card: this.card,
+      settings: this.settings,
+      isQuestion: false,
+      perfective
+    });
   }
 
   hasPerfective() {

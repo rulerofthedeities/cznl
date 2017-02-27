@@ -52,7 +52,6 @@ export class CardsTestComponent implements OnInit, OnDestroy {
         // Test interrupted - save partial progress
         if (this.cardsIndex > 1) {
           let progressSaved = false;
-          console.log('updating progress', this.cards);
           this.progressService
           .updateTotalsForToday(this.cards.splice(0, this.cardsIndex - 1))
           .takeWhile(() => !progressSaved)

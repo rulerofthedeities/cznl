@@ -1,3 +1,5 @@
+import {AllSettings} from './settings.model';
+
 export enum Direction {Left = -1, Right = 1};
 
 export interface Total {
@@ -41,6 +43,13 @@ export interface WordPair {
   level: any;
   categories: string[];
   perfective?: boolean;
+}
+
+export interface CardQA {
+  card: WordPair;
+  settings: AllSettings;
+  isQuestion: boolean;
+  perfective: boolean;
 }
 
 export interface ErrorObject {

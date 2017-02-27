@@ -19,8 +19,8 @@ import {WordListsComponent} from './components/wordlists/wordlists.component';
 import {AddToList} from './components/wordlists/add-to-list.component';
 import {EditList} from './components/wordlists/edit-list.component';
 import {ShowLists} from './components/wordlists/show-lists.component';
-import {CardItemComponent} from './components/cards/card-item.component';
-import {CardItemAllComponent} from './components/cards/card-item-all.component';
+import {CardItemTestComponent} from './components/cards/card-item-test.component';
+import {CardItemPractiseComponent} from './components/cards/card-item-all.component';
 import {CardItemQuestionComponent} from './components/cards/card-item-question.component';
 import {CardItemAnswerComponent} from './components/cards/card-item-answer.component';
 import {CardsPractiseComponent} from './components/cards/cards-practise.component';
@@ -98,8 +98,8 @@ import {ValidationService} from './services/validation.service';
     AddToList,
     EditList,
     ShowLists,
-    CardItemComponent,
-    CardItemAllComponent,
+    CardItemTestComponent,
+    CardItemPractiseComponent,
     CardItemQuestionComponent,
     CardItemAnswerComponent,
     CardsTestComponent,

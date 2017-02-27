@@ -14,11 +14,11 @@
       </span>
     </div>
   </div>
-  <card-item-all *ngIf="currentCard"
+  <card-item-practise *ngIf="currentCard"
     [card]="currentCard"
     [settings]="settings"
     (cardTurned)="onCardTurned($event)">
-  </card-item-all>
+  </card-item-practise>
 </div>
 <test-buttons
   [test]="true"
