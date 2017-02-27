@@ -11,11 +11,11 @@ import {WordBank} from './components/wordbank.component';
 import {AppSettings} from './components/settings.component';
 import {Menu} from './components/menu.component';
 import {TestsComponent} from './components/tests.component';
-import {Filter} from './components/filter.component';
+import {FilterComponent} from './components/filter.component';
 import {Review} from './components/review.component';
 import {TestButtons} from './components/test-buttons.component';
 import {EditWord} from './components/edit-word.component';
-import {WordLists} from './components/wordlists/wordlists.component';
+import {WordListsComponent} from './components/wordlists/wordlists.component';
 import {AddToList} from './components/wordlists/add-to-list.component';
 import {EditList} from './components/wordlists/edit-list.component';
 import {ShowLists} from './components/wordlists/show-lists.component';
@@ -90,10 +90,10 @@ import {ValidationService} from './services/validation.service';
     Menu,
     WordBank,
     TestsComponent,
-    Filter,
+    FilterComponent,
     Review,
     TestButtons,
-    WordLists,
+    WordListsComponent,
     EditWord,
     AddToList,
     EditList,

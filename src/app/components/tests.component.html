@@ -23,18 +23,18 @@
       </ul>
     </div>
     <filter tpe="exercises"
-      *ngIf="!started && listType=='filter'"
+      *ngIf="!started && listType==='filter'"
       (selectedFilter)="getWordsFromFilter($event)"
       class="col-xs-8">
     </filter>
     <word-lists 
-      *ngIf="!started && listType=='wordlist'" 
+      *ngIf="!started && listType==='wordlist'" 
       [created]="'user'"
       (selectedUserList)="getWordsFromUserList($event)"
       class="col-xs-8">
     </word-lists>
     <word-lists 
-      *ngIf="!started && listType=='dynamic'" 
+      *ngIf="!started && listType==='dynamic'" 
       (selectedUserList)="getWordsFromAutoList($event)"
       [created]="'auto'"
       class="col-xs-8">

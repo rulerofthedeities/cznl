@@ -23,6 +23,20 @@ import 'rxjs/add/operator/takeWhile';
         <span class="badge" *ngIf="list.count>0">{{list.count}}</span>
       </li>
     </ul>
+    <button 
+      class="btn btn-success btn-lg" 
+      (click)="start('review')"
+      [disabled]="!wordsInList || wordsInList < 1">
+    <span class="fa fa-play"></span>
+      Overzicht
+    </button>
+    <button 
+      class="btn btn-success btn-lg" 
+      (click)="start('practise')"
+      [disabled]="!wordsInList || wordsInList < 1">
+    <span class="fa fa-play"></span>
+      Oefen
+    </button>
     <button
       class="btn btn-success btn-lg"
       (click)="start('test')"
@@ -30,19 +44,13 @@ import 'rxjs/add/operator/takeWhile';
       <span class="fa fa-play"></span>
       Start Test
     </button>
-    <button 
-      class="btn btn-success btn-lg" 
-      (click)="start('review')"
-      [disabled]="!wordsInList || wordsInList < 1">
-    <span class="fa fa-play"></span>
-      Toon Overzicht
-    </button>`,
+    `,
   styles: [`
     li {cursor:default;}
     `]
 })
 
-export class WordLists implements OnInit, OnDestroy {
+export class WordListsComponent implements OnInit, OnDestroy {
   @Input('created') tpe;
   @Output() selectedUserList = new EventEmitter<Object>();
   lists: WordList[];
