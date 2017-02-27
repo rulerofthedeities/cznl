@@ -10,10 +10,8 @@ import {AppComponent} from './components/app.component';
 import {WordBank} from './components/wordbank.component';
 import {AppSettings} from './components/settings.component';
 import {Menu} from './components/menu.component';
-import {Tests} from './components/tests.component';
+import {TestsComponent} from './components/tests.component';
 import {Filter} from './components/filter.component';
-import {CardsTest} from './components/cards/cards-test.component';
-import {CardsPractise} from './components/cards/cards-practise.component';
 import {Review} from './components/review.component';
 import {TestButtons} from './components/test-buttons.component';
 import {EditWord} from './components/edit-word.component';
@@ -25,6 +23,8 @@ import {CardItemComponent} from './components/cards/card-item.component';
 import {CardItemAllComponent} from './components/cards/card-item-all.component';
 import {CardItemQuestionComponent} from './components/cards/card-item-question.component';
 import {CardItemAnswerComponent} from './components/cards/card-item-answer.component';
+import {CardsPractiseComponent} from './components/cards/cards-practise.component';
+import {CardsTestComponent} from './components/cards/cards-test.component';
 import {CardScore} from './components/cards/card-score.component';
 import {ScoreBar} from './components/cards/score-bar.component';
 import {InfoMessage} from './components/msg/info-message.component';
@@ -89,10 +89,8 @@ import {ValidationService} from './services/validation.service';
     AppSettings,
     Menu,
     WordBank,
-    Tests,
+    TestsComponent,
     Filter,
-    CardsTest,
-    CardsPractise,
     Review,
     TestButtons,
     WordLists,
@@ -104,6 +102,8 @@ import {ValidationService} from './services/validation.service';
     CardItemAllComponent,
     CardItemQuestionComponent,
     CardItemAnswerComponent,
+    CardsTestComponent,
+    CardsPractiseComponent,
     CardScore,
     ScoreBar,
     InfoMessage,

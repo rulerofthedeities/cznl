@@ -8,37 +8,10 @@ import 'rxjs/add/operator/takeWhile';
 
 @Component({
   selector: 'cards-practise',
-  template: `
-    <div>
-      <div 
-        class="text-center progress"
-        *ngIf="!isFinished">
-        <div 
-          class="progress-bar" 
-          role="progressbar" 
-          [attr.aria-valuenow]="progress"
-          aria-valuemin="0" 
-          aria-valuemax="100" 
-          [style.width.%]="progress">
-          <span>
-            {{cardsIndex}}/{{maxCards}}
-          </span>
-        </div>
-      </div>
-      <card-item-all *ngIf="currentCard"
-        [card]="currentCard"
-        [settings]="settings"
-        (cardTurned)="onCardTurned($event)">
-      </card-item-all>
-    </div>
-    <test-buttons
-      [test]="true"
-      [review]="true"
-      [back]="true"
-    ></test-buttons>`
+  templateUrl: 'cards-practise.component.html'
 })
 
-export class CardsPractise implements OnInit, OnDestroy {
+export class CardsPractiseComponent implements OnInit, OnDestroy {
   @Input('data') cards: WordPair[];
   maxCards: number;
   cardsIndex: number;

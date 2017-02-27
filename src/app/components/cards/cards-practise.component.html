@@ -1,0 +1,27 @@
+<div>
+  <div 
+    class="text-center progress"
+    *ngIf="!isFinished">
+    <div 
+      class="progress-bar" 
+      role="progressbar" 
+      [attr.aria-valuenow]="progress"
+      aria-valuemin="0" 
+      aria-valuemax="100" 
+      [style.width.%]="progress">
+      <span>
+        {{cardsIndex}}/{{maxCards}}
+      </span>
+    </div>
+  </div>
+  <card-item-all *ngIf="currentCard"
+    [card]="currentCard"
+    [settings]="settings"
+    (cardTurned)="onCardTurned($event)">
+  </card-item-all>
+</div>
+<test-buttons
+  [test]="true"
+  [review]="true"
+  [back]="true">
+</test-buttons>

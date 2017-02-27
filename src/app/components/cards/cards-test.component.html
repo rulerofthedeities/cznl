@@ -1,0 +1,31 @@
+<div>
+  <div 
+    class="text-center progress"
+    *ngIf="!isFinished">
+    <div 
+      class="progress-bar" 
+      role="progressbar" 
+      [attr.aria-valuenow]="progress"
+      aria-valuemin="0" 
+      aria-valuemax="100" 
+      [style.width.%]="progress">
+      <span>
+        {{cardsIndex}}/{{maxCards}}
+      </span>
+    </div>
+  </div>
+  <card-item 
+    *ngIf="currentCard"
+    [card]="currentCard"
+    [settings]="settings"
+    (cardAnswered)="onCardAnswered($event)">
+  </card-item>
+  <div class="btn btn-default" (click)="quit()" *ngIf="!isFinished">
+    Quit
+  </div>
+  <card-score 
+    *ngIf="isFinished"
+    [correct]="correct"
+    [total]="maxCards">
+  </card-score>
+</div>

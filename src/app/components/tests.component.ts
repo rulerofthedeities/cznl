@@ -9,84 +9,19 @@ import {ErrorService} from '../services/error.service';
 import {SettingsService} from '../services/settings.service';
 import {TestService} from '../services/test.service';
 import {UtilsService} from '../services/utils.service';
-import {CardsTest} from './cards/cards-test.component';
+import {CardsTestComponent} from './cards/cards-test.component';
 import 'rxjs/add/operator/takeWhile';
 import {Observable} from 'rxjs/Observable';
 
 @Component({
-  template: `
-  <section id="test">
-    <div class="row">
-      <div *ngIf="!started" class="col-xs-4">
-        <ul class="btn-group-vertical btn-group-lg">
-          <li 
-            (click)="selectListType('filter')"
-            class="btn"
-            [ngClass]="{'btn-primary':listType==='filter'}">
-            Filter woordenlijst
-          </li>
-          <li 
-            (click)="selectListType('dynamic')"
-            class="btn"
-            [ngClass]="{'btn-primary':listType==='dynamic'}">
-            Dynamische woordenlijsten
-          </li>
-          <li 
-            (click)="selectListType('wordlist')"
-            class="btn"
-            [ngClass]="{'btn-primary':listType==='wordlist'}">
-            Mijn woordenlijsten
-          </li>
-        </ul>
-      </div>
-      <filter tpe="exercises"
-        *ngIf="!started && listType=='filter'"
-        (selectedFilter)="getWordsFromFilter($event)"
-        class="col-xs-8">
-      </filter>
-      <word-lists 
-        *ngIf="!started && listType=='wordlist'" 
-        [created]="'user'"
-        (selectedUserList)="getWordsFromUserList($event)"
-        class="col-xs-8">
-      </word-lists>
-      <word-lists 
-        *ngIf="!started && listType=='dynamic'" 
-        (selectedUserList)="getWordsFromAutoList($event)"
-        [created]="'auto'"
-        class="col-xs-8">
-      </word-lists>
-      <div *ngIf="started && exerciseTpe=='test'" class="col-xs-12">
-        <cards-test
-          [data]="cards">
-        </cards-test>
-      </div>
-      <div *ngIf="started && exerciseTpe=='review'" class="col-xs-12">
-        <review 
-          [words]="cards">
-        </review>
-      </div>
-      <div *ngIf="started && exerciseTpe=='practise'" class="col-xs-12">
-        <cards-practise 
-          [data]="cards">
-        </cards-practise>
-      </div>
-    </div>
-  </section>
-  <modal-confirm *ngIf="showModalBox"
-    [level]="'warning'"
-    [showModal]="true"
-    (confirmed)="onStopConfirmed($event)">
-    <div title>Opgelet</div>
-    <div message>Bent u zeker dat u de test wenst te onderbreken?</div>
-  </modal-confirm>
-  `,
+  templateUrl: 'tests.component.html',
   styles: [
-  `li {cursor:pointer;}`]
+    `li {cursor:pointer;}`
+  ]
 })
 
-export class Tests implements OnInit, OnDestroy {
-  @ViewChild(CardsTest) cardsTest: CardsTest;
+export class TestsComponent implements OnInit, OnDestroy {
+  @ViewChild(CardsTestComponent) cardsTest: CardsTestComponent;
   maxWords = 20;
   listType = 'filter';
   started = false;

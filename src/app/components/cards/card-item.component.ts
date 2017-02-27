@@ -8,58 +8,7 @@ import 'rxjs/add/operator/takeWhile';
 
 @Component({
   selector: 'card-item',
-  template: `
-    <div class="card center-block"
-      [@cardState]="state" (click)="turnCard(false)">
-      <add-to-list [word]="card"></add-to-list>
-
-<!-- Question -->
-
-      <div *ngIf="isQuestion" class="question text-center">
-        <card-question 
-          [cardData]="cardData"
-          [tpe]="card.tpe">
-        </card-question>
-      </div>  
-
-<!-- Answer -->
-      <div *ngIf="!isQuestion" class="answer">
-        <card-answer 
-          [cardData]="cardData"
-          [tpe]="card.tpe"
-          [showPronoun]="settings.showPronoun">
-        </card-answer>
-
-<!-- Perfective aspect -->
-        <div class="clearfix" *ngIf="this.cardDataPf && !card.perfective">
-          <card-answer 
-            [cardData]="cardDataPf"
-            [tpe]="card.tpe"
-            [showPronoun]="false">
-          </card-answer>
-        </div>
-
-<!-- Answer Buttons -->
-      <div class="clearfix">
-        <div 
-          class="btn btn-success btn-sm pull-right" 
-          (click)="answerCard($event, true)">
-          Juist
-        </div>
-        <div 
-          class="btn btn-danger btn-sm pull-left" 
-          (click)="answerCard($event, false)">
-          Fout
-        </div>
-      </div>
-    </div>
-
-<!-- Scorebar -->
-    <div class="scorebarwrapper" 
-      [ngStyle]="{width:total.correct + total.incorrect > 134 ? '270px' : (total.correct + total.incorrect) * 2 + 2 + 'px'}">
-      <score-bar [total]="total"></score-bar>
-    </div>
-    `,
+  templateUrl: 'card-item.component.html',
   styleUrls: ['./card.component.css'],
   animations: [
     trigger('cardState', [
@@ -84,7 +33,7 @@ export class CardItemComponent implements OnChanges, OnDestroy {
   cardData: Word;
   cardDataPf: Word;
   total: Total;
-  state = 'question';
+  state = 'question'; // For animation
   showAnswer = false;
   componentActive = true;
 

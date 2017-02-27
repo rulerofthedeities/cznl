@@ -7,79 +7,8 @@ import {ErrorService} from '../../services/error.service';
 
 @Component({
   selector: 'card-item-all',
-  template: `
-  <div class="card center-block"
-    (click)="turnCard()">
-    <add-to-list [word]="card"></add-to-list>
-
-<!-- Question -->
-
-    <div class="question text-center">
-      <card-question 
-        [cardData]="getQuestionData()"
-        [tpe]="card.tpe">
-      </card-question>
-    </div>
-
-<!-- Answer -->
-
-    <div class="answer" *ngIf="iseven">
-      <card-answer
-        [cardData]="getAnswerData(false)"
-        [tpe]="card.tpe"
-        [showPronoun]="settings.showPronoun">
-      </card-answer>
-    </div>
-    <div class="answer" *ngIf="!iseven">
-      <card-answer 
-        [cardData]="getAnswerData(false)"
-        [tpe]="card.tpe"
-        [showPronoun]="settings.showPronoun">
-      </card-answer>
-    </div>
-
-<!-- Perfective aspect -->
-
-    <div class="clearfix" *ngIf="hasPerfective()">
-      <card-answer 
-        [cardData]="getAnswerData(true)"
-        [tpe]="card.tpe"
-        [showPronoun]="false">
-      </card-answer>
-    </div>
-
-<!-- Buttons -->
-    
-    <button class="btn btn-primary" (click)="goBack()">
-      <span class="fa fa-chevron-left"></span> Back
-    </button>
-
-  </div>
-  `,
-  styleUrls: ['./card.component.css'],
-  styles: [`
-    .card {
-      cursor:pointer;
-      min-height:300px;
-      position:relative;
-    }
-    .btn {
-      position: absolute;
-      bottom:6px;
-    }
-  `],
-  animations: [
-    trigger('cardState', [
-      transition('question => answer', animate(300, keyframes([
-        style({color: '#fff', transform: 'scaleX(0)'}),
-        style({transform: 'scaleX(1)'})
-      ]))),
-      transition('answer => question', animate(500, keyframes([
-        style({borderColor: '#999', color: '#ddd', transform: 'rotate(300deg)'}),
-        style({borderColor: '#fff', color: '#fff', transform: 'translateX(400%)'})
-      ])))
-    ])
-  ]
+  templateUrl: 'card-item-all.component.html',
+  styleUrls: ['./card.component.css']
 })
 
 export class CardItemAllComponent {

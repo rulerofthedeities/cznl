@@ -1,6 +1,6 @@
 import {ModuleWithProviders} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {Tests} from './components/tests.component';
+import {TestsComponent} from './components/tests.component';
 import {WordBank} from './components/wordbank.component';
 import {AppSettings} from './components/settings.component';
 import {Progress} from './components/progress.component';
@@ -17,13 +17,13 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    component: Tests,
+    component: TestsComponent,
     canActivate: [AuthGuard],
     resolve: {access: AccessResolver}
   },
   {
     path: 'tests',
-    component: Tests,
+    component: TestsComponent,
     canActivate: [AuthGuard],
     canDeactivate: [CanDeactivateGuard],
     resolve: {access: AccessResolver}
