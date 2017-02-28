@@ -8,13 +8,11 @@ import 'rxjs/add/operator/takeWhile';
 @Component({
     selector: 'show-lists',
     templateUrl: './show-lists.component.html',
-    styleUrls: ['./word-list.css'],
-    styles: [`
-      div.modal {color: black;text-align:left;}
-    `]
+    styles: [`div.modal {color: black;text-align:left;}`],
+    styleUrls: ['./word-list.css']
 })
 
-export class ShowLists implements OnDestroy {
+export class ShowListsComponent implements OnDestroy {
   @Input() word: WordPair;
   @Output() userlistChanged = new EventEmitter<any>();
   userLists: WordList[];

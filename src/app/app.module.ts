@@ -19,7 +19,7 @@ import {EditWordComponent} from './components/edit-word.component';
 import {WordListsComponent} from './components/wordlists/wordlists.component';
 import {AddToList} from './components/wordlists/add-to-list.component';
 import {EditList} from './components/wordlists/edit-list.component';
-import {ShowLists} from './components/wordlists/show-lists.component';
+import {ShowListsComponent} from './components/wordlists/show-lists.component';
 import {CardItemTestComponent} from './components/cards/card-item-test.component';
 import {CardItemPractiseComponent} from './components/cards/card-item-practise.component';
 import {CardItemQuestionComponent} from './components/cards/card-item-question.component';
