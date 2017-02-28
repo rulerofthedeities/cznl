@@ -1,17 +1,20 @@
 {
   "name": "cznl",
-  "version": "0.0.0",
-  "license": "MIT",
+  "description": "Dutch-Czech vocabulary tester",
+  "version": "1.2.0",
   "angular-cli": {},
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4000",
+    "start": "node server",
+    "build": "ng build -dev --watch",
+    "build:prod": "ng build -prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
   "engines": {
-    "node": "6.9.5"
+    "node": "6.9.5",
+    "npm": "4.3.0"
   },
   "author": "Kristiaan Van Ermengem",
   "private": false,

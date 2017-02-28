@@ -26,17 +26,7 @@ if (!process.env.JWT_TOKEN_SECRET) {
 app.use(compression());
 app.use(bearerToken());
 app.use(bodyParser.json());
-
-// index view setup
 app.use(express.static(path.join(__dirname, 'dist')));
-
-app.get('/abc*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/index.html'));
-});
-
-app.get(['/', '/words', '/tests', '/settings', '/progress'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/index.html'));
-});
 
 //routing
 routes.initialize(app, new express.Router());

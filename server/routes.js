@@ -12,11 +12,15 @@ var path = require("path"),
 module.exports.initialize = function(app, router) {
   var home = path.resolve(__dirname + '/../dist/index.html');
 
-  router.get('/', function(req, res){
+  app.get('/w*', (req, res) => {
     res.sendFile(home);
   });
 
-  router.use(['/user/refresh', '/user/signin'], function(req, res, next) {
+  app.get(['/', '/words', '/tests', '/settings', '/progress'], (req, res) => {
+    res.sendFile(home);
+  });
+
+  router.use(['/user/refresh', '/user/signin'], (req, res, next) => {
     req.expiresIn = app.get('token_expiration') || 86400;
     next();
   });
@@ -26,7 +30,7 @@ module.exports.initialize = function(app, router) {
   router.post('/user/signup', users.signup);
   
   router.use('/', function(req, res, next) {
-    jwt.verify(req.token, process.env.JWT_TOKEN_SECRET, function(err, decoded) {
+    jwt.verify(req.token, process.env.JWT_TOKEN_SECRET, (err, decoded) => {
       response.handleError(err, res, 401, 'Authentication failed', function(){
         req.decoded = decoded;
         next();
