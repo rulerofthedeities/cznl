@@ -92,6 +92,18 @@ export class ProgressComponent implements OnInit, OnDestroy {
     return moment(date).isSame(this.calendarDays[indx].dt, 'day');
   }
 
+  isGreen(indx: number): boolean {
+    return !!(this.calendarDays[indx].stats.wordsTestedToday > 0);
+  }
+
+  isYellow(indx: number): boolean {
+    return this.isToday(indx) && !this.isGreen(indx);
+  }
+
+  isRed(indx: number): boolean {
+    return !this.isToday(indx) && !this.isGreen(indx);
+  }
+
   ngOnDestroy() {
     this.componentActive = false;
   }

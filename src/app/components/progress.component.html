@@ -44,16 +44,20 @@
                   {{calendarDays[row * 7 + col].day}}
                 </span>
                 <div
-                  *ngIf="isInThePast(row * 7 + col)" 
+                  *ngIf="isInThePast(row * 7 + col) || isToday(row * 7 + col)" 
                   class="cal-day-content"
-                  [ngClass]="{'green' : calendarDays[row * 7 + col].stats.wordsTestedToday > 0}">
+                  [ngClass]="{
+                    'green': isGreen(row * 7 + col),
+                    'yellow': isYellow(row * 7 + col),
+                    'red': isRed(row * 7 + col)
+                  }">
                   <span class="cal-day-total">{{calendarDays[row * 7 + col].stats.wordsTestedToday}}</span>
                 </div>
               </td>
             </tr>
           </tbody>
         </table>
-        
+
       </div>
     </div>
   </div>

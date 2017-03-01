@@ -11,6 +11,7 @@
 }
 th {
   text-align: center;
+  font-size: 18px;
 }
 td {
   vertical-align: text-top;
@@ -35,12 +36,14 @@ td {
   width: 50px;
 }
 .cal-week .today {
-  border: 1px solid #333;
+  border: 1px dotted #333;
   border-radius: 2px;
 }
 .cal-day-total {
   position: relative;
   top: 25%;
+  color: white;
+  text-shadow: 1px 1px #333;
 }
 .diffMonth {
   color: #ddd;
@@ -48,4 +51,22 @@ td {
 }
 .cal-week .green {
   background-color: #16d01a;
+  background: -webkit-linear-gradient(135deg, #16d01a, #12ac16); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(135deg, #16d01a, #12ac16); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(135deg, #16d01a, #12ac16); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(135deg, #16d01a, #12ac16); /* Standard syntax */
+}
+.cal-week .yellow {
+  background-color: #fbf80e;
+  background: -webkit-linear-gradient(135deg, #fbf80e, #dedc0c); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(135deg, #fbf80e, #dedc0c); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(135deg, #fbf80e, #dedc0c); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(135deg, #fbf80e, #dedc0c); /* Standard syntax */
+}
+.cal-week .red {
+  background-color: #fb1515;
+  background: -webkit-linear-gradient(135deg, #fb1515, #d21010); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(135deg, #fb1515, #d21010); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(135deg, #fb1515, #d21010); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(135deg, #fb1515, #d21010); /* Standard syntax */
 }
