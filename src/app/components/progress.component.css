@@ -1,0 +1,51 @@
+.calendar, .calendar-header {
+  border-collapse: separate;
+  border-spacing: 2px;
+  width: 100%;
+}
+.calendar-header-left, .calendar-header-right {
+  width: 20%;
+}
+.calendar-header-title {
+  text-align: center;
+}
+th {
+  text-align: center;
+}
+td {
+  vertical-align: text-top;
+}
+.cal-week .cal-day {
+  background-color: #efefef;
+  border: 1px dotted #ddd;
+  font-size: 16px;
+  height: 100px;
+  padding: 3px;
+  text-align: right;
+  width: 14%;
+}
+.cal-day-content {
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  box-shadow: 2px 2px 3px #bbb;
+  font-size: 20px;
+  height: 50px;
+  margin: 0 auto;
+  text-align: center;
+  width: 50px;
+}
+.cal-week .today {
+  border: 1px solid #333;
+  border-radius: 2px;
+}
+.cal-day-total {
+  position: relative;
+  top: 25%;
+}
+.diffMonth {
+  color: #ddd;
+  font-style: italic;
+}
+.cal-week .green {
+  background-color: #16d01a;
+}

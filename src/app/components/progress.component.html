@@ -1,0 +1,60 @@
+
+
+<div class="container">
+  <div class="row">
+    <div class="panel panel-default">
+      <div class="panel-body">
+
+        <table class="calendar-header">
+          <tbody>
+            <tr>
+              <td class="calendar-header-left">
+                <div class="btn-group">
+                  <button type="button" class="fc-button-prev fc-corner-left btn btn-default btn-sm">
+                    <i class="fa fa-chevron-left"></i>
+                  </button>
+                </div>
+              </td>
+              <td>
+                <span class="calendar-header-title"><h2>{{monthName}}</h2></span>
+              </td>
+              <td class="calendar-header-right">
+                <div class="btn-group pull-right">
+                  <button type="button" class="btn btn-default btn-sm">
+                    <i class="fa fa-chevron-right"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="calendar">
+          <thead>
+            <tr class="cal-header">
+              <th *ngFor="let col of cols;" class="cal-day-name">
+                {{dayNames[col]}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="cal-week" *ngFor="let row of rows">
+              <td *ngFor="let col of cols;" class="cal-day" [ngClass]="{'today': isToday(row * 7 + col)}">
+                <span [ngClass]="{'diffMonth': !calendarDays[row * 7 + col].currentMonth}">
+                  {{calendarDays[row * 7 + col].day}}
+                </span>
+                <div
+                  *ngIf="isInThePast(row * 7 + col)" 
+                  class="cal-day-content"
+                  [ngClass]="{'green' : calendarDays[row * 7 + col].stats.wordsTestedToday > 0}">
+                  <span class="cal-day-total">{{calendarDays[row * 7 + col].stats.wordsTestedToday}}</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        
+      </div>
+    </div>
+  </div>
+</div>

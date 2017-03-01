@@ -9,30 +9,8 @@ import 'rxjs/add/operator/takeWhile';
 import * as moment from 'moment';
 
 @Component({
-  template: `
-    <h1>Progress</h1>
-    <div class="row days">
-      <div *ngFor="let col of cols;" class="col-md-1">
-        {{dayNames[col]}}
-      </div>
-      <div class="col-md-5">extra</div>
-    </div>
-    <div class="row" *ngFor="let row of rows">
-      <div *ngFor="let col of cols;" class="col-md-1">
-        <span [ngClass]="{'diffMonth': !calendarDays[row * 7 + col].currentMonth}">
-          {{calendarDays[row * 7 + col].day}}
-        </span>
-        {{calendarDays[row * 7 + col].stats.wordsTestedToday}}
-      </div>
-      <div class="col-md-5">extra</div>
-    </div>
-  `,
-  styles: [`
-    .diffMonth {
-      color: #cccccc;
-      font-style: italic;
-    }
-  `]
+  templateUrl: './progress.component.html',
+  styleUrls: [`./progress.component.css`]
 })
 
 export class ProgressComponent implements OnInit, OnDestroy {
@@ -40,6 +18,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
   stats: ProgressStats[];
   cols: number[];
   rows: number[];
+  monthName: string;
   dayNames: string[];
   calendarDays: CalendarDay[] = [];
 
@@ -69,12 +48,14 @@ export class ProgressComponent implements OnInit, OnDestroy {
           y = date.getFullYear(),
           m = date.getMonth(),
           firstDay = new Date(y, m, 1);
+    this.monthName = this.utilsService.getMonthNames()[date.getMonth()] + ' ' + moment(date).format('YYYY');
     // get first monday of that week
     const firstMonday = moment(firstDay).startOf('isoWeek');
     let calendarDay = moment(firstMonday);
     // get all days for the calendar
     for (let indx = 0; indx < 35; indx++) {
       this.calendarDays[indx] = {
+        dt: calendarDay.toDate(),
         day: calendarDay.format('DD'),
         currentMonth: calendarDay.month() === moment(firstDay).month(),
         stats: this.stats && this.stats[calendarDay.format('YYYY-MM-DD')] ? this.stats[calendarDay.format('YYYY-MM-DD')] : ''
@@ -99,6 +80,16 @@ export class ProgressComponent implements OnInit, OnDestroy {
       },
       error => this.errorService.handleError(error)
     );
+  }
+
+  isInThePast(indx: number): boolean {
+    const date = new Date();
+    return moment(date).isAfter(this.calendarDays[indx].dt, 'day');
+  }
+
+  isToday(indx: number): boolean {
+    const date = new Date();
+    return moment(date).isSame(this.calendarDays[indx].dt, 'day');
   }
 
   ngOnDestroy() {

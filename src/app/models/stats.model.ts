@@ -12,6 +12,7 @@ export interface ProgressStats {
 }
 
 export interface CalendarDay {
+  dt: Date;
   day: string;
   currentMonth: boolean;
   stats: ProgressStats;

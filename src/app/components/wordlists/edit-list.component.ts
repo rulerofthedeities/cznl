@@ -34,7 +34,7 @@ import {Component, Input, Output, EventEmitter} from '@angular/core';
     }`]
 })
 
-export class EditList {
+export class EditListComponent {
   @Input() name;
   @Output() updatedName = new EventEmitter<string>();
   @Output() addNewList = new EventEmitter<string>();

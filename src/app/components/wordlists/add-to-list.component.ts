@@ -1,5 +1,5 @@
 import {Component, Input, ViewChild, OnChanges, OnDestroy} from '@angular/core';
-import {ShowLists} from './show-lists.component';
+import {ShowListsComponent} from './show-lists.component';
 import {WordPair} from '../../models/word.model';
 import {WordList} from '../../models/list.model';
 import {WordlistService} from '../../services/wordlists.service';
@@ -22,9 +22,9 @@ import 'rxjs/add/operator/takeWhile';
   styleUrls: ['./word-list.css']
 })
 
-export class AddToList implements OnChanges, OnDestroy {
+export class AddToListComponent implements OnChanges, OnDestroy {
   @Input() word: WordPair;
-  @ViewChild(ShowLists) lists: ShowLists;
+  @ViewChild(ShowListsComponent) lists: ShowListsComponent;
   isInList = false;
   componentActive = true;
 

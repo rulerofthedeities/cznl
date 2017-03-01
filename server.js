@@ -13,7 +13,7 @@ var express = require('express'),
 process.on("uncaughtException", console.error);
 
 //config
-app.set('port', process.env.PORT || 4001);
+app.set('port', process.env.PORT || 4000);
 app.set('env', process.env.NODE_ENV || 'development');
 app.set('token_expiration', 604800);// Token expires after 7 days
 

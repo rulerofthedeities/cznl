@@ -43,6 +43,25 @@ export class UtilsService {
     return days[tpe];
   }
 
+  getMonthNames(): string[] {
+    const months = [
+        'Januari',
+        'Februari',
+        'Maart',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Augustus',
+        'September',
+        'Oktober',
+        'November',
+        'December'
+      ];
+
+    return months;
+  }
+
   getFilter(tpe: string): FilterOption[] {
     let filter: FilterOption[] = [];
     switch (tpe) {
