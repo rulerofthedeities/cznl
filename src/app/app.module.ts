@@ -27,7 +27,7 @@ import {CardItemAnswerComponent} from './components/cards/card-item-answer.compo
 import {CardsPractiseComponent} from './components/cards/cards-practise.component';
 import {CardsTestComponent} from './components/cards/cards-test.component';
 import {CardScore} from './components/cards/card-score.component';
-import {ScoreBar} from './components/cards/score-bar.component';
+import {ScoreBarComponent} from './components/cards/score-bar.component';
 import {InfoMessage} from './components/msg/info-message.component';
 import {ErrorMessage} from './components/msg/error-message.component';
 import {FieldMessages} from './components/msg/field-messages.component';
@@ -106,7 +106,7 @@ import {ValidationService} from './services/validation.service';
     CardsTestComponent,
     CardsPractiseComponent,
     CardScore,
-    ScoreBar,
+    ScoreBarComponent,
     InfoMessage,
     ErrorMessage,
     FieldMessages,

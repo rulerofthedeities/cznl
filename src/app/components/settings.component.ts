@@ -36,7 +36,26 @@ export class AppSettingsComponent implements OnInit, OnDestroy {
       {label: 'Nederlands -> Tsjechisch', val: 'nlcz'},
       {label: 'Tsjechisch -> Nederlands', val: 'cznl'}
     ];
-    this.settingsService.getAppSettings()
+    this.getSettings();
+  }
+
+  onModified() {
+    this.isSubmitted = false;
+  }
+
+  onSubmit() {
+    this.settingsService.setAppSettings(this.settings)
+    .takeWhile(() => this.componentActive)
+    .subscribe(
+      settings => { ; },
+      error => this.errorService.handleError(error)
+    );
+    this.isSubmitted = true;
+  }
+
+  getSettings() {
+    this.settingsService
+    .getAppSettings()
     .takeWhile(() => this.componentActive)
     .subscribe(
       settings => {
@@ -54,20 +73,6 @@ export class AppSettingsComponent implements OnInit, OnDestroy {
       },
       error => this.errorService.handleError(error)
     );
-  }
-
-  onModified() {
-    this.isSubmitted = false;
-  }
-
-  onSubmit() {
-    this.settingsService.setAppSettings(this.settings)
-    .takeWhile(() => this.componentActive)
-    .subscribe(
-      settings => { ; },
-      error => this.errorService.handleError(error)
-    );
-    this.isSubmitted = true;
   }
 
   ngOnDestroy() {

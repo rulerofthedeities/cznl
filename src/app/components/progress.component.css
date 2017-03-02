@@ -10,8 +10,8 @@
   text-align: center;
 }
 th {
-  text-align: center;
   font-size: 18px;
+  text-align: center;
 }
 td {
   vertical-align: text-top;
@@ -44,6 +44,7 @@ td {
   top: 25%;
   color: white;
   text-shadow: 1px 1px #333;
+  cursor: default;
 }
 .diffMonth {
   color: #ddd;
@@ -69,4 +70,11 @@ td {
   background: -o-linear-gradient(135deg, #fb1515, #d21010); /* For Opera 11.1 to 12.0 */
   background: -moz-linear-gradient(135deg, #fb1515, #d21010); /* For Firefox 3.6 to 15 */
   background: linear-gradient(135deg, #fb1515, #d21010); /* Standard syntax */
+}
+/*Tooltip*/
+.tt-header {
+  font-style: bold;
+  color: #ffc520;
+  padding:2px;
+  margin-bottom: 2px;
 }

@@ -12,7 +12,8 @@ var path = require("path"),
 module.exports.initialize = function(app, router) {
   var home = path.resolve(__dirname + '/../dist/index.html');
 
-  app.get('/w*', (req, res) => {
+
+  app.get('/abc*', (req, res) => {
     res.sendFile(home);
   });
 

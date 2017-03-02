@@ -35,7 +35,7 @@ interface Bar {
   `]
 })
 
-export class ScoreBar implements OnChanges {
+export class ScoreBarComponent implements OnChanges {
   @Input() total: Total;
   bar: Bar;
   tooltip: string;

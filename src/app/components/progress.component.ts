@@ -64,6 +64,10 @@ export class ProgressComponent implements OnInit, OnDestroy {
     }
   }
 
+  getDay(indx: number): string {
+    return moment(this.calendarDays[indx].dt).format('DD/MM/YYYY');
+  }
+
   fetchStats() {
     this.progressService
     .getProgressStats()
@@ -82,9 +86,9 @@ export class ProgressComponent implements OnInit, OnDestroy {
     );
   }
 
-  isInThePast(indx: number): boolean {
+  isInTheFuture(indx: number): boolean {
     const date = new Date();
-    return moment(date).isAfter(this.calendarDays[indx].dt, 'day');
+    return moment(date).isBefore(this.calendarDays[indx].dt, 'day');
   }
 
   isToday(indx: number): boolean {

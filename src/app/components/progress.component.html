@@ -1,5 +1,3 @@
-
-
 <div class="container">
   <div class="row">
     <div class="panel panel-default">
@@ -44,14 +42,37 @@
                   {{calendarDays[row * 7 + col].day}}
                 </span>
                 <div
-                  *ngIf="isInThePast(row * 7 + col) || isToday(row * 7 + col)" 
+                  *ngIf="!isInTheFuture(row * 7 + col)" 
                   class="cal-day-content"
                   [ngClass]="{
                     'green': isGreen(row * 7 + col),
                     'yellow': isYellow(row * 7 + col),
                     'red': isRed(row * 7 + col)
-                  }">
-                  <span class="cal-day-total">{{calendarDays[row * 7 + col].stats.wordsTestedToday}}</span>
+                  }"
+                  [tooltip]="statsTooltip"
+                  [tooltipAnimation]="true">
+                  <span class="cal-day-total">
+                    {{calendarDays[row * 7 + col].stats.wordsTestedToday}}
+                  </span>
+                  <tooltip-content #statsTooltip [animation]="true" placement="top">
+                    <div class="tt-header">Overzicht {{getDay(row * 7 + col)}}</div>
+                    <div class="tt-data" *ngIf="isGreen(row * 7 + col)">
+                      <ul class="list-unstyled">
+                        <li>Woorden getest: {{calendarDays[row * 7 + col].stats.wordsTestedToday}}</li>
+                        <li>Woorden correct: {{calendarDays[row * 7 + col].stats.wordsCorrectToday}}</li>
+                        <li>Woorden incorrect: {{calendarDays[row * 7 + col].stats.wordsInCorrectToday}}</li>
+                        <li>Niewe woorden: {{calendarDays[row * 7 + col].stats.wordsNewToday}}</li>
+                        <li>Herziene woorden: {{calendarDays[row * 7 + col].stats.wordsReviewedToday}}</li>
+                      </ul>
+                      <ul class="list-unstyled">
+                        <li>Totaal correct: {{calendarDays[row * 7 + col].stats.totalCorrect}}</li>
+                        <li>Totaal incorrect: {{calendarDays[row * 7 + col].stats.totalInCorrect}}</li>
+                      </ul>
+                    </div>
+                    <div *ngIf="!isGreen(row * 7 + col)">
+                      Geen woorden getest op deze dag
+                    </div>
+                  </tooltip-content>
                 </div>
               </td>
             </tr>
@@ -62,3 +83,5 @@
     </div>
   </div>
 </div>
+
+
