@@ -48,11 +48,11 @@ var getAnswersData = function(db, options, callback) {
 }
 
 var loadProgress = function(db, options, callback) {
-  //today
-  const day = moment().subtract(35, 'd').format('YYYY-MM-DD');
+  const lastDay = moment().subtract(options.monthsBack, 'months').endOf('month').add(7, 'd');
+  const firstDay = moment(lastDay).subtract(42, 'd');
   db.collection('progress')
-    .find({userId:options.userId, dt: {$gte:day}}, {_id:0, userId:0})
-    .limit(35)
+    .find({userId:options.userId, dt: {$gte:firstDay.format('YYYY-MM-DD'), $lte:lastDay.format('YYYY-MM-DD')}}, {_id:0, userId:0})
+    .limit(42)
     .sort({dt:1})
     .toArray(function(err, docs) {
       callback(err, docs);
@@ -77,7 +77,10 @@ module.exports = {
     })
   },
   getStats: function(req, res) {
-    var options = {userId:mongo.ObjectID(req.decoded.user._id)};
+    var options = {
+      userId: mongo.ObjectID(req.decoded.user._id),
+      monthsBack: parseInt(req.params.months)
+    };
 
     loadProgress(mongo.DB, options, function(err, docs) {
       response.handleError(err, res, 500, 'Error fetching progress stats', function(){

@@ -33,7 +33,7 @@ export class ProgressService {
       .catch(error => Observable.throw(error));
   }
 
-  getProgressStats() {
+  getProgressStats(monthsBack: number) {
     const token = this.authService.getToken(),
           headers = new Headers();
 
@@ -41,7 +41,7 @@ export class ProgressService {
     headers.append('Authorization', 'Bearer ' + token);
 
     return this.http
-      .get('/api/progress', {headers})
+      .get('/api/progress/' + monthsBack.toString(), {headers})
       .map(response => response.json().obj)
       .catch(error => Observable.throw(error));
   }

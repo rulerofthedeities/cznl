@@ -21,6 +21,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
   monthName: string;
   dayNames: string[];
   calendarDays: CalendarDay[] = [];
+  monthsBack = 0; // Show previous months
 
   constructor (
     private authService: AuthService,
@@ -43,17 +44,14 @@ export class ProgressComponent implements OnInit, OnDestroy {
     this.rows = new Array(5).fill(1).map((x, i) => i);
     this.dayNames = this.utilsService.getDaysNames('short');
 
-    // get  first day of the month
-    const date = new Date(),
-          y = date.getFullYear(),
-          m = date.getMonth(),
-          firstDay = new Date(y, m, 1);
-    this.monthName = this.utilsService.getMonthNames()[date.getMonth()] + ' ' + moment(date).format('YYYY');
+    // get first day of the requested month
+    const firstDay = moment().subtract(this.monthsBack, 'months').startOf('month');
+    this.monthName = this.utilsService.getMonthNames()[firstDay.month()] + ' ' + moment(firstDay).format('YYYY');
     // get first monday of that week
     const firstMonday = moment(firstDay).startOf('isoWeek');
     let calendarDay = moment(firstMonday);
     // get all days for the calendar
-    for (let indx = 0; indx < 35; indx++) {
+    for (let indx = 0; indx < 42; indx++) {
       this.calendarDays[indx] = {
         dt: calendarDay.toDate(),
         day: calendarDay.format('DD'),
@@ -68,9 +66,15 @@ export class ProgressComponent implements OnInit, OnDestroy {
     return moment(this.calendarDays[indx].dt).format('DD/MM/YYYY');
   }
 
+  moveMonth(indx: number) {
+    this.monthsBack += indx;
+    this.monthsBack = this.monthsBack < 0 ? 0 : this.monthsBack;
+    this.fetchStats();
+  }
+
   fetchStats() {
     this.progressService
-    .getProgressStats()
+    .getProgressStats(this.monthsBack)
     .takeWhile(() => this.componentActive)
     .subscribe(
       stats => {
