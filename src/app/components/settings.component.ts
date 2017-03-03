@@ -31,7 +31,7 @@ export class AppSettingsComponent implements OnInit, OnDestroy {
       this.authService.setUserAccess(this.route.snapshot.data['access']);
     }
     this.isReady = false;
-    this.testLength = [10, 25, 50, 100];
+    this.testLength = [5, 10, 20, 25, 50, 100];
     this.directions = [
       {label: 'Nederlands -> Tsjechisch', val: 'nlcz'},
       {label: 'Tsjechisch -> Nederlands', val: 'cznl'}
