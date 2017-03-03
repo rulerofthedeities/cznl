@@ -29,6 +29,7 @@ export interface Answer {
   wordId?: string;
   correct?: boolean;
   review?: boolean;
+  streak?: number;
   total?: Total;
 }
 

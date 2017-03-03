@@ -2,9 +2,8 @@ var mongo = require('mongodb'),
     response = require('../response');
 
 var upsertAnswer = function(db, options, data, callback) {
-  //var mongoAnswerId = new mongo.ObjectID(data.answerId);
-  var mongoWordId = new mongo.ObjectID(data.wordId);
-  var counterObj = data.correct ? {'total.correct':1, 'total.incorrect':0} : {'total.correct':0, 'total.incorrect':1};
+  var mongoWordId = new mongo.ObjectID(data.wordId),
+      counterObj = data.correct ? {'total.correct': 1, 'total.incorrect': 0} : {'total.correct': 0, 'total.incorrect': 1};
   db.collection('answers')
     .update(
       {wordId: mongoWordId, userId:options.userId}, 
@@ -14,6 +13,7 @@ var upsertAnswer = function(db, options, data, callback) {
         },
         $set: {
           correct: data.correct, 
+          streak: data.streak,
           dt: new Date()
         },
         $inc:counterObj
@@ -30,7 +30,7 @@ var getAnswers = function(db, userId, data, callback) {
     .find({
       userId:userId,
       wordId:{$in:data}},
-      {_id:1, wordId:1, correct:1, listIds:1, total:1})
+      {_id:1, wordId:1, correct:1, streak:1, listIds:1, total:1})
     .toArray(function(err, docs) {
       callback(err, docs);
     })

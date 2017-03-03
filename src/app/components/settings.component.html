@@ -24,7 +24,8 @@
           class="form-control"
           name="landir"
           [(ngModel)]="settings.lanDir"
-          (change)="onModified()">
+          (change)="onModified()"
+          disabled>
           <option *ngFor="let d of directions" [value]="d.val">
             {{d.label}}
           </option>

@@ -10,20 +10,21 @@
   text-align: center;
 }
 th {
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
 }
 td {
   vertical-align: text-top;
 }
 .cal-week .cal-day {
-  background-color: #efefef;
-  border: 1px dotted #ddd;
-  font-size: 16px;
+  background-color: #f6f6f6;
+  border: 1px dotted #ccc;
+  font-size: 18px;
   height: 100px;
   padding: 3px;
   text-align: right;
   width: 14%;
+  border-radius: 4px;
 }
 .cal-day-content {
   border: 1px solid #ccc;
@@ -37,7 +38,6 @@ td {
 }
 .cal-week .today {
   border: 1px dotted #333;
-  border-radius: 2px;
 }
 .cal-day-total {
   position: relative;

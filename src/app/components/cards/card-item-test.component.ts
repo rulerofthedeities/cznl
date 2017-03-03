@@ -55,14 +55,16 @@ export class CardItemTestComponent implements OnChanges, OnDestroy {
   }
 
   answerCard(event: MouseEvent, correct: boolean) {
+    const streak = this.getStreak(correct);
+
     event.stopPropagation();
     this.wordService
-    .saveAnswer(this.card._id, correct)
+    .saveAnswer(this.card._id, streak, correct)
     .takeWhile(() => this.componentActive)
     .subscribe(
       answer => {
         this.cardAnswered.emit(correct);
-        this.updateTotals(correct, answer.upserted);
+        this.updateTotals(correct, streak, answer.upserted);
         this.turnCard(true);
       },
       error => this.errorService.handleError(error)
@@ -95,7 +97,17 @@ export class CardItemTestComponent implements OnChanges, OnDestroy {
     };
   }
 
-  updateTotals(correct: boolean, upserted: Array<Object>) {
+  getStreak(correct: boolean) {
+    let streak = this.card.answer && this.card.answer.streak ? this.card.answer.streak : 0;
+    if (correct) {
+      streak = streak > 0 ? streak + 1 : 1;
+    } else {
+      streak = streak && streak < 0 ? streak - 1 : -1;
+    }
+    return streak;
+  }
+
+  updateTotals(correct: boolean, streak: number, upserted: Array<Object>) {
     if (!this.card.answer.total) {
       this.card.answer.total = {
         correct: 0,
@@ -112,6 +124,7 @@ export class CardItemTestComponent implements OnChanges, OnDestroy {
     } else {
       this.card.answer.review = true;
     }
+    this.card.answer.streak = streak;
   }
 
   ngOnDestroy() {

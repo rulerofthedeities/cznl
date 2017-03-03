@@ -114,9 +114,9 @@ export class WordService {
       .catch(error => Observable.throw(error));
   }
 
-  saveAnswer(wordId: string, correct: boolean) {
+  saveAnswer(wordId: string, streak: number, correct: boolean) {
     const token = this.authService.getToken(),
-          answer = {wordId, correct},
+          answer = {wordId, streak, correct},
           headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + token);
@@ -164,8 +164,9 @@ export class WordService {
         if (answersAssoc[word._id]) {
           word.answer = answersAssoc[word._id];
           delete word.answer.wordId;
+          delete word.answer._id;
         }
-        word.tpe = word.tpe;
+        // word.tpe = word.tpe;
         word.cz.article = this.getCardArticle(word.cz.genus);
       });
     }
