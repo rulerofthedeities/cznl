@@ -20,13 +20,13 @@ em{
   font-size: 20px;
 }
 .card {
-  cursor: pointer;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  transition: 0.3s;
-  border-radius: 9px;
   border: 1px solid #aaa;
-  padding: 12px;
+  border-radius: 9px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  cursor: pointer;
   max-width: 300px;
+  padding: 12px;
+  transition: 0.3s;
 }
 .card:hover {
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
@@ -40,4 +40,8 @@ em{
 .pronoun {
   position: relative;
   top:-1px;
+}
+.duration {
+  display: block;
+  margin-top: 8px;
 }

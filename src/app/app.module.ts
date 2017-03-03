@@ -26,7 +26,7 @@ import {CardItemQuestionComponent} from './components/cards/card-item-question.c
 import {CardItemAnswerComponent} from './components/cards/card-item-answer.component';
 import {CardsPractiseComponent} from './components/cards/cards-practise.component';
 import {CardsTestComponent} from './components/cards/cards-test.component';
-import {CardScore} from './components/cards/card-score.component';
+import {CardScoreComponent} from './components/cards/card-score.component';
 import {ScoreBarComponent} from './components/cards/score-bar.component';
 import {InfoMessage} from './components/msg/info-message.component';
 import {ErrorMessage} from './components/msg/error-message.component';
@@ -55,6 +55,7 @@ import {SettingsService} from './services/settings.service';
 import {FilterService} from './services/filters.service';
 import {TestService} from './services/test.service';
 import {ProgressService} from './services/progress.service';
+import {TimeService} from './services/time.service';
 import {ErrorService} from './services/error.service';
 import {UtilsService} from './services/utils.service';
 import {ValidationService} from './services/validation.service';
@@ -75,6 +76,7 @@ import {ValidationService} from './services/validation.service';
     FilterService,
     TestService,
     ProgressService,
+    TimeService,
     ErrorService,
     AuthService,
     AuthGuard,
@@ -105,7 +107,7 @@ import {ValidationService} from './services/validation.service';
     CardItemAnswerComponent,
     CardsTestComponent,
     CardsPractiseComponent,
-    CardScore,
+    CardScoreComponent,
     ScoreBarComponent,
     InfoMessage,
     ErrorMessage,

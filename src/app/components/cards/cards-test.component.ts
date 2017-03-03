@@ -4,6 +4,7 @@ import {ErrorService} from '../../services/error.service';
 import {UtilsService} from '../../services/utils.service';
 import {TestService} from '../../services/test.service';
 import {ProgressService} from '../../services/progress.service';
+import {TimeService} from '../../services/time.service';
 import {WordPair} from '../../models/word.model';
 import {AllSettings} from '../../models/settings.model';
 import 'rxjs/add/operator/takeWhile';
@@ -29,6 +30,7 @@ export class CardsTestComponent implements OnInit, OnDestroy {
     private utilsService: UtilsService,
     private testService: TestService,
     private progressService: ProgressService,
+    private timeService: TimeService,
     private errorService: ErrorService
   ) {}
 
@@ -83,6 +85,7 @@ export class CardsTestComponent implements OnInit, OnDestroy {
       this.currentCard = this.cards[this.cardsIndex++];
       this.progress = Math.trunc(this.cardsIndex / this.maxCards * 100);
     } else {
+      this.timeService.endTimer();
       this.currentCard = null;
       this.isFinished = true;
       // Save user statistics
@@ -113,6 +116,7 @@ export class CardsTestComponent implements OnInit, OnDestroy {
     this.progress = 0;
     this.correct = 0;
     this.cardsIndex = 0;
+    this.timeService.startTimer();
   }
 
   quit() {
