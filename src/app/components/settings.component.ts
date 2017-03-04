@@ -63,7 +63,7 @@ export class AppSettingsComponent implements OnInit, OnDestroy {
           this.settings = settings.all;
         } else {
           this.settings = {
-            maxWords: 25,
+            maxWords: 10,
             lanDir: 'nlcz',
             showPronoun: false,
             showColors: true

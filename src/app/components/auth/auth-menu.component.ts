@@ -7,8 +7,10 @@ import {AuthService} from '../../services/auth.service';
   `
 })
 
-export class AuthMenu {
-  constructor (private authService: AuthService) {}
+export class AuthMenuComponent {
+  constructor (
+    private authService: AuthService
+  ) {}
 
   isLoggedIn() {
       return this.authService.isLoggedIn();

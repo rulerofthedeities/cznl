@@ -31,9 +31,9 @@ import {ScoreBarComponent} from './components/cards/score-bar.component';
 import {InfoMessage} from './components/msg/info-message.component';
 import {ErrorMessage} from './components/msg/error-message.component';
 import {FieldMessages} from './components/msg/field-messages.component';
-import {AuthMenu} from './components/auth/auth-menu.component';
-import {SignUp} from './components/auth/sign-up.component';
-import {SignIn} from './components/auth/sign-in.component';
+import {AuthMenuComponent} from './components/auth/auth-menu.component';
+import {SignUpComponent} from './components/auth/sign-up.component';
+import {SignInComponent} from './components/auth/sign-in.component';
 import {ModalConfirm} from './components/modals/modal-confirm.component';
 import {PageNotFoundComponent} from './components/page-not-found.component';
 
@@ -116,9 +116,9 @@ import {ValidationService} from './services/validation.service';
     GetKeyPress,
     GenusColor,
     LevelNamePipe,
-    AuthMenu,
-    SignIn,
-    SignUp,
+    AuthMenuComponent,
+    SignInComponent,
+    SignUpComponent,
     ModalConfirm,
     PageNotFoundComponent
   ],

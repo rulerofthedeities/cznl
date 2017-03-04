@@ -22,7 +22,7 @@ import {Observable} from 'rxjs/Observable';
 
 export class TestsComponent implements OnInit, OnDestroy {
   @ViewChild(CardsTestComponent) cardsTest: CardsTestComponent;
-  maxWords = 20;
+  maxWords = 10;
   listType = 'filter';
   started = false;
   cards: WordPair[];

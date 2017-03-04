@@ -4,9 +4,9 @@ import {TestsComponent} from './components/tests.component';
 import {WordBankComponent} from './components/wordbank.component';
 import {AppSettingsComponent} from './components/settings.component';
 import {ProgressComponent} from './components/progress.component';
-import {SignUp} from './components/auth/sign-up.component';
-import {SignIn} from './components/auth/sign-in.component';
-import {AuthMenu} from './components/auth/auth-menu.component';
+import {SignUpComponent} from './components/auth/sign-up.component';
+import {SignInComponent} from './components/auth/sign-in.component';
+import {AuthMenuComponent} from './components/auth/auth-menu.component';
 import {PageNotFoundComponent} from './components/page-not-found.component';
 import {AuthGuard} from './services/auth-guard.service';
 import {AuthRoleGuard} from './services/auth-role-guard.service';
@@ -47,15 +47,15 @@ const routes: Routes = [
   },
   {
     path: 'auth',
-    component: AuthMenu,
+    component: AuthMenuComponent,
     children: [
       {
         path: '',
         redirectTo: '/auth/signin',
         pathMatch: 'full'
       },
-      {path: 'signup', component: SignUp},
-      {path: 'signin', component: SignIn}
+      {path: 'signup', component: SignUpComponent},
+      {path: 'signin', component: SignInComponent}
     ]
   },
   {
