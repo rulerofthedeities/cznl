@@ -20,6 +20,7 @@
   "author": "Kristiaan Van Ermengem",
   "private": false,
   "dependencies": {
+    "@angular/cli": "1.0.0-beta.32.3",
     "@angular/common": "^2.4.0",
     "@angular/compiler": "^2.4.0",
     "@angular/core": "^2.4.0",
@@ -28,8 +29,8 @@
     "@angular/platform-browser": "^2.4.0",
     "@angular/platform-browser-dynamic": "^2.4.0",
     "@angular/router": "^3.4.0",
-    "@angular/cli": "1.0.0-beta.32.3",
     "angular2-jwt": "^0.1.28",
+    "body-parser": "^1.17.0",
     "bootstrap": "^3.3.7",
     "compression": "^1.6.2",
     "core-js": "^2.4.1",
