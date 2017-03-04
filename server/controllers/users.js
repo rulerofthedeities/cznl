@@ -1,15 +1,15 @@
 var mongo = require('mongodb'),
     jwt = require('jsonwebtoken'),
-    bcrypt = require('bcrypt'),
+    scrypt = require('scrypt'),
     response = require('../response'),
-    settings = require('./settings'),
-    saltRounds = 10;
+    settings = require('./settings');
 
 var addUser = function(db, req, res, callback) {
-  bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
+  var key = req.body.password;
+  scrypt.kdf(key, {N: 1, r:1, p:1}, function(err, hash) {
     db.collection('users').insert({
       userName: req.body.userName,
-      password: hash,
+      password: hash.toString('base64'),
       email: req.body.email,
       access: {level:1, roles: []}
     }, function (err, result) {
@@ -26,9 +26,9 @@ var findUser = function(db, req, res, callback) {
       callback(err, doc, 500, 'Error finding user')
     }
     if (!doc) {
-      callback({error:'no user'}, doc, 500, 'User could not be found')
+      callback({error:'Gebruikersnaam niet gevonden'}, doc, 500, 'User could not be found')
     } else {
-      bcrypt.compare(req.body.password, doc.password, function(err, result) {
+      scrypt.verifyKdf(new Buffer(doc.password, 'base64'), req.body.password, function(err, result) {
         if (result !== true) {
           callback({error:'Fout paswoord'}, doc, 401, 'Aanmelding mislukt');
         } else {
