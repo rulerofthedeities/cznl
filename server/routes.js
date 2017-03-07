@@ -10,16 +10,6 @@ var path = require("path"),
     response = require('./response');
 
 module.exports.initialize = function(app, router) {
-  var home = path.resolve(__dirname + '/../dist/index.html');
-
-
-  app.get('/abc*', (req, res) => {
-    res.sendFile(home);
-  });
-
-  app.get(['/', '/words', '/tests', '/settings', '/progress'], (req, res) => {
-    res.sendFile(home);
-  });
 
   router.use(['/user/refresh', '/user/signin'], (req, res, next) => {
     req.expiresIn = app.get('token_expiration') || 86400;
@@ -61,4 +51,9 @@ module.exports.initialize = function(app, router) {
   router.post('/lists/add', userlists.save);
 
   app.use('/api/', router);
+
+  app.use(function (req, res) {
+      var home = path.resolve(__dirname + '/../dist/index.html');
+      res.sendFile(home);
+  });
 };
