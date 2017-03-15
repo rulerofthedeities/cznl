@@ -1,536 +1,539 @@
-<form
-  [formGroup]="wordForm"
-  (ngSubmit) = "onSubmit(wordForm.value)"
-  class="form-horizontal">
+<section>
+  <add-to-list [word]="currentWord" *ngIf="currentWord"></add-to-list>
+  <form
+    [formGroup]="wordForm"
+    (ngSubmit) = "onSubmit(wordForm.value)"
+    class="form-horizontal">
 
-<!-- COMMON 1 -->
+  <!-- COMMON 1 -->
 
-  <div class="row">
-    <div class="col-xs-12">
+    <div class="row">
+      <div class="col-xs-12">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div class="form-group" *ngIf="filtersLoaded">
+                <label 
+                  for="tpe" 
+                  class="control-label col-xs-2">
+                  Type:
+                </label>
+                <div class="col-xs-10">
+                  <select 
+                    class="form-control" 
+                    id="tpe"
+                    [formControl]="wordForm.controls['tpe']">
+                    <option *ngFor="let t of filters.tpes" [value]="t.val">
+                      {{t.label}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="isVerb()">
+      <div class="form-group col-xs-12">
+        <input 
+          type="checkbox" 
+          name="showPronoun"
+          [formControl]="wordForm.controls['perfective']">
+          Enkel Perfectief
+      </div>
+    </div>
+
+  <!-- CZ -->
+
+    <div class="row">
+      <div class="col-xs-6">
         <div class="panel panel-default">
+          <div class="panel-heading"><h3>Tsjechisch</h3></div>
           <div class="panel-body">
-            <div class="form-group" *ngIf="filtersLoaded">
+            <h4 *ngIf="isVerb()">{{isVerb(true) ? "Imperfectief" : "Perfectief"}} Aspect</h4>
+            <div class="form-group">
               <label 
-                for="tpe" 
+                for="cz.word" 
                 class="control-label col-xs-2">
-                Type:
+                Woord:
+              </label>
+              <div class="col-xs-10">
+                <strong>
+                  <input 
+                    type="text"
+                    class="form-control"
+                    id="cz.word"
+                    [formControl]="wordForm.controls['cz.word']"
+                    [ngClass]="{'warning':wordAlreadyExists}"
+                    (change)="onChange()">
+                </strong>
+                <div *ngIf="isError('cz.word', 'required')"
+                  class="text-danger">Het Tsjechische woord ontbreekt.
+                </div>
+                <div *ngIf="wordAlreadyExists"
+                  class="text-warning">Dit woord bestaat reeds.
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group" *ngIf="isVerb()">
+              <label for="cz.firstpersonsingular" class="control-label col-xs-2">
+                1.p.e.:
+              </label>
+              <div class="col-xs-10">
+                <input 
+                  type="text"
+                  class="form-control"
+                  id="cz.firstpersonsingular"
+                  [formControl]="wordForm.controls['cz.firstpersonsingular']">
+              </div>
+            </div>
+
+            <div class="form-group" *ngIf="filtersLoaded && isNoun()">
+              <label 
+                for="cz.genus" 
+                class="control-label col-xs-2">
+                Genus:
               </label>
               <div class="col-xs-10">
                 <select 
                   class="form-control" 
-                  id="tpe"
-                  [formControl]="wordForm.controls['tpe']">
-                  <option *ngFor="let t of filters.tpes" [value]="t.val">
-                    {{t.label}}
+                  id="cz.genus"
+                  [formControl]="wordForm.controls['cz.genus']">
+                  <option *ngFor="let g of filters.genus" [value]="g.val">
+                    {{g.label}}
                   </option>
                 </select>
               </div>
             </div>
-          </div>
-        </div>
-    </div>
-  </div>
-  <div class="row" *ngIf="isVerb()">
-    <div class="form-group col-xs-12">
-      <input 
-        type="checkbox" 
-        name="showPronoun"
-        [formControl]="wordForm.controls['perfective']">
-        Enkel Perfectief
-    </div>
-  </div>
 
-<!-- CZ -->
-
-  <div class="row">
-    <div class="col-xs-6">
-      <div class="panel panel-default">
-        <div class="panel-heading"><h3>Tsjechisch</h3></div>
-        <div class="panel-body">
-          <h4 *ngIf="isVerb()">{{isVerb(true) ? "Imperfectief" : "Perfectief"}} Aspect</h4>
-          <div class="form-group">
-            <label 
-              for="cz.word" 
-              class="control-label col-xs-2">
-              Woord:
-            </label>
-            <div class="col-xs-10">
-              <strong>
+            <div class="form-group" *ngIf="isNoun()">
+              <label 
+                for="cz.diminutive" 
+                class="control-label col-xs-2">
+                Verkleinw:
+              </label>
+              <div class="col-xs-10">
                 <input 
                   type="text"
                   class="form-control"
-                  id="cz.word"
-                  [formControl]="wordForm.controls['cz.word']"
-                  [ngClass]="{'warning':wordAlreadyExists}"
-                  (change)="onChange()">
-              </strong>
-              <div *ngIf="isError('cz.word', 'required')"
-                class="text-danger">Het Tsjechische woord ontbreekt.
-              </div>
-              <div *ngIf="wordAlreadyExists"
-                class="text-warning">Dit woord bestaat reeds.
+                  id="cz.diminutive"
+                  [formControl]="wordForm.controls['cz.diminutive']">
               </div>
             </div>
-          </div>
 
-          <div class="form-group" *ngIf="isVerb()">
-            <label for="cz.firstpersonsingular" class="control-label col-xs-2">
-              1.p.e.:
-            </label>
-            <div class="col-xs-10">
-              <input 
-                type="text"
-                class="form-control"
-                id="cz.firstpersonsingular"
-                [formControl]="wordForm.controls['cz.firstpersonsingular']">
+            <div class="form-group" *ngIf="isNoun()">
+              <label 
+                for="cz.plural" 
+                class="control-label col-xs-2">
+                Meerv:
+              </label>
+              <div class="col-xs-10">
+                <input 
+                  type="text"
+                  class="form-control"
+                  id="cz.plural"
+                  [formControl]="wordForm.controls['cz.plural']">
+              </div>
             </div>
-          </div>
 
-          <div class="form-group" *ngIf="filtersLoaded && isNoun()">
-            <label 
-              for="cz.genus" 
-              class="control-label col-xs-2">
-              Genus:
-            </label>
-            <div class="col-xs-10">
-              <select 
-                class="form-control" 
-                id="cz.genus"
-                [formControl]="wordForm.controls['cz.genus']">
-                <option *ngFor="let g of filters.genus" [value]="g.val">
-                  {{g.label}}
-                </option>
+            <div class="form-group" *ngIf="filtersLoaded && canHaveCase()">
+              <label 
+                for="cz.case" 
+                class="control-label col-xs-3">
+                Naamval:
+              </label>
+              <div class="col-xs-3">
+                <select 
+                  class="form-control" 
+                  id="cz.case"
+                  [formControl]="wordForm.controls['cz.case']">
+                  <option *ngFor="let g of filters.cases" [value]="g.val">
+                    {{g.label}}
+                  </option>
               </select>
+              </div>
+              <div class="col-xs-6">
+                <span class="fa fa-times" (click)="removeCase('cz.case')"></span>
+              </div>
             </div>
-          </div>
 
-          <div class="form-group" *ngIf="isNoun()">
-            <label 
-              for="cz.diminutive" 
-              class="control-label col-xs-2">
-              Verkleinw:
-            </label>
-            <div class="col-xs-10">
-              <input 
-                type="text"
-                class="form-control"
-                id="cz.diminutive"
-                [formControl]="wordForm.controls['cz.diminutive']">
-            </div>
-          </div>
-
-          <div class="form-group" *ngIf="isNoun()">
-            <label 
-              for="cz.plural" 
-              class="control-label col-xs-2">
-              Meerv:
-            </label>
-            <div class="col-xs-10">
-              <input 
-                type="text"
-                class="form-control"
-                id="cz.plural"
-                [formControl]="wordForm.controls['cz.plural']">
-            </div>
-          </div>
-
-          <div class="form-group" *ngIf="filtersLoaded && canHaveCase()">
-            <label 
-              for="cz.case" 
-              class="control-label col-xs-3">
-              Naamval:
-            </label>
-            <div class="col-xs-3">
-              <select 
-                class="form-control" 
-                id="cz.case"
-                [formControl]="wordForm.controls['cz.case']">
-                <option *ngFor="let g of filters.cases" [value]="g.val">
-                  {{g.label}}
-                </option>
-            </select>
-            </div>
-            <div class="col-xs-6">
-              <span class="fa fa-times" (click)="removeCase('cz.case')"></span>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="cz.otherwords" class="control-label optional col-xs-2">
-              Alt.:
-            </label>
-            <div class="col-xs-10">
-              <input 
-                type="text"
-                class="form-control"
-                id="cz.otherwords"
-                [formControl]="wordForm.controls['cz.otherwords']">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="cz.hint" class="control-label optional col-xs-2">
-              Hint:
-            </label>
-            <div class="col-xs-10">
-              <input 
-                type="text"
-                class="form-control"
-                id="cz.hint"
-                [formControl]="wordForm.controls['cz.hint']">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="cz.info" class="control-label optional col-xs-2">
-              Info:
-            </label>
-            <div class="col-xs-10">
-              <input 
-                type="text"
-                class="form-control"
-                id="cz.info"
-                [formControl]="wordForm.controls['cz.info']">
-            </div>
-          </div>
-        </div>
-        
-        <!-- Perfective -->
-
-        <div class="panel-body" *ngIf="isVerb(true)">
-          <h4>Perfectief Aspect</h4>
-
-          <div class="form-group">
-            <label 
-              for="czP.word" 
-              class="control-label col-xs-2">
-              Woord:
-            </label>
-            <div class="col-xs-10">
-              <strong>
+            <div class="form-group">
+              <label for="cz.otherwords" class="control-label optional col-xs-2">
+                Alt.:
+              </label>
+              <div class="col-xs-10">
                 <input 
                   type="text"
                   class="form-control"
-                  id="czP.word"
-                  [formControl]="wordForm.controls['czP.word']">
-              </strong>
+                  id="cz.otherwords"
+                  [formControl]="wordForm.controls['cz.otherwords']">
+              </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <label for="czP.firstpersonsingular" class="control-label col-xs-2">
-              1.p.e.:
-            </label>
-            <div class="col-xs-10">
-              <input 
-                type="text"
-                class="form-control"
-                id="czP.firstpersonsingular"
-                [formControl]="wordForm.controls['czP.firstpersonsingular']">
-            </div>
-          </div>
-
-          <div class="form-group" *ngIf="filtersLoaded">
-            <label 
-              for="czP.case" 
-              class="control-label col-xs-3">
-              Naamval:
-            </label>
-            <div class="col-xs-3">
-              <select 
-                class="form-control" 
-                id="czP.case"
-                [formControl]="wordForm.controls['czP.case']">
-                <option *ngFor="let g of filters.cases" [value]="g.val">
-                  {{g.label}}
-                </option>
-            </select>
-            </div>
-            <div class="col-xs-6">
-              <span class="fa fa-times" (click)="removeCase('czP.case')"></span>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="czP.otherwords" class="control-label optional col-xs-2">
-              Alt.:
-            </label>
-            <div class="col-xs-10">
-              <input 
-                type="text"
-                class="form-control"
-                id="czP.otherwords"
-                [formControl]="wordForm.controls['czP.otherwords']">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="czP.hint" class="control-label optional col-xs-2">
-              Hint:
-            </label>
-            <div class="col-xs-10">
-              <input 
-                type="text"
-                class="form-control"
-                id="czP.hint"
-                [formControl]="wordForm.controls['czP.hint']">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="czP.info" class="control-label optional col-xs-2">
-              Info:
-            </label>
-            <div class="col-xs-10">
-              <input 
-                type="text"
-                class="form-control"
-                id="czP.info"
-                [formControl]="wordForm.controls['czP.info']">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-<!-- NL -->
-
-    <div class="col-xs-6">
-      <div class="panel panel-default">
-        <div class="panel-heading"><h3>Nederlands</h3></div>
-        <div class="panel-body">
-          <h4 *ngIf="isVerb()">{{isVerb(true) ? "Imperfectief" : "Perfectief"}} Aspect</h4>
-
-          <div class="form-group">
-            <label for="nl.word" class="control-label col-xs-2">
-              Woord:
-            </label>
-            <div class="col-xs-10">
-              <strong>
+            <div class="form-group">
+              <label for="cz.hint" class="control-label optional col-xs-2">
+                Hint:
+              </label>
+              <div class="col-xs-10">
                 <input 
                   type="text"
                   class="form-control"
-                  id="nl.word"
-                  [formControl]="wordForm.controls['nl.word']">
-              </strong>
-              <div *ngIf="isError('nl.word', 'required')"
-                class="text-danger">Het Nederlandse woord ontbreekt.
+                  id="cz.hint"
+                  [formControl]="wordForm.controls['cz.hint']">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="cz.info" class="control-label optional col-xs-2">
+                Info:
+              </label>
+              <div class="col-xs-10">
+                <input 
+                  type="text"
+                  class="form-control"
+                  id="cz.info"
+                  [formControl]="wordForm.controls['cz.info']">
               </div>
             </div>
           </div>
           
-          <div class="form-group" *ngIf="isNoun()">
-            <label for="nl.article" class="control-label col-xs-2">
-              Lidw.:
-            </label>
-            <div class="col-xs-10">
-              <label class="radio-inline">
-                <input 
-                  type="radio"
-                  id="nl.article"
-                  value="de"
-                  [formControl]="wordForm.controls['nl.article']">
-                  de
+          <!-- Perfective -->
+
+          <div class="panel-body" *ngIf="isVerb(true)">
+            <h4>Perfectief Aspect</h4>
+
+            <div class="form-group">
+              <label 
+                for="czP.word" 
+                class="control-label col-xs-2">
+                Woord:
               </label>
-              <label class="radio-inline">
-                <input 
-                  type="radio"
-                  id="nl.article"
-                  value="het"
-                  [formControl]="wordForm.controls['nl.article']">
-                het
+              <div class="col-xs-10">
+                <strong>
+                  <input 
+                    type="text"
+                    class="form-control"
+                    id="czP.word"
+                    [formControl]="wordForm.controls['czP.word']">
+                </strong>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="czP.firstpersonsingular" class="control-label col-xs-2">
+                1.p.e.:
               </label>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="nl.otherwords" class="control-label optional col-xs-2">
-              Alt.:
-            </label>
-            <div class="col-xs-10">
-              <input 
-                type="text"
-                class="form-control"
-                id="nl.otherwords"
-                [formControl]="wordForm.controls['nl.otherwords']">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="nl.hint" class="control-label optional col-xs-2">
-              Hint:
-            </label>
-            <div class="col-xs-10">
-              <input 
-                type="text"
-                class="form-control"
-                id="nl.hint"
-                [formControl]="wordForm.controls['nl.hint']">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="nl.info" class="control-label optional col-xs-2">
-              Info:
-            </label>
-            <div class="col-xs-10">
-              <input 
-                type="text"
-                class="form-control"
-                id="nl.info"
-                [formControl]="wordForm.controls['nl.info']">
-            </div>
-          </div>
-        </div>
-        
-        <!-- Perfective -->
-
-        <div class="panel-body" *ngIf="isVerb(true)">
-          <h4>Perfectief Aspect</h4>
-
-          <div class="form-group">
-            <label for="nlP.word" class="control-label col-xs-2">
-              Woord:
-            </label>
-            <div class="col-xs-10">
-              <strong>
+              <div class="col-xs-10">
                 <input 
                   type="text"
                   class="form-control"
-                  id="nlP.word"
-                  [formControl]="wordForm.controls['nlP.word']">
-              </strong>
+                  id="czP.firstpersonsingular"
+                  [formControl]="wordForm.controls['czP.firstpersonsingular']">
+              </div>
             </div>
-          </div>
-          
-          <div class="form-group">
-            <label for="nlP.otherwords" class="control-label optional col-xs-2">
-              Alt.:
-            </label>
-            <div class="col-xs-10">
-              <input 
-                type="text"
-                class="form-control"
-                id="nlP.otherwords"
-                [formControl]="wordForm.controls['nlP.otherwords']">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="nlP.hint" class="control-label optional col-xs-2">
-              Hint:
-            </label>
-            <div class="col-xs-10">
-              <input 
-                type="text"
-                class="form-control"
-                id="nlP.hint"
-                [formControl]="wordForm.controls['nlP.hint']">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="nlP.info" class="control-label optional col-xs-2">
-              Info:
-            </label>
-            <div class="col-xs-10">
-              <input 
-                type="text"
-                class="form-control"
-                id="nlP.info"
-                [formControl]="wordForm.controls['nlP.info']">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-<!-- COMMON 2 -->
-
-  <div class="row">
-    <div class="col-xs-12">
-        <div class="panel panel-default">
-          <div class="panel-body">
 
             <div class="form-group" *ngIf="filtersLoaded">
               <label 
-                for="level" 
-                class="control-label col-xs-2">
-                Niveau:
+                for="czP.case" 
+                class="control-label col-xs-3">
+                Naamval:
               </label>
-              <div class="col-xs-10">
+              <div class="col-xs-3">
                 <select 
                   class="form-control" 
-                  id="level"
-                  [formControl]="wordForm.controls['level']">
-                  <option *ngFor="let l of filters.levels" [value]="l.val">
-                    {{l.label}}
+                  id="czP.case"
+                  [formControl]="wordForm.controls['czP.case']">
+                  <option *ngFor="let g of filters.cases" [value]="g.val">
+                    {{g.label}}
                   </option>
-                </select>
+              </select>
+              </div>
+              <div class="col-xs-6">
+                <span class="fa fa-times" (click)="removeCase('czP.case')"></span>
               </div>
             </div>
 
-            <div class="form-group" *ngIf="filtersLoaded">
-              <label 
-                for="categories" 
-                class="control-label col-xs-2">
-                Categorieën:
+            <div class="form-group">
+              <label for="czP.otherwords" class="control-label optional col-xs-2">
+                Alt.:
               </label>
               <div class="col-xs-10">
                 <input 
-                  class="form-control" 
-                  id="categories"
-                  [formControl]="wordForm.controls['categories']">
+                  type="text"
+                  class="form-control"
+                  id="czP.otherwords"
+                  [formControl]="wordForm.controls['czP.otherwords']">
               </div>
             </div>
 
-              <div class="col-xs-offset-2 col-xs-10">
-                Zoek categorieën:
-                <input type="text"
-                  (keyup)="searchCats(searchcats.value)"
-                  #searchcats>
+            <div class="form-group">
+              <label for="czP.hint" class="control-label optional col-xs-2">
+                Hint:
+              </label>
+              <div class="col-xs-10">
+                <input 
+                  type="text"
+                  class="form-control"
+                  id="czP.hint"
+                  [formControl]="wordForm.controls['czP.hint']">
               </div>
+            </div>
 
-              <div class="col-xs-offset-2 col-xs-10">
-                <ul class="searchcats list-inline">
-                  <li *ngFor="let cat of cats" 
-                    (click)="addCategory(cat.name)"
-                    class="label label-info">
-                      {{cat.name}}
-                  </li>
-                </ul>
+            <div class="form-group">
+              <label for="czP.info" class="control-label optional col-xs-2">
+                Info:
+              </label>
+              <div class="col-xs-10">
+                <input 
+                  type="text"
+                  class="form-control"
+                  id="czP.info"
+                  [formControl]="wordForm.controls['czP.info']">
               </div>
+            </div>
           </div>
         </div>
+      </div>
+
+  <!-- NL -->
+
+      <div class="col-xs-6">
+        <div class="panel panel-default">
+          <div class="panel-heading"><h3>Nederlands</h3></div>
+          <div class="panel-body">
+            <h4 *ngIf="isVerb()">{{isVerb(true) ? "Imperfectief" : "Perfectief"}} Aspect</h4>
+
+            <div class="form-group">
+              <label for="nl.word" class="control-label col-xs-2">
+                Woord:
+              </label>
+              <div class="col-xs-10">
+                <strong>
+                  <input 
+                    type="text"
+                    class="form-control"
+                    id="nl.word"
+                    [formControl]="wordForm.controls['nl.word']">
+                </strong>
+                <div *ngIf="isError('nl.word', 'required')"
+                  class="text-danger">Het Nederlandse woord ontbreekt.
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group" *ngIf="isNoun()">
+              <label for="nl.article" class="control-label col-xs-2">
+                Lidw.:
+              </label>
+              <div class="col-xs-10">
+                <label class="radio-inline">
+                  <input 
+                    type="radio"
+                    id="nl.article"
+                    value="de"
+                    [formControl]="wordForm.controls['nl.article']">
+                    de
+                </label>
+                <label class="radio-inline">
+                  <input 
+                    type="radio"
+                    id="nl.article"
+                    value="het"
+                    [formControl]="wordForm.controls['nl.article']">
+                  het
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="nl.otherwords" class="control-label optional col-xs-2">
+                Alt.:
+              </label>
+              <div class="col-xs-10">
+                <input 
+                  type="text"
+                  class="form-control"
+                  id="nl.otherwords"
+                  [formControl]="wordForm.controls['nl.otherwords']">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="nl.hint" class="control-label optional col-xs-2">
+                Hint:
+              </label>
+              <div class="col-xs-10">
+                <input 
+                  type="text"
+                  class="form-control"
+                  id="nl.hint"
+                  [formControl]="wordForm.controls['nl.hint']">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="nl.info" class="control-label optional col-xs-2">
+                Info:
+              </label>
+              <div class="col-xs-10">
+                <input 
+                  type="text"
+                  class="form-control"
+                  id="nl.info"
+                  [formControl]="wordForm.controls['nl.info']">
+              </div>
+            </div>
+          </div>
+          
+          <!-- Perfective -->
+
+          <div class="panel-body" *ngIf="isVerb(true)">
+            <h4>Perfectief Aspect</h4>
+
+            <div class="form-group">
+              <label for="nlP.word" class="control-label col-xs-2">
+                Woord:
+              </label>
+              <div class="col-xs-10">
+                <strong>
+                  <input 
+                    type="text"
+                    class="form-control"
+                    id="nlP.word"
+                    [formControl]="wordForm.controls['nlP.word']">
+                </strong>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="nlP.otherwords" class="control-label optional col-xs-2">
+                Alt.:
+              </label>
+              <div class="col-xs-10">
+                <input 
+                  type="text"
+                  class="form-control"
+                  id="nlP.otherwords"
+                  [formControl]="wordForm.controls['nlP.otherwords']">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="nlP.hint" class="control-label optional col-xs-2">
+                Hint:
+              </label>
+              <div class="col-xs-10">
+                <input 
+                  type="text"
+                  class="form-control"
+                  id="nlP.hint"
+                  [formControl]="wordForm.controls['nlP.hint']">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="nlP.info" class="control-label optional col-xs-2">
+                Info:
+              </label>
+              <div class="col-xs-10">
+                <input 
+                  type="text"
+                  class="form-control"
+                  id="nlP.info"
+                  [formControl]="wordForm.controls['nlP.info']">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-  
-  <div class="clearfix"></div>
 
-  <button *ngIf="!disableSubmit && isNew"
-    type="submit" 
-    class="btn btn-success" 
-    [disabled]="!wordForm.valid">
-    Voeg woord toe
-  </button>
+  <!-- COMMON 2 -->
 
-  <info-msg>{{submitMessage}}</info-msg>
+    <div class="row">
+      <div class="col-xs-12">
+          <div class="panel panel-default">
+            <div class="panel-body">
 
-  <button *ngIf="!isNew"
-    type="button" 
-    (click)="onSubmit(wordForm.value)"
-    class="btn btn-success" 
-    [disabled]="!wordForm.valid">
-    Pas woord aan
-  </button>
+              <div class="form-group" *ngIf="filtersLoaded">
+                <label 
+                  for="level" 
+                  class="control-label col-xs-2">
+                  Niveau:
+                </label>
+                <div class="col-xs-10">
+                  <select 
+                    class="form-control" 
+                    id="level"
+                    [formControl]="wordForm.controls['level']">
+                    <option *ngFor="let l of filters.levels" [value]="l.val">
+                      {{l.label}}
+                    </option>
+                  </select>
+                </div>
+              </div>
 
-  <button *ngIf="disableSubmit || !isNew"
-    type="button" 
-    (click)="resetForm()"
-    [disabled]="wordForm.valid && isNew"
-    class="btn btn-success">
-    Nieuw woord
-  </button>
-  
-</form>
+              <div class="form-group" *ngIf="filtersLoaded">
+                <label 
+                  for="categories" 
+                  class="control-label col-xs-2">
+                  Categorieën:
+                </label>
+                <div class="col-xs-10">
+                  <input 
+                    class="form-control" 
+                    id="categories"
+                    [formControl]="wordForm.controls['categories']">
+                </div>
+              </div>
+
+                <div class="col-xs-offset-2 col-xs-10">
+                  Zoek categorieën:
+                  <input type="text"
+                    (keyup)="searchCats(searchcats.value)"
+                    #searchcats>
+                </div>
+
+                <div class="col-xs-offset-2 col-xs-10">
+                  <ul class="searchcats list-inline">
+                    <li *ngFor="let cat of cats" 
+                      (click)="addCategory(cat.name)"
+                      class="label label-info">
+                        {{cat.name}}
+                    </li>
+                  </ul>
+                </div>
+            </div>
+          </div>
+      </div>
+    </div>
+    
+    <div class="clearfix"></div>
+
+    <button *ngIf="!disableSubmit && isNew"
+      type="submit" 
+      class="btn btn-success" 
+      [disabled]="!wordForm.valid">
+      Voeg woord toe
+    </button>
+
+    <info-msg>{{submitMessage}}</info-msg>
+
+    <button *ngIf="!isNew"
+      type="button" 
+      (click)="onSubmit(wordForm.value)"
+      class="btn btn-success" 
+      [disabled]="!wordForm.valid">
+      Pas woord aan
+    </button>
+
+    <button *ngIf="disableSubmit || !isNew"
+      type="button" 
+      (click)="resetForm()"
+      [disabled]="wordForm.valid && isNew"
+      class="btn btn-success">
+      Nieuw woord
+    </button>
+    
+  </form>
+</section>

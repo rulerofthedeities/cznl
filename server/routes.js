@@ -53,7 +53,7 @@ module.exports.initialize = function(app, router) {
   app.use('/api/', router);
 
   app.use(function (req, res) {
-      var home = path.resolve(__dirname + '/../dist/index.html');
-      res.sendFile(home);
+    var home = path.resolve(__dirname + '/../dist/index.html');
+    res.sendFile(home);
   });
 };

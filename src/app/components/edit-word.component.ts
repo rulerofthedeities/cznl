@@ -47,6 +47,7 @@ export class EditWordComponent implements OnInit, OnDestroy {
   disableSubmit = false;
   wordAlreadyExists = false;
   componentActive = true;
+  currentWord: WordPair; // For add-to-list
 
   constructor(
     private filterService: FilterService,
@@ -64,6 +65,7 @@ export class EditWordComponent implements OnInit, OnDestroy {
     .subscribe(
       word => {
         this.editForm(word);
+        this.currentWord = word;
       }
     );
   }
@@ -129,7 +131,7 @@ export class EditWordComponent implements OnInit, OnDestroy {
         this.disableSubmit = true;
         this.isNew = false;
         this.wordForm.patchValue({_id: wordPair._id});
-
+        this.currentWord = wordPair;
       },
       error => this.errorService.handleError(error)
     );
@@ -154,7 +156,7 @@ export class EditWordComponent implements OnInit, OnDestroy {
     this.wordForm.patchValue({ctrlName: ''});
   }
 
-  editForm(word) {
+  editForm(word: WordPair) {
     this.isNew = false;
     this._buildForm(word);
     this.submitMessage = '';
@@ -164,6 +166,7 @@ export class EditWordComponent implements OnInit, OnDestroy {
   resetForm() {
     // Create new word
     this.isNew = true;
+    this.currentWord = null;
     this.wordAlreadyExists = false;
     this._buildForm();
     this.submitMessage = '';
